@@ -42,5 +42,12 @@
     function pickEnemy() {
         return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
     }
+
+    // Loot drops
+    function lootPickOptions(count=2) {
+        let arr=[];
+        for (let i = 0; i < count; i++) arr.push(LOOT[Math.floor(Math.random()*LOOT.length)]);
+        return arr;
+    }
 </script>
 </html>
