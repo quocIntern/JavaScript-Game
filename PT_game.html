@@ -49,5 +49,17 @@
         for (let i = 0; i < count; i++) arr.push(LOOT[Math.floor(Math.random()*LOOT.length)]);
         return arr;
     }
+
+    //Main menu
+    function mainMenu() {
+        const div = document.getElementById("personaSelect");
+        let newButton = document.createElement("button");
+        newButton.onclick=() => personaSelect();
+        div.appendChild(newButton);
+        let loadButton = document.createElement("button");
+        loadButton.textContent="Load Save";
+        loadButton.onclick = () => loadGame();
+        div.appendChild(loadButton);
+    }
 </script>
 </html>
