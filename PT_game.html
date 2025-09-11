@@ -79,5 +79,17 @@
         spawnEnemy();
         render();
     }
+
+    // attack
+    function attack() {
+        let dmg = Math.max(1, state.persona.STR - state.enemy.END);
+        state.enemy.HP -= dmg;
+        if (state.enemy.HP <= 0) {
+            enemyDefeated();
+            return;
+        }
+        enemyTurn();
+        render();
+    }
 </script>
 </html>
