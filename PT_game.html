@@ -71,5 +71,13 @@
             btn.innterHtml=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
         })
     }
+
+    // Starting the game
+    function startGame(cls) {
+        const base = PERSONAS[cls];
+        state.persona={  cls, HP:base.HP, maxHP:base.HP, STATS:base.STATS{ STR:base.STR, MAG:base.MAG, END:base.END, AGI:base.AGI, LUK:base.LUK}, ABILITY:[base.ABILITY]};
+        spawnEnemy();
+        render();
+    }
 </script>
 </html>
