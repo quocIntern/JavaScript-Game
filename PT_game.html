@@ -37,6 +37,10 @@
         level:1,
         persona:null
     };
-    
+
+    // How enemies are chosen
+    function pickEnemy() {
+        return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
+    }
 </script>
 </html>
