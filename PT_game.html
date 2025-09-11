@@ -61,5 +61,15 @@
         loadButton.onclick = () => loadGame();
         div.appendChild(loadButton);
     }
+
+    // Selecting Persona
+    function personaSelect() {
+        const div = document.getElementById("personaSelect");
+        div.innerHTML = "<h4>Choose your Persona</h4>";
+        Object.keys(PERSONAS).forEach (c => {
+            let btn = document.createElement("button");
+            btn.innterHtml=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
+        })
+    }
 </script>
 </html>
