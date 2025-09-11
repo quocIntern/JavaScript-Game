@@ -75,7 +75,7 @@
     // Starting the game
     function startGame(cls) {
         const base = PERSONAS[cls];
-        state.persona={  cls, HP:base.HP, maxHP:base.HP, STATS:base.STATS{ STR:base.STR, MAG:base.MAG, END:base.END, AGI:base.AGI, LUK:base.LUK}, ABILITY:[base.ABILITY]};
+        state.persona={  cls, HP:base.HP, maxHP:base.HP, SP:base.SP, maxSP:base.SP, STATS:{ STR:base.STATS.STR, MAG:base.STATS.MAG, END:base.STATS.END, AGI:base.STATS.AGI, LUK:base.STATS.LUK}, ABILITY:[...base.ABILITY]};
         spawnEnemy();
         render();
     }
