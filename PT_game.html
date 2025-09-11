@@ -20,5 +20,12 @@
     const DEMONS = [
         {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Pixie.webp"}
     ]
+
+    // Loot
+    const LOOT = [
+        {name:"Bead", use: function(Persona) {
+            Persona.SP += Math.min(Persona.SP + 10, Persona.SP);
+        }}
+    ]
 </script>
 </html>
