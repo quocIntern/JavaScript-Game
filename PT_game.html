@@ -91,18 +91,29 @@
         enemyTurn();
         render();
     }
-
+    // use Ability
     function useAbility(){
 
     }
-
+    // Rest
     function rest() {
 
     }
-
+    // Enemy turn to attack
     function enemyTurn() {
         let dmg=Math.max(1, state.enemy.attack - state.player.END);
         state.persona.hp -= dmg;
+    }
+    // Enemy dies
+    function enemyDefeated(){
+        state.xp+=10;
+        if(state.xp>=state.level*20){
+        state.level++;
+        state.player.maxhp+=2;
+        state.player.hp=state.player.maxhp;
+        //Random stat+1
+        }
+        showLootOptions();
     }
 </script>
 </html>
