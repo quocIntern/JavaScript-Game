@@ -97,7 +97,12 @@
     }
 
     function rest() {
-        
+
+    }
+
+    function enemyTurn() {
+        let dmg=Math.max(1, state.enemy.attack - state.player.END);
+        state.persona.hp -= dmg;
     }
 </script>
 </html>
