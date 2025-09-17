@@ -129,5 +129,17 @@
     function spawnEnemy(){
         state.enemy = pickEnemy();
     }
+
+    function render(){
+        if (!state.persona) return;
+        let p = state.persona;
+        document.getElementById("stats").innerHTML = `
+            <img src='${p.img}' class='icon'><br>
+            Persona: ${p.name} <br>
+            Hp: <div class='hpBar'><div class='hpFill' style='width:${(p.HP/p.maxHP)*100}%'></div></div>
+            STR: ${p.STR} <br>
+            
+        `;
+    }
 </script>
 </html>
