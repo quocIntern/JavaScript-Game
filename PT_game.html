@@ -101,5 +101,17 @@
     function enemyTurn(){
         
     }
+
+    // Enemy defeated
+    function enemyDefeated(){
+        state.xp += 10;
+        if (state.xp >= state.level*20) {
+            state.level++;
+            state.persona.maxHP += 5;
+            state.persona.hp = state.persona.maxHP;
+            //3 random stats get +1
+        }
+        showTarrotCard
+    }
 </script>
 </html>
