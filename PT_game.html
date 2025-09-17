@@ -113,5 +113,18 @@
         }
         showTarrotCard
     }
+
+    // Tarrot Card loot
+    function showTarrotCard(){
+        let options = pickLootOption(Math.floor(Math.random() * 6) + 3);
+        options.forEach(it => {
+            let btn = document.createElement("button");
+            btn.innerHTML=`<img src='${it.img}' class='icon'> ${it.name}`;
+            btn.onclick =() => //Apply the effect
+            div.appendChild(btn);
+        })
+    }
+
+    
 </script>
 </html>
