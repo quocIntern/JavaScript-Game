@@ -95,6 +95,39 @@
         render();
     }
 
+    // Render all game info
+    function render() {
+        if (!state.persona) return;
+        const playerStatsDiv = document.getElementById("player-stats");
+        let p = state.persona;
+        playerStatsDiv.innerHTML = `
+            <h3>${p.name}</h3>
+            <img src='${p.img}' alt='${p.name}' class='icon'>
+            <p>HP: ${p.HP} / ${p.maxHP}</p>
+            <p>SP: ${p.SP} / ${p.maxSP}</p>
+        <ul>
+            <li>STR: ${p.STATS.STR}</li>
+            <li>MAG: ${p.STATS.MAG}</li>
+            <li>END: ${p.STATS.END}</li>
+            <li>AGI: ${p.STATS.AGI}</li>
+            <li>LUK: ${p.STATS.LUK}</li>
+        </ul>
+        `;
+
+        const enemyDisplayDiv = document.getElementById("enemy-display");
+        if (state.enemy) {
+            let e = state.enemy;
+            enemyDisplayDiv.innerHTML = `
+                <h3>${e.name}</h3>
+                <img src='${e.img}' alt='${e.name}' class='icon'>
+                <p>HP: ${e.HP}</p>
+            `;
+        }
+
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
+    }
+
     // attack
     function attack() {
         let dmg = Math.max(1, state.persona.STR - state.enemy.END);
