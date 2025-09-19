@@ -122,6 +122,7 @@
             enemyDefeated();
             return;
         }
+        enemyTurn();
         render();
     }
     // use Ability
@@ -135,9 +136,10 @@
 
     // Enemy turn to attack
     function enemyTurn() {
-        let dmg=Math.max(1, state.enemy.attack - state.player.END);
+        let dmg = Math.max(1, state.enemy.STATS.STR - state.persona.STATS.END);
         state.persona.HP -= dmg;
         if (state.persona.HP <= 0) {
+            alert("You have been defeated.");
             document.location.reload();
         }
     }
