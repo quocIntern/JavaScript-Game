@@ -92,6 +92,27 @@
         max-width: 200px;
         margin: 10px auto;
     }
+
+    /* --- Health & SP Bar Styles --- */
+    .stat-bar {
+        background-color: var(--dark-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        height: 20px;
+        width: 90%;
+        margin: 5px auto;
+        overflow: hidden; /* Ensures the fill doesn't spill out */
+    }
+    .hp-fill {
+        background-color: #2a9d8f; /* A teal color for HP */
+        height: 100%;
+        transition: width 0.3s ease-out;
+    }
+    .sp-fill {
+        background-color: #e76f51; /* An orange color for SP */
+        height: 100%;
+        transition: width 0.3s ease-out;
+    }
 </style>
 </head>
 <body>
@@ -183,35 +204,56 @@
     // Render all game info
     function render() {
         if (!state.persona) return;
+        
+        // --- Render Player Stats ---
         const playerStatsDiv = document.getElementById("player-stats");
         let p = state.persona;
+        // Calculate HP and SP percentages
+        const hpPercent = (p.HP / p.maxHP) * 100;
+        const spPercent = (p.SP / p.maxSP) * 100;
+
         playerStatsDiv.innerHTML = `
             <h3>${p.name}</h3>
             <img src='${p.img}' alt='${p.name}' class='icon'>
+            
             <p>HP: ${p.HP} / ${p.maxHP}</p>
+            <div class="stat-bar">
+                <div class="hp-fill" style="width: ${hpPercent}%;"></div>
+            </div>
+
             <p>SP: ${p.SP} / ${p.maxSP}</p>
-        <ul>
-            <li>STR: ${p.STATS.STR}</li>
-            <li>MAG: ${p.STATS.MAG}</li>
-            <li>END: ${p.STATS.END}</li>
-            <li>AGI: ${p.STATS.AGI}</li>
-            <li>LUK: ${p.STATS.LUK}</li>
-        </ul>
+            <div class="stat-bar">
+                <div class="sp-fill" style="width: ${spPercent}%;"></div>
+            </div>
+
+            <ul>
+                <li>STR: ${p.STATS.STR}</li>
+                <li>MAG: ${p.STATS.MAG}</li>
+                <li>END: ${p.STATS.END}</li>
+                <li>AGI: ${p.STATS.AGI}</li>
+                <li>LUK: ${p.STATS.LUK}</li>
+            </ul>
         `;
+
+        // --- Render Enemy Info ---
         const enemyDisplayDiv = document.getElementById("enemy-display");
         if (state.enemy) {
             let e = state.enemy;
+            // Enemies don't have maxHP in our data, so we can't show a bar.
+            // We'll just display their current HP.
             enemyDisplayDiv.innerHTML = `
                 <h3>${e.name}</h3>
                 <img src='${e.img}' alt='${e.name}' class='icon'>
                 <p>HP: ${e.HP}</p>
             `;
         }
+
+        // --- Render Action Buttons (No change here) ---
         const actionsDiv = document.getElementById("actions");
         actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
         p.ABILITY.forEach(skillKey => {
-            const skill = SKILLS[skillKey]; 
-            if (!skill) return; 
+            const skill = SKILLS[skillKey];
+            if (!skill) return;
             let costDisplay = "";
             if (skill.cost.hp) {
                 costDisplay = `${skill.cost.hp} HP`;
@@ -223,55 +265,6 @@
             skillButton.onclick = () => useAbility(skillKey);
             actionsDiv.appendChild(skillButton);
         });
-    }
-
-    // attack
-    function attack() {
-        let dmg = Math.max(1, state.persona.STATS.STR - state.enemy.STATS.END);
-        state.enemy.HP -= dmg;
-        if (state.enemy.HP <= 0) {
-            enemyDefeated();
-            return;
-        }
-        enemyTurn();
-        render();
-    }
-    // use Ability
-    function useAbility(){
-        const skill = SKILLS[skillKey];
-        const player = state.persona;
-        const enemy = state.enemy;
-
-        if (skill.cost.sp && player.SP < skill.cost.sp) {
-            return;
-        }
-        if (skill.cost.hp && player.HP < skill.cost.hp) {
-            return;
-        }
-
-        if (skill.cost.sp) {
-            player.SP -= skill.cost.sp;
-        }
-        if (skill.cost.hp) {
-            player.HP -= skill.cost.hp;
-        }
-
-        let dmg = 0;
-        if (skill.type === 'physical') {
-            dmg = Math.max(1, skill.power + player.STATS.STR - enemy.STATS.END);
-        } else if (skill.type === 'magic') {
-            dmg = Math.max(1, skill.power + player.STATS.MAG - enemy.STATS.END);
-        }
-
-        enemy.HP -= dmg;
-
-        if (enemy.HP <= 0) {
-            enemyDefeated();
-            return;
-        }
-
-        enemyTurn();
-        render();
     }
 
     // Spawning Enemy
