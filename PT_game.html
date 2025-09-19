@@ -72,11 +72,13 @@
 
     // Selecting Persona
     function personaSelect() {
-        const div = document.getElementById("personaSelect");
+        const div = document.getElementById("start-screen");
         div.innerHTML = "<h4>Choose your Persona</h4>";
         Object.keys(PERSONAS).forEach (c => {
             let btn = document.createElement("button");
-            btn.innterHtml=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
+            btn.innerHTML=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
+            btn.onclick = () => startGame(c);
+            div.appendChild(btn);
         })
     }
 
