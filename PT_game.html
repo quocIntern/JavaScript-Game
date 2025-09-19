@@ -83,9 +83,14 @@
     }
 
     // Starting the game
-    function startGame(cls) {
-        const base = PERSONAS[cls];
-        state.persona={  cls, HP:base.HP, maxHP:base.HP, SP:base.SP, maxSP:base.SP, STATS:{ STR:base.STATS.STR, MAG:base.STATS.MAG, END:base.STATS.END, AGI:base.STATS.AGI, LUK:base.STATS.LUK}, ABILITY:[...base.ABILITY]};
+    function startGame(personaName) {
+        const base = PERSONAS[personaName];
+        state.persona = JSON.parse(JSON.stringify(base));
+        state.persona.name = personaName;
+        state.persona.maxHP = base.HP;
+        state.persona.maxSP = base.SP;
+        document.getElementById("start-screen").style.display = 'none';
+        document.getElementById("game-screen").style.display = 'grid';
         spawnEnemy();
         render();
     }
