@@ -135,7 +135,9 @@
 
     // Demon
     const DEMONS = [
-        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, ABILITY:["zio"], img:"./img/Pixie.webp"}
+        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, ABILITY:["zio"], img:"./img/Pixie.webp"},
+        {name:"Jack Frost", HP: 45, SP: 30, STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6}, ABILITY:["agi"], img:"./img/Jack_Frost.jpg"},
+        {name:"Slime", HP: 60, SP: 10, STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2}, ABILITY:["bash"], img:"./img/Slime.png"}
     ]
 
     // Skill
@@ -526,8 +528,6 @@
         state.level++;
         state.persona.maxHP += 5; 
         state.persona.maxSP += 2;
-        state.persona.HP = state.persona.maxHP;
-        state.persona.SP = state.persona.maxSP;
         }
         shuffleTime();
     }
