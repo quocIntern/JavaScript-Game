@@ -109,7 +109,6 @@
             <li>LUK: ${p.STATS.LUK}</li>
         </ul>
         `;
-
         const enemyDisplayDiv = document.getElementById("enemy-display");
         if (state.enemy) {
             let e = state.enemy;
@@ -119,9 +118,22 @@
                 <p>HP: ${e.HP}</p>
             `;
         }
-
         const actionsDiv = document.getElementById("actions");
         actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
+        p.ABILITY.forEach(skillKey => {
+            const skill = SKILLS[skillKey]; 
+            if (!skill) return; 
+            let costDisplay = "";
+            if (skill.cost.hp) {
+                costDisplay = `${skill.cost.hp} HP`;
+            } else if (skill.cost.sp) {
+                costDisplay = `${skill.cost.sp} SP`;
+            }
+            let skillButton = document.createElement("button");
+            skillButton.innerHTML = `${skill.name} <br> (${costDisplay})`;
+            skillButton.onclick = () => useAbility(skillKey);
+            actionsDiv.appendChild(skillButton);
+        });
     }
 
     // attack
