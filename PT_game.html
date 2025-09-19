@@ -18,15 +18,25 @@
 <script>
     // Persona
     const PERSONAS = {
-        Orpheus: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Orpheus.png"},
-        Izanagi: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Izanagi.png"},
-        Arsene: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Arsene.png"}
+        Orpheus: { HP: 70, SP: 30, STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3}, ABILITY:["bash", "agi"], img:"./img/Orpheus.png"},
+        Izanagi: { HP: 80, SP: 25, STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3}, ABILITY:["bash", "zio"], img:"./img/Izanagi.png"},
+        Arsene: { HP: 65, SP: 35, STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5}, ABILITY:["bash", "agi"], img:"./img/Arsene.png"}
     }
 
-    // Demon's
+    // Demon
     const DEMONS = [
-        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Pixie.webp"}
+        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, ABILITY:["zio"], img:"./img/Pixie.webp"}
     ]
+
+    // Skill
+    const SKILLS = {
+        // Physical skills
+        bash: {name: "Bash", cost: 5, power:10, type:"physical"},
+
+        // Magic skills
+        agi: { name: "Agi", cost: 4, power: 12, type: "magic" },
+        zio: { name: "Zio", cost: 4, power: 12, type: "magic" },
+    };
 
     // Starting State
     let state = {
