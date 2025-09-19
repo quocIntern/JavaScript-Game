@@ -59,13 +59,14 @@
 
     //Main menu
     function mainMenu() {
-        const div = document.getElementById("personaSelect");
+        const div = document.getElementById("start-screen");
         let newButton = document.createElement("button");
-        newButton.onclick=() => personaSelect();
+        newButton.textContent = "New Game";
+        newButton.onclick =() => personaSelect();
         div.appendChild(newButton);
         let loadButton = document.createElement("button");
-        loadButton.textContent="Load Save";
-        loadButton.onclick = () => loadGame();
+        loadButton.textContent = "Load Save";
+        loadButton.onclick = () => alert("Not implemented yet!");
         div.appendChild(loadButton);
     }
 
@@ -123,5 +124,7 @@
         showLootOptions();
     }
     
+    // Game Start
+    mainMenu();
 </script>
 </html>
