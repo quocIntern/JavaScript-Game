@@ -148,10 +148,12 @@
         state.xp+=10;
         if(state.xp>=state.level*20){
         state.level++;
-        state.player.maxhp+=2;
-        state.player.hp=state.player.maxhp;
-        //Random stat+1
+        state.persona.maxHP += 5; 
+        state.persona.maxSP += 2;
+        state.persona.HP = state.persona.maxHP;
         }
+        spawnEnemy();
+        render();
     }
     
     // Game Start
