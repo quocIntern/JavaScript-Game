@@ -136,7 +136,10 @@
     // Enemy turn to attack
     function enemyTurn() {
         let dmg=Math.max(1, state.enemy.attack - state.player.END);
-        state.persona.hp -= dmg;
+        state.persona.HP -= dmg;
+        if (state.persona.HP <= 0) {
+            document.location.reload();
+        }
     }
     // Enemy dies
     function enemyDefeated(){
