@@ -331,7 +331,6 @@
     let state = {
         playerName:null,
         enemy:null,
-        inventory:[],
         xp:0,
         level:1,
         persona:null
@@ -489,11 +488,35 @@
 
     // Enemy turn to attack
     function enemyTurn() {
-        let dmg = Math.max(1, state.enemy.STATS.STR - state.persona.STATS.END);
-        state.persona.HP -= dmg;
-        if (state.persona.HP <= 0) {
-            alert("You have been defeated.");
-            document.location.reload();
+        const enemy = state.enemy;
+        const player = state.persona;
+
+        // --- Basic AI Decision Making ---
+        const availableSkills = enemy.ABILITY;
+        const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
+        const skill = SKILLS[chosenSkillKey];
+
+        // Decide whether to use a skill (50% chance if a skill is available)
+        if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
+            // --- Use a Skill ---
+            enemy.SP -= skill.cost.sp;
+            let dmg = 0;
+            if (skill.type === 'physical') {
+                dmg = Math.max(1, skill.power + enemy.STATS.STR - player.STATS.END);
+            } else if (skill.type === 'magic') {
+                dmg = Math.max(1, skill.power + enemy.STATS.MAG - player.STATS.END);
+            }
+            player.HP -= dmg;
+        } else {
+            // --- Use a Basic Attack ---
+            let dmg = Math.max(1, enemy.STATS.STR - player.STATS.END);
+            player.HP -= dmg;
+        }
+
+        // --- Check for Player Defeat ---
+        if (player.HP <= 0) {
+            render(); // Render one last time to show the final message
+            setTimeout(() => document.location.reload(), 2000); // Wait 2s before restart
         }
     }
     // Enemy dies
