@@ -130,13 +130,12 @@
 
     // attack
     function attack() {
-        let dmg = Math.max(1, state.persona.STR - state.enemy.END);
+        let dmg = Math.max(1, state.persona.STATS.STR - state.enemy.STATS.END);
         state.enemy.HP -= dmg;
         if (state.enemy.HP <= 0) {
             enemyDefeated();
             return;
         }
-        enemyTurn();
         render();
     }
     // use Ability
