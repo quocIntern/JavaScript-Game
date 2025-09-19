@@ -126,13 +126,13 @@
     }
     // use Ability
     function useAbility(){
+    }
 
     // Spawning Enemy
     function spawnEnemy() {
         state.enemy = pickEnemy();
     }
 
-    }
     // Enemy turn to attack
     function enemyTurn() {
         let dmg=Math.max(1, state.enemy.attack - state.player.END);
