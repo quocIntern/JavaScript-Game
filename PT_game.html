@@ -149,6 +149,40 @@
     }
     // use Ability
     function useAbility(){
+        const skill = SKILLS[skillKey];
+        const player = state.persona;
+        const enemy = state.enemy;
+
+        if (skill.cost.sp && player.SP < skill.cost.sp) {
+            return;
+        }
+        if (skill.cost.hp && player.HP < skill.cost.hp) {
+            return;
+        }
+
+        if (skill.cost.sp) {
+            player.SP -= skill.cost.sp;
+        }
+        if (skill.cost.hp) {
+            player.HP -= skill.cost.hp;
+        }
+
+        let dmg = 0;
+        if (skill.type === 'physical') {
+            dmg = Math.max(1, skill.power + player.STATS.STR - enemy.STATS.END);
+        } else if (skill.type === 'magic') {
+            dmg = Math.max(1, skill.power + player.STATS.MAG - enemy.STATS.END);
+        }
+
+        enemy.HP -= dmg;
+
+        if (enemy.HP <= 0) {
+            enemyDefeated();
+            return;
+        }
+
+        enemyTurn();
+        render();
     }
 
     // Spawning Enemy
