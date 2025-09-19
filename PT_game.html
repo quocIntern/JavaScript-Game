@@ -148,6 +148,185 @@
         zio: { name: "Zio", cost: {sp:4}, power: 12, type: "magic" },
     };
 
+    const CARDS = [
+        { 
+            name: "0. The Fool", 
+            description: "+1 to all stats.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+                persona.STATS.END += 1;
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+            } 
+        },
+        { 
+            name: "I. The Magician", 
+            description: "Increases Magic by 2.",
+            apply: function(persona) { persona.STATS.MAG += 2; } 
+        },
+        { 
+            name: "IV. The Emperor", 
+            description: "Increases Endurance by 2.",
+            apply: function(persona) { persona.STATS.END += 2; } 
+        },
+        { 
+            name: "VI. The Lovers", 
+            description: "Increases Agility and Luck by 1.",
+            apply: function(persona) {
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+            } 
+        },
+        { 
+            name: "VII. The Chariot", 
+            description: "Increases Strength by 2.",
+            apply: function(persona) { persona.STATS.STR += 2; } 
+        },
+        { 
+            name: "VIII. Strength", 
+            description: "Increases Strength and Endurance by 1.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.END += 1;
+            } 
+        },
+        { 
+            name: "IX. The Hermit", 
+            description: "Increases Luck by 3.",
+            apply: function(persona) { persona.STATS.LUK += 3; } 
+        },
+        { 
+            name: "XI. Justice", 
+            description: "Increases Strength and Magic by 1.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+            } 
+        },
+        { 
+            name: "XII. The Hanged Man", 
+            description: "Increases Agility by 3.",
+            apply: function(persona) { persona.STATS.AGI += 3; } 
+        },
+        { 
+            name: "XV. The Devil", 
+            description: "Increases Strength by 4.",
+            apply: function(persona) { persona.STATS.STR += 4; } 
+        },
+        { 
+            name: "XVI. The Tower", 
+            description: "Increases Endurance by 4.",
+            apply: function(persona) { persona.STATS.END += 4; } 
+        },
+        { 
+            name: "XVIII. The Moon", 
+            description: "Increases Magic and Luck by 2.",
+            apply: function(persona) {
+                persona.STATS.MAG += 2;
+                persona.STATS.LUK += 2;
+            } 
+        },
+        { 
+            name: "XXI. The World", 
+            description: "+2 to Strength, Magic, and Endurance.",
+            apply: function(persona) {
+                persona.STATS.STR += 2;
+                persona.STATS.MAG += 2;
+                persona.STATS.END += 2;
+            } 
+        },
+
+        // --- Resource & Healing Cards ---
+        { 
+            name: "II. The High Priestess", 
+            description: "+5 to Max SP and restore 5 SP.",
+            apply: function(persona) { 
+                persona.maxSP += 5;
+                persona.SP += 5;
+            } 
+        },
+        { 
+            name: "III. The Empress", 
+            description: "+10 to Max HP and heal 10 HP.",
+            apply: function(persona) { 
+                persona.maxHP += 10;
+                persona.HP += 10;
+            } 
+        },
+        { 
+            name: "V. The Hierophant", 
+            description: "Restore 50% of your Max SP.",
+            apply: function(persona) {
+                const spRestore = Math.floor(persona.maxSP * 0.50);
+                persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
+            } 
+        },
+        { 
+            name: "XIII. Death", 
+            description: "Fully restore HP and SP.",
+            apply: function(persona) {
+                persona.HP = persona.maxHP;
+                persona.SP = persona.maxSP;
+            } 
+        },
+        {
+            name: "XIV. Temperance",
+            description: "Heal 50% of your Max HP.",
+            apply: function(persona) {
+                const healAmount = Math.floor(persona.maxHP * 0.50);
+                persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
+            }
+        },
+        { 
+            name: "XVII. The Star", 
+            description: "+5 Max HP and +5 Max SP.",
+            apply: function(persona) { 
+                persona.maxHP += 5;
+                persona.maxSP += 5;
+                persona.HP += 5;
+                persona.SP += 5;
+            } 
+        },
+        { 
+            name: "XX. Judgement", 
+            description: "Increase Max HP and Max SP by 10%.",
+            apply: function(persona) {
+                const hpBonus = Math.floor(persona.maxHP * 0.10);
+                const spBonus = Math.floor(persona.maxSP * 0.10);
+                persona.maxHP += hpBonus;
+                persona.maxSP += spBonus;
+                persona.HP += hpBonus;
+                persona.SP += spBonus;
+            } 
+        },
+
+        // --- Special Effect Cards ---
+        { 
+            name: "X. Wheel of Fortune", 
+            description: "+3 to a random stat.",
+            apply: function(persona) {
+                const stats = ["STR", "MAG", "END", "AGI", "LUK"];
+                const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                persona.STATS[randomStat] += 3;
+                alert(`Your ${randomStat} increased!`);
+            } 
+        },
+        { 
+            name: "XIX. The Sun", 
+            description: "+1 to all stats and fully heal HP & SP.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+                persona.STATS.END += 1;
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+                persona.HP = persona.maxHP;
+                persona.SP = persona.maxSP;
+            } 
+        },
+    ];
+
     // Starting State
     let state = {
         playerName:null,
@@ -327,8 +506,30 @@
         state.persona.HP = state.persona.maxHP;
         state.persona.SP = state.persona.maxSP;
         }
+        
         spawnEnemy();
         render();
+    }
+
+    // Shuffle Time
+    function shuffleTime() {
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = "<h4>Shuffle Time! Choose your reward...</h4>";
+        const options = [];
+        const shuffled = [...CARDS].sort(() => 0.5 - Math.random());
+        for (let i = 0; i < Math.min(3, shuffled.length); i++) {
+            options.push(shuffled[i]);
+        }
+        options.forEach(card => {
+            let btn = document.createElement("button");
+            btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
+            btn.onclick = () => {
+                card.apply(state.persona);
+                spawnEnemy();              
+                render();                  
+            };
+            actionsDiv.appendChild(btn);
+        });
     }
     
     // Game Start
