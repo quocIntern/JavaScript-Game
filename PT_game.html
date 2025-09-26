@@ -4,35 +4,341 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Persona Tensei : Down Hellwhole</title>
+    <style>
+    :root {
+        --retro-blue: #001a6d;
+        --retro-text: #ffffff;
+        --retro-border: #c3c3c3;
+    }
+
+    body {
+        font-family: 'Press Start 2P', cursive; /* Use the new pixel font */
+        background-color: black;
+        color: var(--retro-text);
+        text-align: center;
+        margin: 0;
+        padding: 10px;
+        /* These ensure our pixel art and font stay sharp */
+        image-rendering: pixelated;
+        font-smooth: never;
+        -webkit-font-smoothing: none;
+    }
+
+    #game-container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h3, h4 {
+        font-size: 1em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--retro-text);
+    }
+
+    #game-screen {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "player enemy"
+            "actions actions";
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    /* This is the core of the retro text box style */
+    #player-stats, #enemy-display {
+        background-color: var(--retro-blue);
+        padding: 24px; /* Give space for the border */
+        text-align: left;
+        
+        /* The magic for decorative borders */
+        border: 12px solid;
+        border-image-source: url(https://i.imgur.com/jI9a614.png);
+        border-image-slice: 6; /* This tells the browser how to "slice" the image */
+        border-image-width: 1;
+        border-image-repeat: stretch;
+    }
+    #player-stats { grid-area: player; }
+    #enemy-display { grid-area: enemy; }
+
+    #actions {
+        grid-area: actions;
+        padding: 10px;
+        border: 12px solid;
+        border-image-source: url(https://i.imgur.com/jI9a614.png);
+        border-image-slice: 6;
+        border-image-width: 1;
+        background-color: var(--retro-blue);
+    }
+
+    .icon {
+        width: 96px; /* A multiple of 8 or 16 is good for pixel art */
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    button {
+        background-color: var(--retro-blue);
+        color: var(--retro-text);
+        border: 2px solid var(--retro-border);
+        padding: 10px 15px;
+        cursor: pointer;
+        font-family: 'Press Start 2P', cursive;
+        margin: 5px;
+        font-size: 0.8em; /* Match the retro feel */
+    }
+
+    button:hover {
+        background-color: var(--retro-text);
+        color: var(--retro-blue);
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        text-align: left;
+        margin: 10px 0;
+    }
+    li {
+        padding: 2px 0;
+    }
+
+    /* Health & SP Bar Styles */
+    .stat-bar {
+        background-color: #333;
+        border: 1px solid var(--retro-border);
+        height: 12px;
+        width: 100%;
+        margin: 5px 0 15px 0;
+    }
+    .hp-fill {
+        background-color: #32a852; /* Classic green for HP */
+        height: 100%;
+    }
+    .sp-fill {
+        background-color: #3262a8; /* Classic blue for SP/MP */
+        height: 100%;
+    }
+</style>
 </head>
 <body>
-    
+    <div id="game-container">
+        <div id="start-screen"></div>
+        <div id="game-screen" style="display: none;">
+            <div id="player-stats"></div>
+            <div id="enemy-display"></div>
+            <div id="actions"></div>
+        </div>
+    </div>
 </body>
 <script>
     // Persona
     const PERSONAS = {
-        Orpheus: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Orpheus.png"},
-        Izanagi: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Izanagi.png"},
-        Arsene: { HP: 70, SP: 30, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Arsene.png"}
+        Orpheus: { HP: 70, SP: 30, STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3}, ABILITY:["bash", "agi"], img:"./img/Orpheus.png"},
+        Izanagi: { HP: 80, SP: 25, STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3}, ABILITY:["bash", "zio"], img:"./img/Izanagi.png"},
+        Arsene: { HP: 65, SP: 35, STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5}, ABILITY:["bash", "agi"], img:"./img/Arsene.png"}
     }
 
-    // Demon's
+    // Demon
     const DEMONS = [
-        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 1, MAG:1, END: 1, AGI: 1, LUK: 1}, ABILITY:["Melee", "Spell", "", "", "", ""], img:"./img/Pixie.webp"}
+        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, ABILITY:["zio"], img:"./img/Pixie.webp"},
+        {name:"Jack Frost", HP: 45, SP: 30, STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6}, ABILITY:["agi"], img:"./img/Jack_Frost.jpg"},
+        {name:"Slime", HP: 60, SP: 10, STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2}, ABILITY:["bash"], img:"./img/Slime.png"}
     ]
 
-    // Loot
-    const LOOT = [
-        {name:"Bead", use: function(Persona) {
-            Persona.SP += Math.min(Persona.SP + 10, Persona.SP);
-        }}
-    ]
+    // Skill
+    const SKILLS = {
+        // Physical skills
+        bash: {name: "Bash", cost: {hp:4}, power:10, type:"physical"},
+
+        // Magic skills
+        agi: { name: "Agi", cost: {sp:4}, power: 12, type: "magic" },
+        zio: { name: "Zio", cost: {sp:4}, power: 12, type: "magic" },
+    };
+
+    const CARDS = [
+        { 
+            name: "0. The Fool", 
+            description: "+1 to all stats.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+                persona.STATS.END += 1;
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+            } 
+        },
+        { 
+            name: "I. The Magician", 
+            description: "Increases Magic by 2.",
+            apply: function(persona) { persona.STATS.MAG += 2; } 
+        },
+        { 
+            name: "IV. The Emperor", 
+            description: "Increases Endurance by 2.",
+            apply: function(persona) { persona.STATS.END += 2; } 
+        },
+        { 
+            name: "VI. The Lovers", 
+            description: "Increases Agility and Luck by 1.",
+            apply: function(persona) {
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+            } 
+        },
+        { 
+            name: "VII. The Chariot", 
+            description: "Increases Strength by 2.",
+            apply: function(persona) { persona.STATS.STR += 2; } 
+        },
+        { 
+            name: "VIII. Strength", 
+            description: "Increases Strength and Endurance by 1.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.END += 1;
+            } 
+        },
+        { 
+            name: "IX. The Hermit", 
+            description: "Increases Luck by 3.",
+            apply: function(persona) { persona.STATS.LUK += 3; } 
+        },
+        { 
+            name: "XI. Justice", 
+            description: "Increases Strength and Magic by 1.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+            } 
+        },
+        { 
+            name: "XII. The Hanged Man", 
+            description: "Increases Agility by 3.",
+            apply: function(persona) { persona.STATS.AGI += 3; } 
+        },
+        { 
+            name: "XV. The Devil", 
+            description: "Increases Strength by 4.",
+            apply: function(persona) { persona.STATS.STR += 4; } 
+        },
+        { 
+            name: "XVI. The Tower", 
+            description: "Increases Endurance by 4.",
+            apply: function(persona) { persona.STATS.END += 4; } 
+        },
+        { 
+            name: "XVIII. The Moon", 
+            description: "Increases Magic and Luck by 2.",
+            apply: function(persona) {
+                persona.STATS.MAG += 2;
+                persona.STATS.LUK += 2;
+            } 
+        },
+        { 
+            name: "XXI. The World", 
+            description: "+2 to Strength, Magic, and Endurance.",
+            apply: function(persona) {
+                persona.STATS.STR += 2;
+                persona.STATS.MAG += 2;
+                persona.STATS.END += 2;
+            } 
+        },
+
+        // --- Resource & Healing Cards ---
+        { 
+            name: "II. The High Priestess", 
+            description: "+5 to Max SP and restore 5 SP.",
+            apply: function(persona) { 
+                persona.maxSP += 5;
+                persona.SP += 5;
+            } 
+        },
+        { 
+            name: "III. The Empress", 
+            description: "+10 to Max HP and heal 10 HP.",
+            apply: function(persona) { 
+                persona.maxHP += 10;
+                persona.HP += 10;
+            } 
+        },
+        { 
+            name: "V. The Hierophant", 
+            description: "Restore 50% of your Max SP.",
+            apply: function(persona) {
+                const spRestore = Math.floor(persona.maxSP * 0.50);
+                persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
+            } 
+        },
+        { 
+            name: "XIII. Death", 
+            description: "Fully restore HP and SP.",
+            apply: function(persona) {
+                persona.HP = persona.maxHP;
+                persona.SP = persona.maxSP;
+            } 
+        },
+        {
+            name: "XIV. Temperance",
+            description: "Heal 50% of your Max HP.",
+            apply: function(persona) {
+                const healAmount = Math.floor(persona.maxHP * 0.50);
+                persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
+            }
+        },
+        { 
+            name: "XVII. The Star", 
+            description: "+5 Max HP and +5 Max SP.",
+            apply: function(persona) { 
+                persona.maxHP += 5;
+                persona.maxSP += 5;
+                persona.HP += 5;
+                persona.SP += 5;
+            } 
+        },
+        { 
+            name: "XX. Judgement", 
+            description: "Increase Max HP and Max SP by 10%.",
+            apply: function(persona) {
+                const hpBonus = Math.floor(persona.maxHP * 0.10);
+                const spBonus = Math.floor(persona.maxSP * 0.10);
+                persona.maxHP += hpBonus;
+                persona.maxSP += spBonus;
+                persona.HP += hpBonus;
+                persona.SP += spBonus;
+            } 
+        },
+
+        // --- Special Effect Cards ---
+        { 
+            name: "X. Wheel of Fortune", 
+            description: "+3 to a random stat.",
+            apply: function(persona) {
+                const stats = ["STR", "MAG", "END", "AGI", "LUK"];
+                const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                persona.STATS[randomStat] += 3;
+            } 
+        },
+        { 
+            name: "XIX. The Sun", 
+            description: "+1 to all stats and fully heal HP & SP.",
+            apply: function(persona) {
+                persona.STATS.STR += 1;
+                persona.STATS.MAG += 1;
+                persona.STATS.END += 1;
+                persona.STATS.AGI += 1;
+                persona.STATS.LUK += 1;
+                persona.HP = persona.maxHP;
+                persona.SP = persona.maxSP;
+            } 
+        },
+    ];
 
     // Starting State
     let state = {
         playerName:null,
         enemy:null,
-        inventory:[],
         xp:0,
         level:1,
         persona:null
@@ -43,46 +349,100 @@
         return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
     }
 
-    // Loot drops
-    function lootPickOptions(count=2) {
-        let arr=[];
-        for (let i = 0; i < count; i++) arr.push(LOOT[Math.floor(Math.random()*LOOT.length)]);
-        return arr;
-    }
-
     //Main menu
     function mainMenu() {
-        const div = document.getElementById("personaSelect");
+        const div = document.getElementById("start-screen");
         let newButton = document.createElement("button");
-        newButton.onclick=() => personaSelect();
+        newButton.textContent = "New Game";
+        newButton.onclick =() => personaSelect();
         div.appendChild(newButton);
         let loadButton = document.createElement("button");
-        loadButton.textContent="Load Save";
-        loadButton.onclick = () => loadGame();
+        loadButton.textContent = "Load Save";
+        loadButton.onclick = () => alert("Not implemented yet!");
         div.appendChild(loadButton);
     }
 
     // Selecting Persona
     function personaSelect() {
-        const div = document.getElementById("personaSelect");
+        const div = document.getElementById("start-screen");
         div.innerHTML = "<h4>Choose your Persona</h4>";
         Object.keys(PERSONAS).forEach (c => {
             let btn = document.createElement("button");
-            btn.innterHtml=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
+            btn.innerHTML=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
+            btn.onclick = () => startGame(c);
+            div.appendChild(btn);
         })
     }
 
     // Starting the game
-    function startGame(cls) {
-        const base = PERSONAS[cls];
-        state.persona={  cls, HP:base.HP, maxHP:base.HP, SP:base.SP, maxSP:base.SP, STATS:{ STR:base.STATS.STR, MAG:base.STATS.MAG, END:base.STATS.END, AGI:base.STATS.AGI, LUK:base.STATS.LUK}, ABILITY:[...base.ABILITY]};
+    function startGame(personaName) {
+        const base = PERSONAS[personaName];
+        state.persona = JSON.parse(JSON.stringify(base));
+        state.persona.name = personaName;
+        state.persona.maxHP = base.HP;
+        state.persona.maxSP = base.SP;
+        document.getElementById("start-screen").style.display = 'none';
+        document.getElementById("game-screen").style.display = 'grid';
         spawnEnemy();
         render();
     }
 
+    // Render all game info
+    function render() {
+        if (!state.persona) return;
+        const playerStatsDiv = document.getElementById("player-stats");
+        let p = state.persona;
+        const hpPercent = (p.HP / p.maxHP) * 100;
+        const spPercent = (p.SP / p.maxSP) * 100;
+        playerStatsDiv.innerHTML = `
+            <h3>${p.name}</h3>
+            <img src='${p.img}' alt='${p.name}' class='icon'>
+            <p>HP: ${p.HP} / ${p.maxHP}</p>
+            <div class="stat-bar">
+                <div class="hp-fill" style="width: ${hpPercent}%;"></div>
+            </div>
+            <p>SP: ${p.SP} / ${p.maxSP}</p>
+            <div class="stat-bar">
+                <div class="sp-fill" style="width: ${spPercent}%;"></div>
+            </div>
+        <ul>
+            <li>STR: ${p.STATS.STR}</li>
+            <li>MAG: ${p.STATS.MAG}</li>
+            <li>END: ${p.STATS.END}</li>
+            <li>AGI: ${p.STATS.AGI}</li>
+            <li>LUK: ${p.STATS.LUK}</li>
+        </ul>
+        `;
+        const enemyDisplayDiv = document.getElementById("enemy-display");
+        if (state.enemy) {
+            let e = state.enemy;
+            enemyDisplayDiv.innerHTML = `
+                <h3>${e.name}</h3>
+                <img src='${e.img}' alt='${e.name}' class='icon'>
+                <p>HP: ${e.HP}</p>
+            `;
+        }
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
+        p.ABILITY.forEach(skillKey => {
+            const skill = SKILLS[skillKey]; 
+            if (!skill) return; 
+            let costDisplay = "";
+            if (skill.cost.hp) {
+                costDisplay = `${skill.cost.hp} HP`;
+            } else if (skill.cost.sp) {
+                costDisplay = `${skill.cost.sp} SP`;
+            }
+            let skillButton = document.createElement("button");
+            skillButton.innerHTML = `${skill.name} <br> (${costDisplay})`;
+            skillButton.onclick = () => useAbility(skillKey);
+            actionsDiv.appendChild(skillButton);
+        });
+    }
+
     // attack
     function attack() {
-        let dmg = Math.max(1, state.persona.STR - state.enemy.END);
+        let dmg = Math.max(1, state.persona.STATS.STR - state.enemy.STATS.END);
         state.enemy.HP -= dmg;
         if (state.enemy.HP <= 0) {
             enemyDefeated();
@@ -91,55 +451,115 @@
         enemyTurn();
         render();
     }
+    // use Ability
+    function useAbility(skillKey){
+        const skill = SKILLS[skillKey];
+        const player = state.persona;
+        const enemy = state.enemy;
 
-    // ability
-    function useAbility(){
-        
-    }
-
-    // Enemy turn
-    function enemyTurn(){
-        
-    }
-
-    // Enemy defeated
-    function enemyDefeated(){
-        state.xp += 10;
-        if (state.xp >= state.level*20) {
-            state.level++;
-            state.persona.maxHP += 5;
-            state.persona.hp = state.persona.maxHP;
-            //3 random stats get +1
+        if (skill.cost.sp && player.SP < skill.cost.sp) {
+            return;
         }
-        showTarrotCard
-    }
+        if (skill.cost.hp && player.HP < skill.cost.hp) {
+            return;
+        }
 
-    // Tarrot Card loot
-    function showTarrotCard(){
-        let options = pickLootOption(Math.floor(Math.random() * 6) + 3);
-        options.forEach(it => {
-            let btn = document.createElement("button");
-            btn.innerHTML=`<img src='${it.img}' class='icon'> ${it.name}`;
-            btn.onclick =() => //Apply the effect
-            div.appendChild(btn);
-        })
+        if (skill.cost.sp) {
+            player.SP -= skill.cost.sp;
+        }
+        if (skill.cost.hp) {
+            player.HP -= skill.cost.hp;
+        }
+
+        let dmg = 0;
+        if (skill.type === 'physical') {
+            dmg = Math.max(1, skill.power + player.STATS.STR - enemy.STATS.END);
+        } else if (skill.type === 'magic') {
+            dmg = Math.max(1, skill.power + player.STATS.MAG - enemy.STATS.END);
+        }
+
+        enemy.HP -= dmg;
+
+        if (enemy.HP <= 0) {
+            enemyDefeated();
+            return;
+        }
+
+        enemyTurn();
+        render();
     }
 
     // Spawning Enemy
-    function spawnEnemy(){
+    function spawnEnemy() {
         state.enemy = pickEnemy();
     }
 
-    function render(){
-        if (!state.persona) return;
-        let p = state.persona;
-        document.getElementById("stats").innerHTML = `
-            <img src='${p.img}' class='icon'><br>
-            Persona: ${p.name} <br>
-            Hp: <div class='hpBar'><div class='hpFill' style='width:${(p.HP/p.maxHP)*100}%'></div></div>
-            STR: ${p.STR} <br>
-            
-        `;
+    // Enemy turn to attack
+    function enemyTurn() {
+        const enemy = state.enemy;
+        const player = state.persona;
+
+        // --- Basic AI Decision Making ---
+        const availableSkills = enemy.ABILITY;
+        const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
+        const skill = SKILLS[chosenSkillKey];
+
+        // Decide whether to use a skill (50% chance if a skill is available)
+        if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
+            // --- Use a Skill ---
+            enemy.SP -= skill.cost.sp;
+            let dmg = 0;
+            if (skill.type === 'physical') {
+                dmg = Math.max(1, skill.power + enemy.STATS.STR - player.STATS.END);
+            } else if (skill.type === 'magic') {
+                dmg = Math.max(1, skill.power + enemy.STATS.MAG - player.STATS.END);
+            }
+            player.HP -= dmg;
+        } else {
+            // --- Use a Basic Attack ---
+            let dmg = Math.max(1, enemy.STATS.STR - player.STATS.END);
+            player.HP -= dmg;
+        }
+
+        // --- Check for Player Defeat ---
+        if (player.HP <= 0) {
+            render(); // Render one last time to show the final message
+            setTimeout(() => document.location.reload(), 2000); // Wait 2s before restart
+        }
     }
+    // Enemy dies
+    function enemyDefeated(){
+        state.xp+=10;
+        if(state.xp>=state.level*20){
+        state.level++;
+        state.persona.maxHP += 5; 
+        state.persona.maxSP += 2;
+        }
+        shuffleTime();
+    }
+
+    // Shuffle Time
+    function shuffleTime() {
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = "<h4>Shuffle Time! Choose your reward...</h4>";
+        const options = [];
+        const shuffled = [...CARDS].sort(() => 0.5 - Math.random());
+        for (let i = 0; i < Math.min(3, shuffled.length); i++) {
+            options.push(shuffled[i]);
+        }
+        options.forEach(card => {
+            let btn = document.createElement("button");
+            btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
+            btn.onclick = () => {
+                card.apply(state.persona);
+                spawnEnemy();              
+                render();                  
+            };
+            actionsDiv.appendChild(btn);
+        });
+    }
+    
+    // Game Start
+    mainMenu();
 </script>
 </html>
