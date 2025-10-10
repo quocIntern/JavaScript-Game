@@ -748,6 +748,34 @@
     }
     }
 
+    function saveGame() {
+    // Convert the entire 'state' object into a JSON string
+    const saveFile = JSON.stringify(state);
+    // Store that string in the browser's localStorage under a unique key
+    localStorage.setItem('personaSaveFile', saveFile);
+    alert("Game Saved!");
+    }
+
+    function loadGame() {
+        // Retrieve the saved string from localStorage
+        const savedState = localStorage.getItem('personaSaveFile');
+
+        if (savedState) {
+            // If a save file exists, parse the string back into an object
+            state = JSON.parse(savedState);
+            
+            // Hide the start screen and show the game screen
+            document.getElementById("start-screen").style.display = 'none';
+            document.getElementById("game-screen").style.display = 'grid';
+            
+            // IMPORTANT: Re-render the game with the loaded state
+            render();
+            alert("Game Loaded!");
+        } else {
+            alert("No save file found!");
+        }
+    }
+
 
     // Game Start
     mainMenu();
