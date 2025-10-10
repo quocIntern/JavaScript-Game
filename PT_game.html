@@ -157,6 +157,10 @@
         color: var(--retro-border);
         text-align: left;
     }
+    .feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
+    .feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
+    .feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
+    .feedback-text.critical { color: #ffd900; } /* Add this line for CRITICAL */
 </style>
 </head>
 <body>
@@ -592,29 +596,33 @@
             return 0; // Not a damage skill
         }
 
+        let isCrit = false;
+        // Base 5% crit chance, plus 0.75% for every point of Luck
+        const critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
+        if (Math.random() < critChance) {
+            isCrit = true;
+        }
+
         // Step 2: Check target's affinities for the skill's element
         const affinity = target.affinities[skill.element];
-        let multiplier = 1.0; // Normal damage
-        if (affinity) { // Check if an affinity was found
-        showAffinityFeedback(target, affinity); // Call our new function!
+        let affinityMultiplier = 1.0; // Normal damage
+        if (affinity) {
+            showAffinityFeedback(target, affinity);
+            if (affinity === 'weak') affinityMultiplier = 1.5;
+            if (affinity === 'resist') affinityMultiplier = 0.5;
+            if (affinity === 'null') affinityMultiplier = 0;
         }
-        if (affinity === 'weak') {
-            multiplier = 1.5;
-            console.log("WEAK!"); // We can add UI for this later
-        } else if (affinity === 'resist') {
-            multiplier = 0.5;
-            console.log("RESIST!");
-        } else if (affinity === 'null') {
-            multiplier = 0;
-            console.log("NULL!");
-        }
-        
-        // Step 3: Calculate final damage
+            
+            // Step 3: Calculate final damage
         const totalDamage = baseDamage - target.STATS.END;
-        const finalDamage = Math.floor(Math.max(1, totalDamage) * multiplier);
-        
-        return finalDamage;
-    }
+        let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier);
+
+        if (isCrit) {
+            finalDamage = Math.floor(finalDamage * 1.5);
+            showCombatText(target, "CRITICAL!", 'critical');
+        }
+            return finalDamage;
+        }
 
     // attack
     function attack() {
@@ -840,22 +848,26 @@
         });
     }
 
-    function showAffinityFeedback(target, affinity) {
+    function showCombatText(target, text, className) {
     // Determine which div to show the feedback in
     const feedbackDiv = (target === state.persona) ? document.getElementById('player-feedback') : document.getElementById('enemy-feedback');
 
     if (feedbackDiv) {
-        feedbackDiv.textContent = affinity.toUpperCase() + "!";
-        feedbackDiv.className = `feedback-text ${affinity}`; // e.g., "feedback-text weak"
+        feedbackDiv.textContent = text;
+        feedbackDiv.className = `feedback-text ${className}`; // e.g., "feedback-text critical"
 
         // The 'show' class triggers the animation
         feedbackDiv.classList.add('show');
 
         // Remove the animation class after it finishes so it can be re-triggered
         setTimeout(() => {
-        feedbackDiv.classList.remove('show');
+            feedbackDiv.classList.remove('show');
         }, 1000);
     }
+}
+
+    function showAffinityFeedback(target, affinity) {
+        showCombatText(target, affinity.toUpperCase() + "!", affinity);
     }
 
     function saveGame() {
