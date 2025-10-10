@@ -416,6 +416,7 @@
         const enemyDisplayDiv = document.getElementById("enemy-display");
         if (state.enemy) {
             let e = state.enemy;
+            const enemyHpPercent = (e.HP / e.maxHP) * 100;
             enemyDisplayDiv.innerHTML = `
                 <h3>${e.name}</h3>
                 <img src='${e.img}' alt='${e.name}' class='icon'>
