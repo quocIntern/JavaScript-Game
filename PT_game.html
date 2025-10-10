@@ -440,7 +440,7 @@
         const spPercent = (p.SP / p.maxSP) * 100;
         playerStatsDiv.innerHTML = `
             <h3>${p.name}</h3>
-            <img src='${p.img}' alt='${p.name}' class='icon'>
+            <img src='${p.img}' class='icon'>
             <p>HP: ${p.HP} / ${p.maxHP}</p>
             <div class="stat-bar">
                 <div class="hp-fill" style="width: ${hpPercent}%;"></div>
@@ -463,7 +463,7 @@
             const enemyHpPercent = (e.HP / e.maxHP) * 100; // Calculate percentage
             enemyDisplayDiv.innerHTML = `
                 <h3>${e.name}</h3>
-                <img src='${e.img}' alt='${e.name}' class='icon'>
+                <img src='${e.img}' class='icon'>
                 
                 <p>HP: ${e.HP} / ${e.maxHP}</p>
                 <div class="stat-bar">
