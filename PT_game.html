@@ -122,13 +122,13 @@
         height: 100%;
     }
     .feedback-text {
-    position: absolute;
-    font-size: 1.2em;
-    font-weight: bold;
-    transform: translate(50px, 50px); /* Center it roughly over the sprite */
-    pointer-events: none; /* Make it unclickable */
-    opacity: 0;
-    transition: opacity 0.5s;
+        position: absolute;
+        font-size: 1.2em;
+        font-weight: bold;
+        transform: translate(50px, 50px); /* Center it roughly over the sprite */
+        pointer-events: none; /* Make it unclickable */
+        opacity: 0;
+        transition: opacity 0.5s;
     }
 
     .feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
@@ -144,12 +144,19 @@
         0% { opacity: 1; transform: translate(50px, 50px); }
         100% { opacity: 0; transform: translate(50px, 0px); }
     }
+    #exit-container {
+    position: fixed; 
+    bottom: 20px;
+    left: 20px;
+    display: none;  
+}
 </style>
 </head>
 <body>
     <div id="game-container">
         <div id="start-screen"></div>
         <div id="game-screen" style="display: none;">
+            <div id="exit-container"></div>
             <div id="player-stats"></div>
             <div id="enemy-display"></div>
             <div id="actions"></div>
@@ -463,6 +470,7 @@
 
     // Selecting Persona
     function personaSelect() {
+        localStorage.removeItem('personaSaveFile');
         const div = document.getElementById("start-screen");
         div.innerHTML = "<h4>Choose your Persona</h4>";
         Object.keys(PERSONAS).forEach (c => {
@@ -484,6 +492,17 @@
         document.getElementById("game-screen").style.display = 'grid';
         spawnEnemy();
         render();
+        const exitContainer = document.getElementById("exit-container");
+        exitContainer.style.display = 'block'; // Make the container visible
+        const exitButton = document.createElement("button");
+        exitButton.textContent = "Exit to Menu";
+        exitButton.onclick = () => {
+            if (confirm("Are you sure you want to exit? Unsaved progress will be lost.")) {
+                document.location.reload();
+            }
+        };
+        exitContainer.innerHTML = ''; // Clear it out first
+        exitContainer.appendChild(exitButton);
     }
 
     // Render all game info
