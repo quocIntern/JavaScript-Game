@@ -26,8 +26,7 @@
     }
 
     #game-container {
-        max-width: 900px;
-        margin: auto;
+        position: relative;
     }
 
     h3, h4 {
@@ -145,21 +144,30 @@
         100% { opacity: 0; transform: translate(50px, 0px); }
     }
     #exit-container {
-    position: fixed; 
-    bottom: 20px;
-    left: 20px;
-    display: none;  
-}
+        position: fixed; 
+        bottom: 20px;
+        left: 20px;
+        display: none;  
+    }
+    #floor-counter {
+        position: absolute; /* Takes the element out of the normal flow */
+        bottom: -25px;        /* Positions it 5px from the bottom of the container */
+        left: 15px;         /* Positions it 15px from the left */
+        font-size: 0.8em;   /* Make it slightly smaller to fit well */
+        color: var(--retro-border);
+        text-align: left;
+    }
 </style>
 </head>
 <body>
     <div id="game-container">
         <div id="start-screen"></div>
         <div id="game-screen" style="display: none;">
-            <div id="exit-container"></div>
             <div id="player-stats"></div>
             <div id="enemy-display"></div>
             <div id="actions"></div>
+            <div id="floor-counter"></div>
+            <div id="exit-container"></div>
         </div>
     </div>
 </body>
@@ -537,7 +545,6 @@
             let e = state.enemy;
             const enemyHpPercent = (e.HP / e.maxHP) * 100; // Calculate percentage
             enemyDisplayDiv.innerHTML = `
-                <h4>Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}</h4>
                 <div class="feedback-text" id="enemy-feedback"></div>
                 <h3>${e.name}</h3>
                 <img src='${e.img}' class='icon'>
@@ -546,6 +553,7 @@
                     <div class="hp-fill" style="width: ${enemyHpPercent}%;"></div>
                 </div>
             `;
+            
         }
         const actionsDiv = document.getElementById("actions");
         actionsDiv.innerHTML = `<button onclick="saveGame()">Save</button><button onclick="attack()">Attack</button>`;
@@ -566,6 +574,10 @@
             actionsDiv.appendChild(skillButton);
         });
         
+        const floorCounterDiv = document.getElementById("floor-counter");
+        if (state.enemy) { // Only show it if the game is running
+         floorCounterDiv.innerHTML = `Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}`;
+        }
     }
 
     // A central function to handle all damage calculations, including affinities.
