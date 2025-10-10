@@ -204,6 +204,36 @@
         }
     ]
 
+    // Mini Bosses
+    const MINI_BOSSES = [
+        {
+            name:"Hee-Ho Sentinel", HP: 80, maxHP: 80, SP: 40, 
+            STATS:{STR: 8, MAG:10, END: 7, AGI: 6, LUK: 7}, 
+            ABILITY:["bufu", "zionga"], img:"https://i.imgur.com/AptB9Zl.png",
+            affinities: { fire: 'weak', ice: 'null' },
+            isMiniBoss: true
+        }
+    ];
+
+    // Bosses
+    const BOSSES = [
+        {
+            name:"King Slime", HP: 120, maxHP: 120, SP: 50, 
+            STATS:{STR: 10, MAG:5, END: 12, AGI: 3, LUK: 3}, 
+            ABILITY:["bash", "assault_dive"], img:"https://i.imgur.com/034q32u.png",
+            affinities: { phys: 'resist', fire: 'weak' },
+            isBoss: true
+        }
+    ];
+
+    // Final Boss
+    const FINAL_BOSS = {
+        name:"Archon of the Abyss", HP: 300, maxHP: 300, SP: 150, 
+        STATS:{STR: 15, MAG:15, END: 15, AGI: 10, LUK: 10}, 
+        ABILITY:["agilao", "zionga", "bufudyne"], img:"https://i.imgur.com/83Fpq5u.png",
+        affinities: { },
+        isFinalBoss: true        
+    };
     // Skill
     const SKILLS = {
         // --- Tier 1 Skills ---
@@ -408,7 +438,9 @@
         enemy:null,
         xp:0,
         level:1,
-        persona:null
+        persona:null,
+        currentFloor: 1,
+        totalFloors: 10
     };
 
     // How enemies are chosen
@@ -425,7 +457,7 @@
         div.appendChild(newButton);
         let loadButton = document.createElement("button");
         loadButton.textContent = "Load Save";
-        loadButton.onclick = () => alert("Not implemented yet!");
+        loadButton.onclick = () => loadGame();
         div.appendChild(loadButton);
     }
 
@@ -486,10 +518,10 @@
             let e = state.enemy;
             const enemyHpPercent = (e.HP / e.maxHP) * 100; // Calculate percentage
             enemyDisplayDiv.innerHTML = `
+                <h4>Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}</h4>
                 <div class="feedback-text" id="enemy-feedback"></div>
                 <h3>${e.name}</h3>
                 <img src='${e.img}' class='icon'>
-                
                 <p>HP: ${e.HP} / ${e.maxHP}</p>
                 <div class="stat-bar">
                     <div class="hp-fill" style="width: ${enemyHpPercent}%;"></div>
@@ -497,7 +529,9 @@
             `;
         }
         const actionsDiv = document.getElementById("actions");
-        actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
+        actionsDiv.innerHTML = `<button onclick="saveGame()">Save</button><button onclick="attack()">Attack</button>`;
+        
+
         p.ABILITY.forEach(skillKey => {
             const skill = SKILLS[skillKey]; 
             if (!skill) return; 
@@ -512,6 +546,7 @@
             skillButton.onclick = () => useAbility(skillKey);
             actionsDiv.appendChild(skillButton);
         });
+        
     }
 
     // A central function to handle all damage calculations, including affinities.
@@ -596,7 +631,29 @@
 
     // Spawning Enemy
     function spawnEnemy() {
-        const newEnemy = pickEnemy();
+        let newEnemy;
+        const nextEnemyNumber = state.enemiesDefeated + 1;
+
+        // Have we cleared all the floors? Time for the final boss.
+        if (state.currentFloor > state.totalFloors) {
+            newEnemy = JSON.parse(JSON.stringify(FINAL_BOSS));
+        }
+        // Is the next enemy a main floor boss (10th, 20th, etc.)?
+        else if (nextEnemyNumber % 10 === 0) {
+            // This picks a random boss from the array
+            const bossTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
+            newEnemy = JSON.parse(JSON.stringify(bossTemplate));
+        }
+        // Is the next enemy a mini-boss (5th, 15th, etc.)?
+        else if (nextEnemyNumber % 5 === 0) {
+            const miniBossTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
+            newEnemy = JSON.parse(JSON.stringify(miniBossTemplate));
+        }
+        // Otherwise, spawn a regular demon.
+        else {
+            newEnemy = pickEnemy();
+        }
+        
         newEnemy.maxHP = newEnemy.HP; 
         state.enemy = newEnemy;
     }
@@ -631,7 +688,18 @@
     }
     // Enemy dies
     function enemyDefeated(){
-        state.xp+=10;
+        if (state.enemy.isFinalBoss) {
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = "<h4>VICTORY!</h4><p>You have conquered the Abyss and completed your journey!</p><button onclick='document.location.reload()'>Play Again</button>";
+        return; // Stop the function
+        }
+        state.enemiesDefeated++;
+        if (state.enemy.isBoss) {
+            state.currentFloor++;
+            floorTransition(); // Go to a special screen before the next fight
+            return;
+        }
+        state.xp += state.enemy.isMiniBoss ? 25 : 10;
         if(state.xp>=state.level*20){
             state.level++;
             state.persona.maxHP += 5; 
@@ -644,6 +712,17 @@
         } else {
             shuffleTime();
         }
+    }
+
+    function floorTransition() {
+        const actionsDiv = document.getElementById("actions");
+        actionsDiv.innerHTML = `<h4>Floor ${state.currentFloor - 1} Cleared!</h4><p>You feel a shift in the abyss... Preparing to advance.</p>`;
+        
+        // Wait 3 seconds, then spawn the next enemy and render the screen
+        setTimeout(() => {
+            spawnEnemy();
+            render();
+        }, 3000);
     }
 
     // Shuffle Time
