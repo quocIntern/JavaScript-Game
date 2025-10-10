@@ -183,14 +183,22 @@
 
     // Skill
     const SKILLS = {
-        // Physical skills
-        bash: {name: "Bash", cost: {hp:4}, power:10, type:"physical", element:"phys"},
+        // --- Tier 1 Skills ---
+        bash:   { name: "Bash", cost: { hp: 8 }, power: 10, type: "physical", element: "phys", evolves_to: "assault_dive" },
+        agi:    { name: "Agi", cost: { sp: 4 }, power: 12, type: "magic", element: "fire", evolves_to: "agilao" },
+        zio:    { name: "Zio", cost: { sp: 4 }, power: 12, type: "magic", element: "elec", evolves_to: "zionga" },
+        bufu:   { name: "Bufu", cost: { sp: 4 }, power: 12, type: "magic", element: "ice", evolves_to: "bufudyne" },
+        garu:   { name: "Garu", cost: { sp: 4 }, power: 12, type: "magic", element: "wind", evolves_to: "garula" },
+        
+        // --- Tier 2 Skills ---
+        assault_dive: { name: "Assault Dive", cost: { hp: 14 }, power: 22, type: "physical", element: "phys" },
+        agilao:       { name: "Agilao", cost: { sp: 8 }, power: 25, type: "magic", element: "fire" },
+        zionga:       { name: "Zionga", cost: { sp: 8 }, power: 25, type: "magic", element: "elec" },
+        bufudyne:     { name: "Bufudyne", cost: { sp: 8 }, power: 25, type: "magic", element: "ice" },
+        garula:       { name: "Garula", cost: { sp: 8 }, power: 25, type: "magic", element: "wind" },
 
-        // Magic skills
-        agi: { name: "Agi", cost: {sp:4}, power: 12, type: "magic", element: "fire" },
-        zio: { name: "Zio", cost: {sp:4}, power: 12, type: "magic", element: "elec" },
-        bufu: { name: "Bufu", cost: {sp:4}, power: 12, type: "magic", element: "ice" },
-        garu: { name: "Garu", cost: {sp:4}, power: 12, type: "magic", element: "wind" },
+        // --- Healing Skills  ---
+        dia: { name: "Dia", cost: { sp: 20 }, power: 20, type: "healing", element: "heal" },
     };
 
     const CARDS = [
