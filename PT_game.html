@@ -121,6 +121,29 @@
         background-color: #3262a8; /* Classic blue for SP/MP */
         height: 100%;
     }
+    .feedback-text {
+    position: absolute;
+    font-size: 1.2em;
+    font-weight: bold;
+    transform: translate(50px, 50px); /* Center it roughly over the sprite */
+    pointer-events: none; /* Make it unclickable */
+    opacity: 0;
+    transition: opacity 0.5s;
+    }
+
+    .feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
+    .feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
+    .feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
+
+    /* Animation class */
+    .feedback-text.show {
+        animation: fadeUp 1s ease-out;
+    }
+
+    @keyframes fadeUp {
+        0% { opacity: 1; transform: translate(50px, 50px); }
+        100% { opacity: 0; transform: translate(50px, 0px); }
+    }
 </style>
 </head>
 <body>
@@ -439,6 +462,7 @@
         const hpPercent = (p.HP / p.maxHP) * 100;
         const spPercent = (p.SP / p.maxSP) * 100;
         playerStatsDiv.innerHTML = `
+            <div class="feedback-text" id="player-feedback"></div>
             <h3>${p.name}</h3>
             <img src='${p.img}' class='icon'>
             <p>HP: ${p.HP} / ${p.maxHP}</p>
@@ -462,6 +486,7 @@
             let e = state.enemy;
             const enemyHpPercent = (e.HP / e.maxHP) * 100; // Calculate percentage
             enemyDisplayDiv.innerHTML = `
+                <div class="feedback-text" id="enemy-feedback"></div>
                 <h3>${e.name}</h3>
                 <img src='${e.img}' class='icon'>
                 
@@ -504,7 +529,9 @@
         // Step 2: Check target's affinities for the skill's element
         const affinity = target.affinities[skill.element];
         let multiplier = 1.0; // Normal damage
-
+        if (affinity) { // Check if an affinity was found
+        showAffinityFeedback(target, affinity); // Call our new function!
+        }
         if (affinity === 'weak') {
             multiplier = 1.5;
             console.log("WEAK!"); // We can add UI for this later
@@ -609,7 +636,6 @@
             state.level++;
             state.persona.maxHP += 5; 
             state.persona.maxSP += 2;
-            alert("Level Up!");
         }
 
         // 25% chance for a special "Skill Time", 75% for a normal "Shuffle Time"
@@ -703,6 +729,26 @@
             actionsDiv.appendChild(btn);
         });
     }
+
+    function showAffinityFeedback(target, affinity) {
+    // Determine which div to show the feedback in
+    const feedbackDiv = (target === state.persona) ? document.getElementById('player-feedback') : document.getElementById('enemy-feedback');
+
+    if (feedbackDiv) {
+        feedbackDiv.textContent = affinity.toUpperCase() + "!";
+        feedbackDiv.className = `feedback-text ${affinity}`; // e.g., "feedback-text weak"
+
+        // The 'show' class triggers the animation
+        feedbackDiv.classList.add('show');
+
+        // Remove the animation class after it finishes so it can be re-triggered
+        setTimeout(() => {
+        feedbackDiv.classList.remove('show');
+        }, 1000);
+    }
+    }
+
+
     // Game Start
     mainMenu();
 </script>
