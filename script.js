@@ -349,7 +349,8 @@ function render() {
     const spPercent = (p.SP / p.maxSP) * 100;
     playerStatsDiv.innerHTML = `
         <div class="feedback-text" id="player-feedback"></div>
-        <h3>${p.name}</h3>
+        
+        <h3>${p.name} -- Lvl.${state.level}</h3>
         <img src='${p.img}' class='icon'>
         <p>HP: ${p.HP} / ${p.maxHP}</p>
         <div class="stat-bar">
