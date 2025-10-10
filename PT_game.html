@@ -136,26 +136,61 @@
 <script>
     // Persona
     const PERSONAS = {
-        Orpheus: { HP: 70, SP: 30, STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3}, ABILITY:["bash", "agi"], img:"./img/Orpheus.png"},
-        Izanagi: { HP: 80, SP: 25, STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3}, ABILITY:["bash", "zio"], img:"./img/Izanagi.png"},
-        Arsene: { HP: 65, SP: 35, STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5}, ABILITY:["bash", "agi"], img:"./img/Arsene.png"}
+        Orpheus: { 
+            HP: 70, SP: 30, 
+            STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3}, 
+            ABILITY:["bash", "agi"], 
+            img:"https://i.imgur.com/83Fpq5u.png",
+            affinities: { elec: 'weak', fire: 'resist' } 
+        },
+        Izanagi: { 
+            HP: 80, SP: 25, 
+            STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3}, 
+            ABILITY:["bash", "zio", "garu"], 
+            img:"https://i.imgur.com/11n2k5b.png",
+            affinities: { wind: 'weak', elec: 'resist' } 
+        },
+        Arsene: { 
+            HP: 65, SP: 35, 
+            STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5}, 
+            ABILITY:["bash", "bufu"], 
+            img:"https://i.imgur.com/K33t636.png",
+            affinities: { ice: 'weak', phys: 'resist' } 
+        }
     }
 
     // Demon
     const DEMONS = [
-        {name:"Pixie", HP: 30, SP: 20, STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, ABILITY:["zio"], img:"./img/Pixie.webp"},
-        {name:"Jack Frost", HP: 45, SP: 30, STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6}, ABILITY:["agi"], img:"./img/Jack_Frost.jpg"},
-        {name:"Slime", HP: 60, SP: 10, STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2}, ABILITY:["bash"], img:"./img/Slime.png"}
+        {
+            name:"Pixie", HP: 30, maxHP: 30, SP: 20, 
+            STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, 
+            ABILITY:["zio"], img:"https://i.imgur.com/FGfb3s7.png",
+            affinities: { phys: 'weak', elec: 'resist' }
+        },
+        {
+            name:"Jack Frost", HP: 45, maxHP: 45, SP: 30, 
+            STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6}, 
+            ABILITY:["bufu"], img:"https://i.imgur.com/AptB9Zl.png",
+            affinities: { fire: 'weak', ice: 'null' }
+        },
+        {
+            name:"Slime", HP: 60, maxHP: 60, SP: 10, 
+            STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2}, 
+            ABILITY:["bash"], img:"https://i.imgur.com/034q32u.png",
+            affinities: { phys: 'resist', fire: 'weak' }
+        }
     ]
 
     // Skill
     const SKILLS = {
         // Physical skills
-        bash: {name: "Bash", cost: {hp:4}, power:10, type:"physical"},
+        bash: {name: "Bash", cost: {hp:4}, power:10, type:"physical", element:"phys"},
 
         // Magic skills
-        agi: { name: "Agi", cost: {sp:4}, power: 12, type: "magic" },
-        zio: { name: "Zio", cost: {sp:4}, power: 12, type: "magic" },
+        agi: { name: "Agi", cost: {sp:4}, power: 12, type: "magic", element: "fire" },
+        zio: { name: "Zio", cost: {sp:4}, power: 12, type: "magic", element: "elec" },
+        bufu: { name: "Bufu", cost: {sp:4}, power: 12, type: "magic", element: "ice" },
+        garu: { name: "Garu", cost: {sp:4}, power: 12, type: "magic", element: "wind" },
     };
 
     const CARDS = [
