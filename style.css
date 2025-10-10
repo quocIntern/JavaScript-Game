@@ -1,0 +1,155 @@
+:root {
+    --retro-blue: #001a6d;
+    --retro-text: #ffffff;
+    --retro-border: #c3c3c3;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive; /* Use the new pixel font */
+    background-color: black;
+    color: var(--retro-text);
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    /* These ensure our pixel art and font stay sharp */
+    image-rendering: pixelated;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+}
+
+#game-container {
+    position: relative;
+}
+
+h3, h4 {
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--retro-text);
+}
+
+#game-screen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+        "player enemy"
+        "actions actions";
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* This is the core of the retro text box style */
+#player-stats, #enemy-display {
+    background-color: var(--retro-blue);
+    padding: 24px; /* Give space for the border */
+    text-align: left;
+    
+    /* The magic for decorative borders */
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6; /* This tells the browser how to "slice" the image */
+    border-image-width: 1;
+    border-image-repeat: stretch;
+}
+#player-stats { grid-area: player; }
+#enemy-display { grid-area: enemy; }
+
+#actions {
+    grid-area: actions;
+    padding: 10px;
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6;
+    border-image-width: 1;
+    background-color: var(--retro-blue);
+}
+
+.icon {
+    width: 96px; /* A multiple of 8 or 16 is good for pixel art */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: var(--retro-blue);
+    color: var(--retro-text);
+    border: 2px solid var(--retro-border);
+    padding: 10px 15px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    margin: 5px;
+    font-size: 0.8em; /* Match the retro feel */
+}
+
+button:hover {
+    background-color: var(--retro-text);
+    color: var(--retro-blue);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    margin: 10px 0;
+}
+li {
+    padding: 2px 0;
+}
+
+/* Health & SP Bar Styles */
+.stat-bar {
+    background-color: #333;
+    border: 1px solid var(--retro-border);
+    height: 12px;
+    width: 100%;
+    margin: 5px 0 15px 0;
+}
+.hp-fill {
+    background-color: #32a852; /* Classic green for HP */
+    height: 100%;
+}
+.sp-fill {
+    background-color: #3262a8; /* Classic blue for SP/MP */
+    height: 100%;
+}
+.feedback-text {
+    position: absolute;
+    font-size: 1.2em;
+    font-weight: bold;
+    transform: translate(50px, 50px); /* Center it roughly over the sprite */
+    pointer-events: none; /* Make it unclickable */
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
+.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
+.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
+
+/* Animation class */
+.feedback-text.show {
+    animation: fadeUp 1s ease-out;
+}
+
+@keyframes fadeUp {
+    0% { opacity: 1; transform: translate(50px, 50px); }
+    100% { opacity: 0; transform: translate(50px, 0px); }
+}
+#exit-container {
+    position: fixed; 
+    bottom: 20px;
+    left: 20px;
+    display: none;  
+}
+#floor-counter {
+    position: absolute; /* Takes the element out of the normal flow */
+    bottom: -25px;        /* Positions it 5px from the bottom of the container */
+    left: 15px;         /* Positions it 15px from the left */
+    font-size: 0.8em;   /* Make it slightly smaller to fit well */
+    color: var(--retro-border);
+    text-align: left;
+}
+.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
+.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
+.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
+.feedback-text.critical { color: #ffd900; } /* Add this line for CRITICAL */
