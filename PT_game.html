@@ -419,7 +419,11 @@
             enemyDisplayDiv.innerHTML = `
                 <h3>${e.name}</h3>
                 <img src='${e.img}' alt='${e.name}' class='icon'>
-                <p>HP: ${e.HP}</p>
+
+                <p>HP: ${e.HP}/${e.maxHP}</p>
+                <div class="stat-bar">
+                    <div class="hp-fill" style="width: ${enemyHpPercent}%;"></div>
+                </div>
             `;
         }
         const actionsDiv = document.getElementById("actions");
