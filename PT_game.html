@@ -582,11 +582,18 @@
     function enemyDefeated(){
         state.xp+=10;
         if(state.xp>=state.level*20){
-        state.level++;
-        state.persona.maxHP += 5; 
-        state.persona.maxSP += 2;
+            state.level++;
+            state.persona.maxHP += 5; 
+            state.persona.maxSP += 2;
+            alert("Level Up!");
         }
-        shuffleTime();
+
+        // 25% chance for a special "Skill Time", 75% for a normal "Shuffle Time"
+        if (Math.random() < 0.25) {
+            skillShuffleTime();
+        } else {
+            shuffleTime();
+        }
     }
 
     // Shuffle Time
@@ -610,6 +617,68 @@
         });
     }
     
+    // ... after your shuffleTime() function ...
+
+    // NEW: A special reward screen dedicated to skills.
+    function skillShuffleTime() {
+        const actionsDiv = document.getElementById("actions");
+        const player = state.persona;
+        actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
+
+        let skillOptions = [];
+
+        // --- Find Upgradable Skills ---
+        player.ABILITY.forEach(skillKey => {
+            const skill = SKILLS[skillKey];
+            // Check if this skill has an evolution and if we know what it evolves to
+            if (skill.evolves_to && SKILLS[skill.evolves_to]) {
+                const newSkill = SKILLS[skill.evolves_to];
+                skillOptions.push({
+                    name: `Upgrade ${skill.name}`,
+                    description: `${skill.name} -> ${newSkill.name}`,
+                    apply: (persona) => {
+                        // Find the index of the old skill and replace it
+                        const index = persona.ABILITY.indexOf(skillKey);
+                        if (index > -1) {
+                            persona.ABILITY[index] = skill.evolves_to;
+                        }
+                    }
+                });
+            }
+        });
+
+        // --- Find Learnable Skills ---
+        const learnableSkills = ['dia', 'garu', 'bufu']; // Define which skills are learnable
+        learnableSkills.forEach(skillKey => {
+            // Only add it as an option if the player DOESN'T already know it
+            if (!player.ABILITY.includes(skillKey)) {
+                const skill = SKILLS[skillKey];
+                skillOptions.push({
+                    name: `Learn ${skill.name}`,
+                    description: `Acquire the skill '${skill.name}'.`,
+                    apply: (persona) => {
+                        if (persona.ABILITY.length < 6) { // Max 8 skills
+                            persona.ABILITY.push(skillKey);
+                        }
+                    }
+                });
+            }
+        });
+
+        // --- Create the Buttons ---
+        const shuffledOptions = skillOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+        shuffledOptions.forEach(card => {
+            let btn = document.createElement("button");
+            btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
+            btn.onclick = () => {
+                card.apply(state.persona);
+                spawnEnemy();              
+                render();                  
+            };
+            actionsDiv.appendChild(btn);
+        });
+    }
     // Game Start
     mainMenu();
 </script>
