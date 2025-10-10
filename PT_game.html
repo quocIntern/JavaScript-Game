@@ -497,7 +497,9 @@
 
     // Spawning Enemy
     function spawnEnemy() {
-        state.enemy = pickEnemy();
+        const newEnemy = pickEnemy();
+        newEnemy.maxHP = newEnemy.HP; 
+        state.enemy = newEnemy;
     }
 
     // Enemy turn to attack
