@@ -489,9 +489,44 @@
         });
     }
 
+    // A central function to handle all damage calculations, including affinities.
+    function calculateDamage(attacker, target, skill) {
+        // Step 1: Determine base damage based on skill type
+        let baseDamage = 0;
+        if (skill.type === 'physical') {
+            baseDamage = skill.power + attacker.STATS.STR;
+        } else if (skill.type === 'magic') {
+            baseDamage = skill.power + attacker.STATS.MAG;
+        } else {
+            return 0; // Not a damage skill
+        }
+
+        // Step 2: Check target's affinities for the skill's element
+        const affinity = target.affinities[skill.element];
+        let multiplier = 1.0; // Normal damage
+
+        if (affinity === 'weak') {
+            multiplier = 1.5;
+            console.log("WEAK!"); // We can add UI for this later
+        } else if (affinity === 'resist') {
+            multiplier = 0.5;
+            console.log("RESIST!");
+        } else if (affinity === 'null') {
+            multiplier = 0;
+            console.log("NULL!");
+        }
+        
+        // Step 3: Calculate final damage
+        const totalDamage = baseDamage - target.STATS.END;
+        const finalDamage = Math.floor(Math.max(1, totalDamage) * multiplier);
+        
+        return finalDamage;
+    }
+
     // attack
     function attack() {
-        let dmg = Math.max(1, state.persona.STATS.STR - state.enemy.STATS.END);
+        const attackSkill = { power: 0, type: 'physical', element: 'phys' };
+        const dmg = calculateDamage(state.persona, state.enemy, attackSkill);
         state.enemy.HP -= dmg;
         if (state.enemy.HP <= 0) {
             enemyDefeated();
@@ -520,13 +555,7 @@
             player.HP -= skill.cost.hp;
         }
 
-        let dmg = 0;
-        if (skill.type === 'physical') {
-            dmg = Math.max(1, skill.power + player.STATS.STR - enemy.STATS.END);
-        } else if (skill.type === 'magic') {
-            dmg = Math.max(1, skill.power + player.STATS.MAG - enemy.STATS.END);
-        }
-
+        const dmg = calculateDamage(player, enemy, skill);
         enemy.HP -= dmg;
 
         if (enemy.HP <= 0) {
@@ -555,20 +584,15 @@
         const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
         const skill = SKILLS[chosenSkillKey];
 
-        // Decide whether to use a skill (50% chance if a skill is available)
         if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
             // --- Use a Skill ---
             enemy.SP -= skill.cost.sp;
-            let dmg = 0;
-            if (skill.type === 'physical') {
-                dmg = Math.max(1, skill.power + enemy.STATS.STR - player.STATS.END);
-            } else if (skill.type === 'magic') {
-                dmg = Math.max(1, skill.power + enemy.STATS.MAG - player.STATS.END);
-            }
+            const dmg = calculateDamage(enemy, player, skill); // Use new calculator
             player.HP -= dmg;
         } else {
             // --- Use a Basic Attack ---
-            let dmg = Math.max(1, enemy.STATS.STR - player.STATS.END);
+            const attackSkill = { power: 0, type: 'physical', element: 'phys' };
+            const dmg = calculateDamage(enemy, player, attackSkill); // Use new calculator
             player.HP -= dmg;
         }
 
