@@ -459,7 +459,8 @@
         level:1,
         persona:null,
         currentFloor: 1,
-        totalFloors: 10
+        totalFloors: 10,
+        enemiesDefeated: 0,
     };
 
     // How enemies are chosen
@@ -575,6 +576,12 @@
             let skillButton = document.createElement("button");
             skillButton.innerHTML = `${skill.name} <br> (${costDisplay})`;
             skillButton.onclick = () => useAbility(skillKey);
+            const hasEnoughSp = !skill.cost.sp || p.SP >= skill.cost.sp;
+            const hasEnoughHp = !skill.cost.hp || p.HP > skill.cost.hp;
+            if (!hasEnoughSp || !hasEnoughHp) {
+                skillButton.disabled = true; // Disable the button
+                skillButton.style.opacity = "0.5"; // Make it look disabled
+            }
             actionsDiv.appendChild(skillButton);
         });
         
@@ -649,22 +656,24 @@
             return;
         }
 
-        if (skill.cost.sp) {
-            player.SP -= skill.cost.sp;
-        }
-        if (skill.cost.hp) {
-            player.HP -= skill.cost.hp;
-        }
+        if (skill.cost.sp) player.SP -= skill.cost.sp;
+        if (skill.cost.hp) player.HP -= skill.cost.hp;
 
-        const dmg = calculateDamage(player, enemy, skill);
-        enemy.HP -= dmg;
+        if (skill.type === 'healing') {
+        const healAmount = skill.power + player.STATS.MAG; // Healing can scale with Magic
+        player.HP = Math.min(player.maxHP, player.HP + healAmount);
+        // No need to attack the enemy, so we can skip the enemy's turn to give a strategic advantage
+        } else {
+            const dmg = calculateDamage(player, enemy, skill);
+            enemy.HP -= dmg;
 
-        if (enemy.HP <= 0) {
-            enemyDefeated();
-            return;
+            if (enemy.HP <= 0) {
+                enemyDefeated();
+                return;
+            }
+
+            enemyTurn();
         }
-
-        enemyTurn();
         render();
     }
 
