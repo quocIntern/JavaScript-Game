@@ -383,6 +383,26 @@ const SKILLS = {
     // #endregion
 };
 
+// Passive Skills
+const PASSIVE_SKILLS = {
+    // Damage Boosts
+    fire_boost: { name: "Fire Boost", description: "Increases Fire damage by 25%.", type: "damage_boost", element: "fire", multiplier: 1.25 },
+    ice_boost:  { name: "Ice Boost", description: "Increases Ice damage by 25%.", type: "damage_boost", element: "ice", multiplier: 1.25 },
+    elec_boost: { name: "Elec Boost", description: "Increases Elec damage by 25%.", type: "damage_boost", element: "elec", multiplier: 1.25 },
+    wind_boost: { name: "Wind Boost", description: "Increases Wind damage by 25%.", type: "damage_boost", element: "wind", multiplier: 1.25 },
+
+    // Defensive & Counter Skills
+    resist_phys: { name: "Resist Physical", description: "Reduces damage taken from Physical attacks.", type: "resistance", element: "phys", affinity: "resist" },
+    counter:     { name: "Counter", description: "15% chance to repel Physical attacks with light damage.", type: "counter", chance: 0.15, power: 10 },
+    
+    // Resource Management
+    invigorate_1: { name: "Invigorate 1", description: "Restore 3 SP at the start of your turn.", type: "regen", resource: "SP", amount: 3 },
+    regenerate_1: { name: "Regenerate 1", description: "Restore 5% of max HP at the start of your turn.", type: "regen", resource: "HP", amount: 0.05 },
+
+    // Stat & Other Bonuses
+    apt_pupil: { name: "Apt Pupil", description: "Doubles your critical hit rate.", type: "crit_boost", multiplier: 2.0 },
+};
+
 const CARDS = [
     {
         name: "0. The Fool",
@@ -611,6 +631,7 @@ function startGame(personaName) {
     document.getElementById("start-screen").style.display = 'none';
     document.getElementById("game-screen").style.display = 'grid';
     spawnEnemy();
+    handleStartOfTurnPassives();
     render();
     const exitContainer = document.getElementById("exit-container");
     exitContainer.style.display = 'block';
@@ -651,6 +672,15 @@ function render() {
             <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
             <li>LUK: ${p.STATS.LUK}</li>
         </ul>`;
+        if (p.PASSIVES && p.PASSIVES.length > 0) {
+        playerStatsDiv.innerHTML += `
+            <div class="passives-list">
+                <strong>Passives:</strong>
+                <ul>
+                    ${p.PASSIVES.map(pKey => `<li>${PASSIVE_SKILLS[pKey].name}</li>`).join('')}
+                </ul>
+            </div>`;
+    }
 
     const enemyDisplayDiv = document.getElementById("enemy-display");
     if (state.enemy) {
@@ -699,47 +729,65 @@ function calculateDamage(attacker, target, skill) {
         baseDamage = skill.power + attacker.STATS.MAG;
     }
 
-    let bonusTurn = false; // Flag for "1 More!"
+    let bonusTurn = false;
 
-    // Check for Critical Hit
-    const critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
+    // BUG FIX: Define attacker's passives, defaulting to an empty array if none exist.
+    const attackerPassives = attacker.PASSIVES || [];
+
+    // --- Check for Critical Hit ---
+    // BUG FIX: Apply passives like 'Apt Pupil' *before* the random check.
+    let critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
+    if (attackerPassives.includes('apt_pupil')) {
+        critChance *= 2.0; // Apt Pupil doubles the chance
+    }
     const isCrit = Math.random() < critChance;
+
     if (isCrit) {
         bonusTurn = true;
     }
 
-    // Check for elemental affinity
+    // --- Check for elemental affinity ---
     const affinity = target.affinities[skill.element];
     let affinityMultiplier = 1.0;
+    // BUG FIX: Initialize damageMultiplier for passive skill boosts.
+    let damageMultiplier = 1.0; 
+
     if (affinity) {
         showAffinityFeedback(target, affinity);
         if (affinity === 'weak') {
             affinityMultiplier = 1.5;
-            bonusTurn = true; // Hitting a weakness also grants a bonus turn
-        }
-        if (affinity === 'resist') affinityMultiplier = 0.5;
-        if (affinity === 'null') {
+            bonusTurn = true;
+        } else if (affinity === 'resist') {
+            affinityMultiplier = 0.5;
+        } else if (affinity === 'null') {
             affinityMultiplier = 0;
-            bonusTurn = false; // Cannot get a bonus turn on a null
+            bonusTurn = false;
         }
     }
     
+    // BUG FIX: Correctly loop through attackerPassives and update the damage multiplier.
+    attackerPassives.forEach(pKey => {
+        const passive = PASSIVE_SKILLS[pKey];
+        if (passive && passive.type === 'damage_boost' && passive.element === skill.element) {
+            damageMultiplier *= passive.multiplier;
+        }
+    });
+    
     const totalDamage = baseDamage - target.STATS.END;
-    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier);
+    // BUG FIX: Apply the damageMultiplier from passives to the final damage calculation.
+    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * damageMultiplier);
 
-    // Apply critical damage and show text if it's a crit (and not nullified)
     if (isCrit && affinity !== 'null') {
         finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
     }
+
     if (finalDamage > 0) {
-        // We add a short delay so it appears *after* WEAK/RESIST text
         setTimeout(() => {
             showCombatText(target, finalDamage, 'damage');
         }, 150);
     }
 
-    // Return an object with both damage and bonus status
     return { damage: finalDamage, bonus: bonusTurn };
 }
 function attack() {
@@ -794,34 +842,66 @@ function useAbility(skillKey){
 function enemyTurn() {
     const enemy = state.enemy;
     const player = state.persona;
+    // BUG FIX: This flag is needed to track the attack type for the 'counter' passive.
+    let wasPhysicalAttack = false; 
 
     const dodgeChance = (player.STATS.AGI * 0.02) + (player.STATS.LUK * 0.01);
     if (Math.random() < dodgeChance) {
         showCombatText(player, "EVADED!", 'resist');
-        return; // Attack is dodged, skip the rest of the enemy's turn.
+        handleStartOfTurnPassives(); // Player's turn starts if enemy attack is dodged
+        render();
+        return;
     }
 
     const availableSkills = enemy.ABILITY;
     const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
     const skill = SKILLS[chosenSkillKey];
     
-    // --- FIX IS HERE ---
-    if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
-        enemy.SP -= skill.cost.sp;
-        const result = calculateDamage(enemy, player, skill); // Get the result object
-        player.HP -= result.damage; // Use the .damage property
+    // BUG FIX: Improved AI to correctly check if it can afford skills (HP or SP).
+    const canUseSkill = skill && ((skill.cost.sp && enemy.SP >= skill.cost.sp) || (skill.cost.hp && enemy.HP > skill.cost.hp));
+    const wantsToUseSkill = Math.random() < 0.75; // 75% chance to use a skill if possible
+
+    if (canUseSkill && wantsToUseSkill) {
+        if(skill.cost.sp) enemy.SP -= skill.cost.sp;
+        if(skill.cost.hp) enemy.HP -= skill.cost.hp;
+        
+        const result = calculateDamage(enemy, player, skill);
+        player.HP -= result.damage;
+
+        if (skill.type === 'physical') {
+            wasPhysicalAttack = true;
+        }
     } else {
         const attackSkill = { power: 0, type: 'physical', element: 'phys' };
-        const result = calculateDamage(enemy, player, attackSkill); // Get the result object
-        player.HP -= result.damage; // Use the .damage property
+        const result = calculateDamage(enemy, player, attackSkill);
+        player.HP -= result.damage;
+        wasPhysicalAttack = true; 
+    }
+    
+    // BUG FIX: The 'counter' check now works correctly using the flag.
+    if (wasPhysicalAttack && player.PASSIVES && player.PASSIVES.includes('counter')) {
+        const counterPassive = PASSIVE_SKILLS.counter;
+        if (Math.random() < counterPassive.chance) {
+            setTimeout(() => {
+                showCombatText(player, 'COUNTER!', 'critical');
+                const counterSkill = { power: counterPassive.power, type: 'physical', element: 'phys' };
+                const counterResult = calculateDamage(player, enemy, counterSkill);
+                enemy.HP -= counterResult.damage;
+                if (enemy.HP <= 0) enemyDefeated();
+                render(); // Update UI immediately after counter
+            }, 500);
+        }
     }
 
     if (player.HP <= 0) {
         player.HP = 0;
         render();
-        // Display defeat message in the actions div
         document.getElementById('actions').innerHTML = `<h4>DEFEAT...</h4>`; 
         setTimeout(() => document.location.reload(), 2000); 
+    } else {
+        // BUG FIX: Moved passive skill trigger to here, the actual start of the player's turn.
+        handleStartOfTurnPassives();
+        render();
     }
 }
 // #endregion
@@ -875,10 +955,17 @@ function enemyDefeated(){
         return;
     }
     state.xp += state.enemy.isMiniBoss ? 25 : 10;
-    if(state.xp >= state.level * 20){
+    
+    // BUG FIX: XP must be consumed after leveling up to prevent leveling every fight.
+    const xpToLevel = state.level * 20;
+    if(state.xp >= xpToLevel){
+        state.xp -= xpToLevel; // Subtract the XP cost for the level-up
         state.level++;
         state.persona.maxHP += 5; 
         state.persona.maxSP += 2;
+        // Also, fully heal the player on level up as a bonus
+        state.persona.HP = state.persona.maxHP;
+        state.persona.SP = state.persona.maxSP;
     }
 
     if (Math.random() < 0.25) {
@@ -911,7 +998,8 @@ function shuffleTime() {
         btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
         btn.onclick = () => {
             card.apply(state.persona);
-            spawnEnemy();              
+            spawnEnemy(); 
+            handleStartOfTurnPassives();             
             render();                  
         };
         actionsDiv.appendChild(btn);
@@ -956,6 +1044,24 @@ function skillShuffleTime() {
             });
         }
     });
+    const learnablePassives = ['invigorate_1', 'resist_phys', 'counter', 'fire_boost'];
+    learnablePassives.forEach(pKey => {
+        if (!player.PASSIVES || !player.PASSIVES.includes(pKey)) {
+            const passive = PASSIVE_SKILLS[pKey];
+            skillOptions.push({
+                name: `Learn ${passive.name}`,
+                description: passive.description,
+                apply: (persona) => {
+                    if (!persona.PASSIVES) persona.PASSIVES = [];
+                    persona.PASSIVES.push(pKey);
+                    // Apply immediate effects, like changing an affinity
+                    if (passive.type === 'resistance') {
+                        persona.affinities[passive.element] = passive.affinity;
+                    }
+                }
+            });
+        }
+    });
 
     const shuffledOptions = skillOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
     shuffledOptions.forEach(card => {
@@ -986,6 +1092,23 @@ function showCombatText(target, text, className) {
 
 function showAffinityFeedback(target, affinity) {
     showCombatText(target, affinity.toUpperCase() + "!", affinity);
+}
+
+function handleStartOfTurnPassives() {
+    if (!state.persona.PASSIVES) return;
+
+    state.persona.PASSIVES.forEach(pKey => {
+        const passive = PASSIVE_SKILLS[pKey];
+        if (passive && passive.type === 'regen') {
+            if (passive.resource === 'HP') {
+                const healAmount = Math.floor(state.persona.maxHP * passive.amount);
+                state.persona.HP = Math.min(state.persona.maxHP, state.persona.HP + healAmount);
+            }
+            if (passive.resource === 'SP') {
+                state.persona.SP = Math.min(state.persona.maxSP, state.persona.SP + passive.amount);
+            }
+        }
+    });
 }
 // #endregion
 
