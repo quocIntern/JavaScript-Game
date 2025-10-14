@@ -1,12 +1,4 @@
 // #region ------------------- GAME DATA -------------------
-// Add this new sound manager object at the top of your script.js
-const SOUNDS = {
-    hit: new Audio('./sfx/hit.wav'),       // A basic physical hit sound
-    crit: new Audio('./sfx/crit.wav'),      // A more impactful critical hit sound
-    heal: new Audio('./sfx/heal.wav'),      // A healing spell sound
-    select: new Audio('./sfx/select.wav'),  // A UI selection sound
-    // You will need to find and add these .wav or .mp3 files to an 'sfx' folder
-};
 
 function playSound(soundName) {
     if (SOUNDS[soundName]) {
@@ -309,8 +301,8 @@ const FLOOR_ENCOUNTERS = [
     ["Goblin", "Mandrake", "Agathion"],
     // Floor 4: Stronger early-game demons before the first mini-boss.
     ["Bicorn", "Angel", "Jack Frost"],
-    // Floor 5 is a Mini-Boss floor, so it has no regular encounters.
-    [], 
+    // Floor 5: A final test of early-game demons.
+    ["Angel", "Bicorn", "Jack Frost"],
     // Floor 6: A step up in difficulty with mid-game demons.
     ["Pyro Jack", "Nekomata"],
     // Floor 7: Introduce stronger physical and magical threats.
@@ -1208,6 +1200,13 @@ function loadGame() {
         alert("No save file found!");
     }
 }
+
+const SOUNDS = {
+    hit: new Audio('./sfx/hit.mp3'),       // A basic physical hit sound
+    crit: new Audio('./sfx/crit.mp3'),      // A more impactful critical hit sound
+    heal: new Audio('./sfx/heal.mp3'),      // A healing spell sound
+    select: new Audio('./sfx/select.mp3'),  // A UI selection sound
+};
 // #endregion
 
 // --- Game Start ---
