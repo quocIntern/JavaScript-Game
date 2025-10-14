@@ -733,8 +733,12 @@ function render() {
     
     const floorCounterDiv = document.getElementById("floor-counter");
     if (state.enemy) {
-        // FIX: Display the only metric that matters.
-        floorCounterDiv.innerHTML = `Kill Count: ${state.totalKills}`;
+        const currentFloor = Math.floor(state.totalKills / 10) + 1;
+        
+        floorCounterDiv.innerHTML = `
+            Floor: ${currentFloor}<br>
+            Kill Count: ${state.totalKills}
+        `;
     }
 
 }
@@ -972,17 +976,8 @@ function enemyDefeated(){
         return;
     }
 
-    state.enemiesDefeated++;
-
-    if (state.enemy.isBoss) {
-        state.currentFloor++;
-        state.killsThisFloor = 0;
-        floorTransition();
-        return;
-    }
-
     const wasBoss = state.enemy.isBoss || state.enemy.isMiniBoss;
-    state.totalKills++;
+    state.totalKills++; // This is the ONLY progression variable we need to change.
     state.xp += wasBoss ? 25 : 10;
 
     const xpToLevel = state.level * 20;
@@ -995,15 +990,14 @@ function enemyDefeated(){
         state.persona.SP = state.persona.maxSP;
     }
 
+    // A reward is granted after every fight.
     if (wasBoss) {
-        // After a boss, 50% chance for a significant skill upgrade.
         if (Math.random() < 0.5) { 
             skillShuffleTime();
         } else {
             shuffleTime();
         }
     } else {
-        // After a standard victory, the player gets a standard card reward.
         shuffleTime();
     }
 }
