@@ -445,6 +445,12 @@ function calculateDamage(attacker, target, skill) {
         finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
     }
+    if (finalDamage > 0) {
+        // We add a short delay so it appears *after* WEAK/RESIST text
+        setTimeout(() => {
+            showCombatText(target, finalDamage, 'damage');
+        }, 150);
+    }
 
     // Return an object with both damage and bonus status
     return { damage: finalDamage, bonus: bonusTurn };
@@ -479,6 +485,7 @@ function useAbility(skillKey){
     if (skill.type === 'healing') {
         const healAmount = skill.power + player.STATS.MAG;
         player.HP = Math.min(player.maxHP, player.HP + healAmount);
+        showCombatText(player, `+${healAmount}`, 'healing');
     } else {
         const result = calculateDamage(player, state.enemy, skill);
         state.enemy.HP -= result.damage;
