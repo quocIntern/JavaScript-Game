@@ -2,25 +2,28 @@
 // Persona
 const PERSONAS = {
     Orpheus: {
-        HP: 70, SP: 30,
-        STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3},
-        ABILITY:["bash", "agi"],
+        name: "Orpheus", // Added name for consistency
+        HP: 75, SP: 30,
+        STATS:{STR: 5, MAG: 4, END: 5, AGI: 4, LUK: 3}, // Total stats: 21
+        ABILITY:["bash", "agi", "dia"],
         img:"https://i.imgur.com/83Fpq5u.png",
         affinities: { elec: 'weak', fire: 'resist' }
     },
     Izanagi: {
-        HP: 80, SP: 25,
-        STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3},
-        ABILITY:["bash", "zio", "garu"],
+        name: "Izanagi", // Added name for consistency
+        HP: 85, SP: 20,
+        STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3}, // Total stats: 21
+        ABILITY:["lunge", "bash"],
         img:"https://i.imgur.com/11n2k5b.png",
-        affinities: { wind: 'weak', elec: 'resist' }
+        affinities: { wind: 'weak', elec: 'resist', phys: 'resist' } // Gave him phys resist instead of Arsene
     },
     Arsene: {
-        HP: 65, SP: 35,
-        STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5},
-        ABILITY:["bash", "bufu"],
+        name: "Arsene", // Added name for consistency
+        HP: 65, SP: 40,
+        STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3}, // Total stats: 21
+        ABILITY:["eiha", "bufu"],
         img:"https://i.imgur.com/K33t636.png",
-        affinities: { ice: 'weak', phys: 'resist' }
+        affinities: { light: 'weak', dark: 'resist' } // Changed affinities completely
     }
 };
 
@@ -791,7 +794,7 @@ function calculateDamage(attacker, target, skill) {
     return { damage: finalDamage, bonus: bonusTurn };
 }
 function attack() {
-    const attackSkill = { power: 0, type: 'physical', element: 'phys' };
+    const attackSkill = { power: 10, type: 'physical', element: 'phys' };
     const result = calculateDamage(state.persona, state.enemy, attackSkill);
     state.enemy.HP -= result.damage;
 
