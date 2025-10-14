@@ -1,4 +1,21 @@
 // #region ------------------- GAME DATA -------------------
+// Add this new sound manager object at the top of your script.js
+const SOUNDS = {
+    hit: new Audio('./sfx/hit.wav'),       // A basic physical hit sound
+    crit: new Audio('./sfx/crit.wav'),      // A more impactful critical hit sound
+    heal: new Audio('./sfx/heal.wav'),      // A healing spell sound
+    select: new Audio('./sfx/select.wav'),  // A UI selection sound
+    // You will need to find and add these .wav or .mp3 files to an 'sfx' folder
+};
+
+function playSound(soundName) {
+    if (SOUNDS[soundName]) {
+        SOUNDS[soundName].currentTime = 0; // Rewind to start
+        SOUNDS[soundName].play();
+    }
+}
+
+
 // Persona
 const PERSONAS = {
     Orpheus: {
@@ -781,11 +798,19 @@ function calculateDamage(attacker, target, skill) {
     let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * damageMultiplier);
 
     if (isCrit && affinity !== 'null') {
+        playSound('crit'); // Play critical hit sound
+        if (target === state.enemy) triggerScreenShake();
         finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
+        
+        // FIX: Add this line to trigger the shake on a critical hit.
+        if (target === state.enemy) { // Only shake on crits against the enemy
+             triggerScreenShake();
+        }
     }
 
     if (finalDamage > 0) {
+        playSound('hit');
         setTimeout(() => {
             showCombatText(target, finalDamage, 'damage');
         }, 150);
@@ -824,6 +849,7 @@ function useAbility(skillKey){
         const healAmount = skill.power + player.STATS.MAG;
         player.HP = Math.min(player.maxHP, player.HP + healAmount);
         showCombatText(player, `+${healAmount}`, 'healing');
+        playSound('heal');
     } else {
         const result = calculateDamage(player, state.enemy, skill);
         state.enemy.HP -= result.damage;
@@ -948,8 +974,7 @@ function enemyDefeated(){
 
     state.enemiesDefeated++;
 
-    // FIX: A floor is cleared by defeating a Boss OR a Mini-Boss.
-    if (state.enemy.isBoss || state.enemy.isMiniBoss) {
+    if (state.enemy.isBoss) {
         state.currentFloor++;
         state.killsThisFloor = 0;
         floorTransition();
@@ -985,7 +1010,7 @@ function enemyDefeated(){
 
 function floorTransition() {
     const actionsDiv = document.getElementById("actions");
-    actionsDiv.innerHTML = `<h4>Floor ${state.currentFloor - 1} Cleared!</h4><p>Preparing to advance.</p>`;
+    actionsDiv.innerHTML = `<h4>Floor ${state.currentFloor} Cleared!</h4><p>Preparing to advance.</p>`;
     
     setTimeout(() => {
         spawnEnemy();
@@ -1005,6 +1030,7 @@ function shuffleTime() {
         let btn = document.createElement("button");
         btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
         btn.onclick = () => {
+            playSound('select');
             card.apply(state.persona);
             spawnEnemy(); 
             handleStartOfTurnPassives();             
@@ -1160,6 +1186,12 @@ function handleStartOfTurnPassives() {
             }
         }
     });
+}
+
+function triggerScreenShake() {
+    const gameContainer = document.getElementById('game-container');
+    gameContainer.classList.add('shake');
+    setTimeout(() => gameContainer.classList.remove('shake'), 300);
 }
 // #endregion
 
