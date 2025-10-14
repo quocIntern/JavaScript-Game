@@ -153,7 +153,7 @@ li {
 }
 #floor-counter {
     position: absolute; /* Takes the element out of the normal flow */
-    bottom: -25px;        /* Positions it 5px from the bottom of the container */
+    bottom: -90px;        /* Positions it 5px from the bottom of the container */
     left: 15px;         /* Positions it 15px from the left */
     font-size: 0.8em;   /* Make it slightly smaller to fit well */
     color: var(--retro-border);

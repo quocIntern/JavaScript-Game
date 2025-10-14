@@ -594,10 +594,7 @@ let state = {
     xp:0,
     level:1,
     persona:null,
-    currentFloor: 1,
-    totalFloors: 10,
-    killsThisFloor: 0,
-    killsNeeded: 5
+    totalKills:0,
 };
 // #endregion
 
@@ -719,20 +716,11 @@ function render() {
     
     const floorCounterDiv = document.getElementById("floor-counter");
     if (state.enemy) {
-        let floorText = `Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}`;
-        
-        // FIX: Display the kill counter, but ONLY on regular floors.
-        const isBossFloor = (state.currentFloor % 5 === 0 || state.currentFloor % 10 === 0);
-        if (!isBossFloor && state.currentFloor <= state.totalFloors) {
-            floorText += `<br>Enemies: ${state.killsThisFloor} / ${state.killsNeeded}`;
-        }
-
-        floorCounterDiv.innerHTML = floorText;
+        // FIX: Display the only metric that matters.
+        floorCounterDiv.innerHTML = `Kill Count: ${state.totalKills}`;
     }
 
 }
-
-
 // #endregion
 
 // #region ------------------- COMBAT LOGIC -------------------
@@ -924,22 +912,28 @@ function enemyTurn() {
 // #region ------------------- GAME FLOW & PROGRESSION -------------------
 function spawnEnemy() {
     let newEnemyTemplate;
+    // FIX: You were missing this line. The variable must be defined before it can be used.
+    const nextKillNumber = state.totalKills + 1;
 
-    // FIX: The logic is now streamlined to check the floor number directly.
-    if (state.currentFloor > state.totalFloors) {
-        newEnemyTemplate = FINAL_BOSS;
-    } else if (state.currentFloor % 10 === 0) { // Is it a major boss floor?
+    if (nextKillNumber % 10 === 0) {
         newEnemyTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
-    } else if (state.currentFloor % 5 === 0) {  // Is it a mini-boss floor?
+    } else if (nextKillNumber % 5 === 0) {
         newEnemyTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
-    } else { // Otherwise, it's a regular floor.
-        const floorIndex = Math.min(state.currentFloor - 1, FLOOR_ENCOUNTERS.length - 1);
+    } else {
+        const enemyTier = Math.floor(state.totalKills / 10);
+        const floorIndex = Math.min(enemyTier, FLOOR_ENCOUNTERS.length - 1);
         const availableEnemies = FLOOR_ENCOUNTERS[floorIndex];
-        const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
-        newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
+        
+        if (!availableEnemies || availableEnemies.length === 0) {
+            const lastTier = FLOOR_ENCOUNTERS[FLOOR_ENCOUNTERS.length - 1];
+            const chosenEnemyName = lastTier[Math.floor(Math.random() * lastTier.length)];
+            newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
+        } else {
+            const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+            newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
+        }
     }
     
-    // Create a deep copy to avoid modifying original data.
     const newEnemy = JSON.parse(JSON.stringify(newEnemyTemplate));
     newEnemy.maxHP = newEnemy.HP; 
     state.enemy = newEnemy;
@@ -961,8 +955,10 @@ function enemyDefeated(){
         floorTransition();
         return;
     }
-    state.killsThisFloor++;
-    state.xp += 10;
+
+    const wasBoss = state.enemy.isBoss || state.enemy.isMiniBoss;
+    state.totalKills++;
+    state.xp += wasBoss ? 25 : 10;
 
     const xpToLevel = state.level * 20;
     if(state.xp >= xpToLevel){
@@ -976,10 +972,9 @@ function enemyDefeated(){
 
     if (state.killsThisFloor >= state.killsNeeded) {
         state.currentFloor++;
-        state.killsThisFloor = 0; // Reset for the next floor.
-        floorTransition(); // Show the "Floor Cleared" message and advance.
+        state.killsThisFloor = 0;
+        floorTransition();
     } else {
-        // If the quota is not met, proceed to the reward screen as normal.
         if (Math.random() < 0.25) {
             skillShuffleTime();
         } else {
