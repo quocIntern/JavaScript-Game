@@ -410,43 +410,60 @@ function calculateDamage(attacker, target, skill) {
         baseDamage = skill.power + attacker.STATS.STR;
     } else if (skill.type === 'magic') {
         baseDamage = skill.power + attacker.STATS.MAG;
-    } else {
-        return 0;
     }
 
-    let isCrit = false;
+    let bonusTurn = false; // Flag for "1 More!"
+
+    // Check for Critical Hit
     const critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
-    if (Math.random() < critChance) {
-        isCrit = true;
+    const isCrit = Math.random() < critChance;
+    if (isCrit) {
+        bonusTurn = true;
     }
 
+    // Check for elemental affinity
     const affinity = target.affinities[skill.element];
     let affinityMultiplier = 1.0;
     if (affinity) {
         showAffinityFeedback(target, affinity);
-        if (affinity === 'weak') affinityMultiplier = 1.5;
+        if (affinity === 'weak') {
+            affinityMultiplier = 1.5;
+            bonusTurn = true; // Hitting a weakness also grants a bonus turn
+        }
         if (affinity === 'resist') affinityMultiplier = 0.5;
-        if (affinity === 'null') affinityMultiplier = 0;
+        if (affinity === 'null') {
+            affinityMultiplier = 0;
+            bonusTurn = false; // Cannot get a bonus turn on a null
+        }
     }
-        
+    
     const totalDamage = baseDamage - target.STATS.END;
     let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier);
 
-    if (isCrit) {
+    // Apply critical damage and show text if it's a crit (and not nullified)
+    if (isCrit && affinity !== 'null') {
         finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
     }
-    return finalDamage;
-}
 
+    // Return an object with both damage and bonus status
+    return { damage: finalDamage, bonus: bonusTurn };
+}
 function attack() {
     const attackSkill = { power: 0, type: 'physical', element: 'phys' };
-    state.enemy.HP -= calculateDamage(state.persona, state.enemy, attackSkill);
+    const result = calculateDamage(state.persona, state.enemy, attackSkill);
+    state.enemy.HP -= result.damage;
+
     if (state.enemy.HP <= 0) {
         enemyDefeated();
         return;
     }
-    enemyTurn();
+
+    if (result.bonus) {
+        showCombatText(state.persona, "1 MORE!", "critical"); // Show "1 More!" feedback
+    } else {
+        enemyTurn();
+    }
     render();
 }
 
@@ -463,12 +480,19 @@ function useAbility(skillKey){
         const healAmount = skill.power + player.STATS.MAG;
         player.HP = Math.min(player.maxHP, player.HP + healAmount);
     } else {
-        state.enemy.HP -= calculateDamage(player, state.enemy, skill);
+        const result = calculateDamage(player, state.enemy, skill);
+        state.enemy.HP -= result.damage;
+        
         if (state.enemy.HP <= 0) {
             enemyDefeated();
             return;
         }
-        enemyTurn();
+
+        if (result.bonus) {
+            showCombatText(state.persona, "1 MORE!", "critical");
+        } else {
+            enemyTurn();
+        }
     }
     render();
 }
@@ -487,17 +511,22 @@ function enemyTurn() {
     const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
     const skill = SKILLS[chosenSkillKey];
     
+    // --- FIX IS HERE ---
     if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
         enemy.SP -= skill.cost.sp;
-        player.HP -= calculateDamage(enemy, player, skill);
+        const result = calculateDamage(enemy, player, skill); // Get the result object
+        player.HP -= result.damage; // Use the .damage property
     } else {
         const attackSkill = { power: 0, type: 'physical', element: 'phys' };
-        player.HP -= calculateDamage(enemy, player, attackSkill);
+        const result = calculateDamage(enemy, player, attackSkill); // Get the result object
+        player.HP -= result.damage; // Use the .damage property
     }
 
     if (player.HP <= 0) {
         player.HP = 0;
         render();
+        // Display defeat message in the actions div
+        document.getElementById('actions').innerHTML = `<h4>DEFEAT...</h4>`; 
         setTimeout(() => document.location.reload(), 2000); 
     }
 }
