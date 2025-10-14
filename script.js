@@ -189,7 +189,7 @@ const MINI_BOSSES = [
     {
         name:"High Pixie", HP: 90, maxHP: 90, SP: 65,
         STATS:{STR: 6, MAG: 13, END: 7, AGI: 12, LUK: 10},
-        ABILITY:["zionga", "diarama"], img:"./img/High_Pixie", // Placeholder
+        ABILITY:["zionga", "diarama"], img:"./img/High_Pixie.webp", // Placeholder
         affinities: { nuke: 'weak', wind: 'resist', elec: 'resist' },
         isMiniBoss: true,
         description: "A durable magic user that can heal itself."
@@ -1020,39 +1020,49 @@ function skillShuffleTime() {
     actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
     let skillOptions = [];
 
+    // --- Generate UPGRADE options ---
     player.ABILITY.forEach(skillKey => {
         const skill = SKILLS[skillKey];
         if (skill.evolves_to && SKILLS[skill.evolves_to]) {
-            const newSkill = SKILLS[skill.evolves_to];
             skillOptions.push({
                 name: `Upgrade ${skill.name}`,
-                description: `${skill.name} -> ${newSkill.name}`,
+                description: `${skill.name} -> ${SKILLS[skill.evolves_to].name}`,
                 apply: (persona) => {
                     const index = persona.ABILITY.indexOf(skillKey);
-                    if (index > -1) {
-                        persona.ABILITY[index] = skill.evolves_to;
-                    }
+                    if (index > -1) persona.ABILITY[index] = skill.evolves_to;
+                    spawnEnemy();
+                    render();
                 }
             });
         }
     });
 
-    const learnableSkills = ['dia', 'garu', 'bufu'];
+    // --- Generate LEARN options for active skills ---
+    const learnableSkills = ['dia', 'garu', 'bufu', 'lunge', 'psi', 'kouha'];
     learnableSkills.forEach(skillKey => {
+        // FIX: This check prevents offering skills the player already has.
         if (!player.ABILITY.includes(skillKey)) {
             const skill = SKILLS[skillKey];
             skillOptions.push({
                 name: `Learn ${skill.name}`,
                 description: `Acquire the skill '${skill.name}'.`,
                 apply: (persona) => {
+                    // FIX: This handles the 6-skill limit.
                     if (persona.ABILITY.length < 6) {
                         persona.ABILITY.push(skillKey);
+                        spawnEnemy();
+                        render();
+                    } else {
+                        // If full, trigger the replacement UI.
+                        promptSkillReplacement(skillKey);
                     }
                 }
             });
         }
     });
-    const learnablePassives = ['invigorate_1', 'resist_phys', 'counter', 'fire_boost'];
+
+    // --- Generate LEARN options for passive skills ---
+    const learnablePassives = ['invigorate_1', 'resist_phys', 'counter', 'fire_boost', 'apt_pupil'];
     learnablePassives.forEach(pKey => {
         if (!player.PASSIVES || !player.PASSIVES.includes(pKey)) {
             const passive = PASSIVE_SKILLS[pKey];
@@ -1062,26 +1072,59 @@ function skillShuffleTime() {
                 apply: (persona) => {
                     if (!persona.PASSIVES) persona.PASSIVES = [];
                     persona.PASSIVES.push(pKey);
-                    // Apply immediate effects, like changing an affinity
                     if (passive.type === 'resistance') {
                         persona.affinities[passive.element] = passive.affinity;
                     }
+                    spawnEnemy();
+                    render();
                 }
             });
         }
     });
 
     const shuffledOptions = skillOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
+    
+    // If no skills are available to learn or upgrade, default to a standard card draw.
+    if (shuffledOptions.length === 0) {
+        shuffleTime();
+        return;
+    }
+
     shuffledOptions.forEach(card => {
         let btn = document.createElement("button");
         btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
+        btn.onclick = () => card.apply(state.persona);
+        actionsDiv.appendChild(btn);
+    });
+}
+
+function promptSkillReplacement(newSkillKey) {
+    const actionsDiv = document.getElementById("actions");
+    const newSkill = SKILLS[newSkillKey];
+    actionsDiv.innerHTML = `<h4>Your skill slots are full.</h4><p>Choose a skill to forget to learn <strong>${newSkill.name}</strong>.</p>`;
+
+    state.persona.ABILITY.forEach((currentSkillKey, index) => {
+        const currentSkill = SKILLS[currentSkillKey];
+        const btn = document.createElement("button");
+        btn.innerHTML = `Forget ${currentSkill.name}`;
         btn.onclick = () => {
-            card.apply(state.persona);
-            spawnEnemy();              
-            render();                  
+            // Replace the old skill with the new one
+            state.persona.ABILITY[index] = newSkillKey;
+            // Proceed to the next battle
+            spawnEnemy();
+            render();
         };
         actionsDiv.appendChild(btn);
     });
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel (Keep current skills)";
+    cancelButton.onclick = () => {
+        // Proceed to the next battle without making a change
+        spawnEnemy();
+        render();
+    };
+    actionsDiv.appendChild(cancelButton);
 }
 // #endregion
 
