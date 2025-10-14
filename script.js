@@ -155,23 +155,118 @@ const DEMONS = [
 
 // Mini Bosses
 const MINI_BOSSES = [
+    // #region --- Brute Force Testers ---
     {
-        name:"Hee-Ho Sentinel", HP: 80, maxHP: 80, SP: 40,
-        STATS:{STR: 8, MAG:10, END: 7, AGI: 6, LUK: 7},
-        ABILITY:["bufu", "zionga"], img:"https://i.imgur.com/AptB9Zl.png",
-        affinities: { fire: 'weak', ice: 'null' },
-        isMiniBoss: true
+        name:"Rampaging Oni", HP: 120, maxHP: 120, SP: 30,
+        STATS:{STR: 15, MAG: 5, END: 12, AGI: 7, LUK: 5},
+        ABILITY:["assault_dive", "power_slash"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { phys: 'resist', fire: 'resist', elec: 'weak' },
+        isMiniBoss: true,
+        description: "A physical wall that forces you to use magic." // Gimmick description
+    },
+    {
+        name:"Setanta", HP: 85, maxHP: 85, SP: 40,
+        STATS:{STR: 13, MAG: 8, END: 7, AGI: 15, LUK: 12},
+        ABILITY:["power_slash", "lunge"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { psy: 'weak', wind: 'resist', fire: 'null' },
+        isMiniBoss: true,
+        description: "A high-crit attacker that is hard to hit."
+    },
+    // #endregion
+
+    // #region --- Magic Specialist Testers ---
+    {
+        name:"Incubus", HP: 90, maxHP: 90, SP: 70,
+        STATS:{STR: 6, MAG: 14, END: 7, AGI: 11, LUK: 10},
+        ABILITY:["agilao", "eigaon"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { phys: 'weak', fire: 'null', dark: 'resist', ice: 'weak' },
+        isMiniBoss: true,
+        description: "A glass cannon that hits hard with magic but is weak to physical attacks."
+    },
+    {
+        name:"High Pixie", HP: 90, maxHP: 90, SP: 65,
+        STATS:{STR: 6, MAG: 13, END: 7, AGI: 12, LUK: 10},
+        ABILITY:["zionga", "diarama"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { nuke: 'weak', wind: 'resist', elec: 'resist' },
+        isMiniBoss: true,
+        description: "A durable magic user that can heal itself."
+    },
+    // #endregion
+
+    // #region --- Strategic Challenge Testers ---
+    {
+        name:"Principality", HP: 110, maxHP: 110, SP: 80,
+        STATS:{STR: 9, MAG: 12, END: 9, AGI: 9, LUK: 9},
+        ABILITY:["kougaon", "diarama"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { dark: 'weak', light: 'null', wind: 'resist' },
+        isMiniBoss: true,
+        description: "A battle of attrition that tests your damage output against its healing."
+    },
+    {
+        name:"Kaiwan", HP: 130, maxHP: 130, SP: 60,
+        STATS:{STR: 10, MAG: 11, END: 11, AGI: 10, LUK: 8},
+        ABILITY:["agilao", "psio", "garula"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { phys: 'weak', psy: 'resist', nuke: 'resist' },
+        isMiniBoss: true,
+        description: "An all-rounder with multiple resistances, forcing you to find an opening."
+    },
+    {
+        name:"Naga", HP: 95, maxHP: 95, SP: 55,
+        STATS:{STR: 9, MAG: 13, END: 8, AGI: 13, LUK: 7},
+        ABILITY:["zionga", "lunge"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { wind: 'weak', elec: 'null' },
+        isMiniBoss: true,
+        description: "An elemental specialist that punishes those with an electric weakness."
     }
+    // #endregion
 ];
 
 // Bosses
 const BOSSES = [
+    // The All-Out Attacker
     {
-        name:"King Slime", HP: 120, maxHP: 120, SP: 50,
-        STATS:{STR: 10, MAG:5, END: 12, AGI: 3, LUK: 3},
-        ABILITY:["bash", "assault_dive"], img:"https://i.imgur.com/034q32u.png",
-        affinities: { phys: 'resist', fire: 'weak' },
-        isBoss: true
+        name:"Cerberus", HP: 240, maxHP: 240, SP: 80,
+        STATS:{STR: 22, MAG: 8, END: 15, AGI: 14, LUK: 7},
+        ABILITY:["gigantic_fist", "brave_blade"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { ice: 'weak', fire: 'null' },
+        isBoss: true,
+        description: "A relentless physical attacker that tests your endurance and physical defense."
+    },
+    // The Unbreakable Wall
+    {
+        name:"Girimehkala", HP: 250, maxHP: 250, SP: 120,
+        STATS:{STR: 14, MAG: 16, END: 20, AGI: 8, LUK: 9},
+        ABILITY:["megaton_raid", "eigadyne"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { phys: 'null', dark: 'resist', light: 'weak', nuke: 'weak' },
+        isBoss: true,
+        description: "A defensive fortress that nullifies all physical attacks, forcing a magic-based strategy."
+    },
+    // The Master Spellcaster
+    {
+        name:"Belphegor", HP: 220, maxHP: 220, SP: 150,
+        STATS:{STR: 10, MAG: 20, END: 14, AGI: 12, LUK: 11},
+        ABILITY:["agidyne", "bufudyne"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { fire: 'resist', ice: 'null', elec: 'weak' },
+        isBoss: true,
+        description: "A powerful mage that barrages you with high-tier elemental spells."
+    },
+    // The All-Rounder
+    {
+        name:"Odin", HP: 260, maxHP: 260, SP: 140,
+        STATS:{STR: 18, MAG: 18, END: 17, AGI: 16, LUK: 14},
+        ABILITY:["ziodyne", "brave_blade"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { wind: 'weak', elec: 'null', light: 'resist' },
+        isBoss: true,
+        description: "A balanced master of both physical and magical combat with no obvious flaws."
+    },
+    // The Gimmick Boss
+    {
+        name:"Trumpeter", HP: 280, maxHP: 280, SP: 200,
+        STATS:{STR: 15, MAG: 18, END: 16, AGI: 15, LUK: 15},
+        ABILITY:["megidola", "diarahan"], img:"https://i.imgur.com/jI9a614.png", // Placeholder
+        affinities: { elec: 'weak', light: 'null', dark: 'null' },
+        isBoss: true,
+        description: "A strategic nightmare that can fully heal itself and uses Almighty damage that cannot be resisted."
     }
 ];
 
