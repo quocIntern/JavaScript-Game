@@ -26,23 +26,130 @@ const PERSONAS = {
 
 // Demon
 const DEMONS = [
+    // --- Early Game Demons (Floors 1-4) ---
     {
         name:"Pixie", HP: 30, maxHP: 30, SP: 20,
-        STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4},
-        ABILITY:["zio"], img:"https://i.imgur.com/FGfb3s7.png",
-        affinities: { phys: 'weak', elec: 'resist' }
-    },
-    {
-        name:"Jack Frost", HP: 45, maxHP: 45, SP: 30,
-        STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6},
-        ABILITY:["bufu"], img:"https://i.imgur.com/AptB9Zl.png",
-        affinities: { fire: 'weak', ice: 'null' }
+        STATS:{STR: 3, MAG: 5, END: 2, AGI: 6, LUK: 4},
+        ABILITY:["zio", "dia"], img:"https://i.imgur.com/FGfb3s7.png",
+        affinities: { phys: 'weak', elec: 'resist', wind: 'weak' }
     },
     {
         name:"Slime", HP: 60, maxHP: 60, SP: 10,
-        STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2},
-        ABILITY:["bash"], img:"https://i.imgur.com/034q32u.png",
-        affinities: { phys: 'resist', fire: 'weak' }
+        STATS:{STR: 6, MAG: 2, END: 8, AGI: 2, LUK: 2},
+        ABILITY:["lunge"], img:"https://i.imgur.com/034q32u.png",
+        affinities: { phys: 'resist', fire: 'weak', elec: 'weak' }
+    },
+    {
+        name:"Goblin", HP: 45, maxHP: 45, SP: 15,
+        STATS:{STR: 7, MAG: 2, END: 5, AGI: 4, LUK: 3},
+        ABILITY:["lunge"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { wind: 'weak', fire: 'resist' }
+    },
+    {
+        name:"Mandrake", HP: 40, maxHP: 40, SP: 22,
+        STATS:{STR: 2, MAG: 8, END: 3, AGI: 5, LUK: 7},
+        ABILITY:["eiha"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { fire: 'weak', elec: 'resist' }
+    },
+    {
+        name:"Agathion", HP: 50, maxHP: 50, SP: 25,
+        STATS:{STR: 5, MAG: 6, END: 5, AGI: 7, LUK: 5},
+        ABILITY:["zio", "lunge"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { wind: 'weak', elec: 'resist', dark: 'resist' }
+    },
+    {
+        name:"Bicorn", HP: 55, maxHP: 55, SP: 18,
+        STATS:{STR: 8, MAG: 3, END: 6, AGI: 6, LUK: 3},
+        ABILITY:["lunge", "garu"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { elec: 'weak', dark: 'null' }
+    },
+    {
+        name:"Angel", HP: 60, maxHP: 60, SP: 35,
+        STATS:{STR: 5, MAG: 9, END: 6, AGI: 8, LUK: 6},
+        ABILITY:["kouha", "garu", "dia"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { dark: 'weak', light: 'null', elec: 'weak' }
+    },
+    {
+        name:"Jack Frost", HP: 70, maxHP: 70, SP: 40,
+        STATS:{STR: 6, MAG: 11, END: 7, AGI: 9, LUK: 8},
+        ABILITY:["bufu", "bufula"], img:"https://i.imgur.com/AptB9Zl.png",
+        affinities: { fire: 'weak', ice: 'null' }
+    },
+
+    // --- Mid-Game Demons (Floors 6-9) ---
+    {
+        name:"Pyro Jack", HP: 75, maxHP: 75, SP: 45,
+        STATS:{STR: 5, MAG: 12, END: 6, AGI: 10, LUK: 9},
+        ABILITY:["agi", "agilao"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { ice: 'weak', fire: 'null' }
+    },
+    {
+        name:"Nekomata", HP: 80, maxHP: 80, SP: 35,
+        STATS:{STR: 9, MAG: 7, END: 7, AGI: 14, LUK: 10},
+        ABILITY:["power_slash", "garula"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { elec: 'weak', psy: 'resist' }
+    },
+    {
+        name:"Orthrus", HP: 90, maxHP: 90, SP: 40,
+        STATS:{STR: 12, MAG: 8, END: 9, AGI: 11, LUK: 5},
+        ABILITY:["agilao", "assault_dive"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { ice: 'weak', fire: 'resist' }
+    },
+    {
+        name:"Valkyrie", HP: 100, maxHP: 100, SP: 45,
+        STATS:{STR: 14, MAG: 9, END: 10, AGI: 12, LUK: 8},
+        ABILITY:["power_slash", "bufula"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { fire: 'weak', ice: 'resist', light: 'null' }
+    },
+    {
+        name:"Leanan Sídhe", HP: 85, maxHP: 85, SP: 60,
+        STATS:{STR: 7, MAG: 15, END: 8, AGI: 11, LUK: 12},
+        ABILITY:["psio", "diarama"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { nuke: 'weak', psy: 'resist' }
+    },
+    {
+        name:"Rakshasa", HP: 110, maxHP: 110, SP: 30,
+        STATS:{STR: 16, MAG: 5, END: 12, AGI: 10, LUK: 6},
+        ABILITY:["megaton_raid"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { light: 'weak', phys: 'resist', dark: 'null' }
+    },
+    {
+        name:"Queen Mab", HP: 130, maxHP: 130, SP: 90,
+        STATS:{STR: 10, MAG: 18, END: 11, AGI: 15, LUK: 13},
+        ABILITY:["agidyne"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { nuke: 'weak', fire: 'null', elec: 'resist' }
+    },
+    {
+        name:"Rangda", HP: 150, maxHP: 150, SP: 85,
+        STATS:{STR: 12, MAG: 16, END: 13, AGI: 17, LUK: 11},
+        ABILITY:["agidyne", "eigaon"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { elec: 'weak', light: 'weak', phys: 'resist', fire: 'resist' }
+    },
+
+    // --- Late-Game Demons (Floor 10) ---
+    {
+        name:"Throne", HP: 160, maxHP: 160, SP: 100,
+        STATS:{STR: 13, MAG: 19, END: 14, AGI: 13, LUK: 12},
+        ABILITY:["agidyne", "kougaon"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { dark: 'weak', fire: 'null', light: 'null', nuke: 'resist' }
+    },
+    {
+        name:"Barong", HP: 175, maxHP: 175, SP: 95,
+        STATS:{STR: 18, MAG: 14, END: 15, AGI: 16, LUK: 10},
+        ABILITY:["ziodyne", "megaton_raid"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { psy: 'weak', elec: 'null', phys: 'resist' }
+    },
+    {
+        name:"Abaddon", HP: 200, maxHP: 200, SP: 110,
+        STATS:{STR: 20, MAG: 15, END: 18, AGI: 12, LUK: 8},
+        ABILITY:["gigantic_fist", "megido"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { nuke: 'weak', phys: 'resist', fire: 'resist', dark: 'resist' }
+    },
+    {
+        name:"Anubis", HP: 140, maxHP: 140, SP: 130,
+        STATS:{STR: 11, MAG: 20, END: 12, AGI: 15, LUK: 16},
+        ABILITY:["kougaon", "eigaon", "megido"], img:"https://i.imgur.com/jI9a614.png", // Placeholder image
+        affinities: { light: 'null', dark: 'null' }
     }
 ];
 
