@@ -280,6 +280,7 @@ let state = {
     xp:0,
     level:1,
     persona:null,
+    playerIsDodging: false,
     currentFloor: 1,
     totalFloors: 10,
     enemiesDefeated: 0,
