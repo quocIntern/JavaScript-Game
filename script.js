@@ -279,27 +279,28 @@ const FINAL_BOSS = {
     isFinalBoss: true
 };
 
+// Floor Encounters
 const FLOOR_ENCOUNTERS = [
-    // Floor 1
-    ['Pixie', 'Goblin'],
-    // Floor 2
-    ['Slime', 'Mandrake'],
-    // Floor 3
-    ['Agathion', 'Bicorn'],
-    // Floor 4
-    ['Angel', 'Jack Frost'],
-    // Floor 5 is a Mini-Boss
+    // Floor 1: The weakest demons to start.
+    ["Pixie", "Slime"],
+    // Floor 2: Introduce a slightly stronger physical attacker.
+    ["Pixie", "Slime", "Goblin"],
+    // Floor 3: Add more variety with magic users.
+    ["Goblin", "Mandrake", "Agathion"],
+    // Floor 4: Stronger early-game demons before the first mini-boss.
+    ["Bicorn", "Angel", "Jack Frost"],
+    // Floor 5 is a Mini-Boss floor, so it has no regular encounters.
     [], 
-    // Floor 6
-    ['Pyro Jack', 'Nekomata'],
-    // Floor 7
-    ['Orthrus', 'Valkyrie'],
-    // Floor 8
-    ['Leanan Sídhe', 'Rakshasa'],
-    // Floor 9
-    ['Queen Mab', 'Rangda'],
-    // Floor 10 has the strongest regular demons before the boss
-    ['Throne', 'Barong', 'Abaddon', 'Anubis']
+    // Floor 6: A step up in difficulty with mid-game demons.
+    ["Pyro Jack", "Nekomata"],
+    // Floor 7: Introduce stronger physical and magical threats.
+    ["Orthrus", "Valkyrie"],
+    // Floor 8: Enemies with more complex resistances and abilities.
+    ["Leanan Sídhe", "Rakshasa"],
+    // Floor 9: High-tier mid-game demons to challenge the player before the boss floor.
+    ["Queen Mab", "Rangda"],
+    // Floor 10: The strongest regular demons before the final boss of the tower.
+    ["Throne", "Barong", "Abaddon", "Anubis"]
 ];
 
 // Skill
