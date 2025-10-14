@@ -970,16 +970,16 @@ function enemyDefeated(){
         state.persona.SP = state.persona.maxSP;
     }
 
-    if (state.killsThisFloor >= state.killsNeeded) {
-        state.currentFloor++;
-        state.killsThisFloor = 0;
-        floorTransition();
-    } else {
-        if (Math.random() < 0.25) {
+    if (wasBoss) {
+        // After a boss, 50% chance for a significant skill upgrade.
+        if (Math.random() < 0.5) { 
             skillShuffleTime();
         } else {
             shuffleTime();
         }
+    } else {
+        // After a standard victory, the player gets a standard card reward.
+        shuffleTime();
     }
 }
 
