@@ -1,56 +1,55 @@
-// #region ------------------- GAME DATA -------------------
 // Persona
 const PERSONAS = {
-    Orpheus: {
-        HP: 70, SP: 30,
-        STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3},
-        ABILITY:["bash", "agi"],
+    Orpheus: { 
+        HP: 70, SP: 30, 
+        STATS:{STR: 5, MAG:3, END: 4, AGI: 5, LUK: 3}, 
+        ABILITY:["bash", "agi"], 
         img:"https://i.imgur.com/83Fpq5u.png",
-        affinities: { elec: 'weak', fire: 'resist' }
+        affinities: { elec: 'weak', fire: 'resist' } 
     },
-    Izanagi: {
-        HP: 80, SP: 25,
-        STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3},
-        ABILITY:["bash", "zio", "garu"],
+    Izanagi: { 
+        HP: 80, SP: 25, 
+        STATS:{STR: 6, MAG:2, END: 5, AGI: 4, LUK: 3}, 
+        ABILITY:["bash", "zio", "garu"], 
         img:"https://i.imgur.com/11n2k5b.png",
-        affinities: { wind: 'weak', elec: 'resist' }
+        affinities: { wind: 'weak', elec: 'resist' } 
     },
-    Arsene: {
-        HP: 65, SP: 35,
-        STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5},
-        ABILITY:["bash", "bufu"],
+    Arsene: { 
+        HP: 65, SP: 35, 
+        STATS:{STR: 4, MAG:4, END: 3, AGI: 6, LUK: 5}, 
+        ABILITY:["bash", "bufu"], 
         img:"https://i.imgur.com/K33t636.png",
-        affinities: { ice: 'weak', phys: 'resist' }
+        affinities: { ice: 'weak', phys: 'resist' } 
     }
-};
+}
 
 // Demon
 const DEMONS = [
     {
-        name:"Pixie", HP: 30, maxHP: 30, SP: 20,
-        STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4},
+        name:"Pixie", HP: 30, maxHP: 30, SP: 20, 
+        STATS:{STR: 3, MAG:5, END: 2, AGI: 6, LUK: 4}, 
         ABILITY:["zio"], img:"https://i.imgur.com/FGfb3s7.png",
         affinities: { phys: 'weak', elec: 'resist' }
     },
     {
-        name:"Jack Frost", HP: 45, maxHP: 45, SP: 30,
-        STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6},
+        name:"Jack Frost", HP: 45, maxHP: 45, SP: 30, 
+        STATS:{STR: 4, MAG:7, END: 4, AGI: 5, LUK: 6}, 
         ABILITY:["bufu"], img:"https://i.imgur.com/AptB9Zl.png",
         affinities: { fire: 'weak', ice: 'null' }
     },
     {
-        name:"Slime", HP: 60, maxHP: 60, SP: 10,
-        STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2},
+        name:"Slime", HP: 60, maxHP: 60, SP: 10, 
+        STATS:{STR: 6, MAG:2, END: 8, AGI: 2, LUK: 2}, 
         ABILITY:["bash"], img:"https://i.imgur.com/034q32u.png",
         affinities: { phys: 'resist', fire: 'weak' }
     }
-];
+]
 
 // Mini Bosses
 const MINI_BOSSES = [
     {
-        name:"Hee-Ho Sentinel", HP: 80, maxHP: 80, SP: 40,
-        STATS:{STR: 8, MAG:10, END: 7, AGI: 6, LUK: 7},
+        name:"Hee-Ho Sentinel", HP: 80, maxHP: 80, SP: 40, 
+        STATS:{STR: 8, MAG:10, END: 7, AGI: 6, LUK: 7}, 
         ABILITY:["bufu", "zionga"], img:"https://i.imgur.com/AptB9Zl.png",
         affinities: { fire: 'weak', ice: 'null' },
         isMiniBoss: true
@@ -60,8 +59,8 @@ const MINI_BOSSES = [
 // Bosses
 const BOSSES = [
     {
-        name:"King Slime", HP: 120, maxHP: 120, SP: 50,
-        STATS:{STR: 10, MAG:5, END: 12, AGI: 3, LUK: 3},
+        name:"King Slime", HP: 120, maxHP: 120, SP: 50, 
+        STATS:{STR: 10, MAG:5, END: 12, AGI: 3, LUK: 3}, 
         ABILITY:["bash", "assault_dive"], img:"https://i.imgur.com/034q32u.png",
         affinities: { phys: 'resist', fire: 'weak' },
         isBoss: true
@@ -70,11 +69,11 @@ const BOSSES = [
 
 // Final Boss
 const FINAL_BOSS = {
-    name:"Archon of the Abyss", HP: 300, maxHP: 300, SP: 150,
-    STATS:{STR: 15, MAG:15, END: 15, AGI: 10, LUK: 10},
+    name:"Archon of the Abyss", HP: 300, maxHP: 300, SP: 150, 
+    STATS:{STR: 15, MAG:15, END: 15, AGI: 10, LUK: 10}, 
     ABILITY:["agilao", "zionga", "bufudyne"], img:"https://i.imgur.com/83Fpq5u.png",
     affinities: { },
-    isFinalBoss: true
+    isFinalBoss: true        
 };
 // Skill
 const SKILLS = {
@@ -97,8 +96,8 @@ const SKILLS = {
 };
 
 const CARDS = [
-    {
-        name: "0. The Fool",
+    { 
+        name: "0. The Fool", 
         description: "+1 to all stats.",
         apply: function(persona) {
             persona.STATS.STR += 1;
@@ -106,117 +105,117 @@ const CARDS = [
             persona.STATS.END += 1;
             persona.STATS.AGI += 1;
             persona.STATS.LUK += 1;
-        }
+        } 
     },
-    {
-        name: "I. The Magician",
+    { 
+        name: "I. The Magician", 
         description: "Increases Magic by 2.",
-        apply: function(persona) { persona.STATS.MAG += 2; }
+        apply: function(persona) { persona.STATS.MAG += 2; } 
     },
-    {
-        name: "IV. The Emperor",
+    { 
+        name: "IV. The Emperor", 
         description: "Increases Endurance by 2.",
-        apply: function(persona) { persona.STATS.END += 2; }
+        apply: function(persona) { persona.STATS.END += 2; } 
     },
-    {
-        name: "VI. The Lovers",
+    { 
+        name: "VI. The Lovers", 
         description: "Increases Agility and Luck by 1.",
         apply: function(persona) {
             persona.STATS.AGI += 1;
             persona.STATS.LUK += 1;
-        }
+        } 
     },
-    {
-        name: "VII. The Chariot",
+    { 
+        name: "VII. The Chariot", 
         description: "Increases Strength by 2.",
-        apply: function(persona) { persona.STATS.STR += 2; }
+        apply: function(persona) { persona.STATS.STR += 2; } 
     },
-    {
-        name: "VIII. Strength",
+    { 
+        name: "VIII. Strength", 
         description: "Increases Strength and Endurance by 1.",
         apply: function(persona) {
             persona.STATS.STR += 1;
             persona.STATS.END += 1;
-        }
+        } 
     },
-    {
-        name: "IX. The Hermit",
+    { 
+        name: "IX. The Hermit", 
         description: "Increases Luck by 3.",
-        apply: function(persona) { persona.STATS.LUK += 3; }
+        apply: function(persona) { persona.STATS.LUK += 3; } 
     },
-    {
-        name: "XI. Justice",
+    { 
+        name: "XI. Justice", 
         description: "Increases Strength and Magic by 1.",
         apply: function(persona) {
             persona.STATS.STR += 1;
             persona.STATS.MAG += 1;
-        }
+        } 
     },
-    {
-        name: "XII. The Hanged Man",
+    { 
+        name: "XII. The Hanged Man", 
         description: "Increases Agility by 3.",
-        apply: function(persona) { persona.STATS.AGI += 3; }
+        apply: function(persona) { persona.STATS.AGI += 3; } 
     },
-    {
-        name: "XV. The Devil",
+    { 
+        name: "XV. The Devil", 
         description: "Increases Strength by 4.",
-        apply: function(persona) { persona.STATS.STR += 4; }
+        apply: function(persona) { persona.STATS.STR += 4; } 
     },
-    {
-        name: "XVI. The Tower",
+    { 
+        name: "XVI. The Tower", 
         description: "Increases Endurance by 4.",
-        apply: function(persona) { persona.STATS.END += 4; }
+        apply: function(persona) { persona.STATS.END += 4; } 
     },
-    {
-        name: "XVIII. The Moon",
+    { 
+        name: "XVIII. The Moon", 
         description: "Increases Magic and Luck by 2.",
         apply: function(persona) {
             persona.STATS.MAG += 2;
             persona.STATS.LUK += 2;
-        }
+        } 
     },
-    {
-        name: "XXI. The World",
+    { 
+        name: "XXI. The World", 
         description: "+2 to Strength, Magic, and Endurance.",
         apply: function(persona) {
             persona.STATS.STR += 2;
             persona.STATS.MAG += 2;
             persona.STATS.END += 2;
-        }
+        } 
     },
 
     // --- Resource & Healing Cards ---
-    {
-        name: "II. The High Priestess",
+    { 
+        name: "II. The High Priestess", 
         description: "+5 to Max SP and restore 5 SP.",
-        apply: function(persona) {
+        apply: function(persona) { 
             persona.maxSP += 5;
             persona.SP += 5;
-        }
+        } 
     },
-    {
-        name: "III. The Empress",
+    { 
+        name: "III. The Empress", 
         description: "+10 to Max HP and heal 10 HP.",
-        apply: function(persona) {
+        apply: function(persona) { 
             persona.maxHP += 10;
             persona.HP += 10;
-        }
+        } 
     },
-    {
-        name: "V. The Hierophant",
+    { 
+        name: "V. The Hierophant", 
         description: "Restore 50% of your Max SP.",
         apply: function(persona) {
             const spRestore = Math.floor(persona.maxSP * 0.50);
             persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
-        }
+        } 
     },
-    {
-        name: "XIII. Death",
+    { 
+        name: "XIII. Death", 
         description: "Fully restore HP and SP.",
         apply: function(persona) {
             persona.HP = persona.maxHP;
             persona.SP = persona.maxSP;
-        }
+        } 
     },
     {
         name: "XIV. Temperance",
@@ -226,18 +225,18 @@ const CARDS = [
             persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
         }
     },
-    {
-        name: "XVII. The Star",
+    { 
+        name: "XVII. The Star", 
         description: "+5 Max HP and +5 Max SP.",
-        apply: function(persona) {
+        apply: function(persona) { 
             persona.maxHP += 5;
             persona.maxSP += 5;
             persona.HP += 5;
             persona.SP += 5;
-        }
+        } 
     },
-    {
-        name: "XX. Judgement",
+    { 
+        name: "XX. Judgement", 
         description: "Increase Max HP and Max SP by 10%.",
         apply: function(persona) {
             const hpBonus = Math.floor(persona.maxHP * 0.10);
@@ -246,51 +245,53 @@ const CARDS = [
             persona.maxSP += spBonus;
             persona.HP += hpBonus;
             persona.SP += spBonus;
-        }
+        } 
     },
 
     // --- Special Effect Cards ---
-    {
-        name: "X. Wheel of Fortune",
+    { 
+        name: "X. Wheel of Fortune", 
         description: "+3 to a random stat.",
         apply: function(persona) {
             const stats = ["STR", "MAG", "END", "AGI", "LUK"];
             const randomStat = stats[Math.floor(Math.random() * stats.length)];
             persona.STATS[randomStat] += 3;
-        }
+        } 
     },
-    {   // MODIFIED CARD
-        name: "XIX. The Sun",
-        description: "+1 to all stats and restore 50% of HP & SP.",
+    { 
+        name: "XIX. The Sun", 
+        description: "+1 to all stats and fully heal HP & SP.",
         apply: function(persona) {
             persona.STATS.STR += 1;
             persona.STATS.MAG += 1;
             persona.STATS.END += 1;
             persona.STATS.AGI += 1;
             persona.STATS.LUK += 1;
-            const healAmount = Math.floor(persona.maxHP * 0.50);
-            const spRestore = Math.floor(persona.maxSP * 0.50);
-            persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
-            persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
-        }
+            persona.HP = persona.maxHP;
+            persona.SP = persona.maxSP;
+        } 
     },
 ];
-// #endregion
 
-// #region ------------------- GAME STATE -------------------
+// Starting State
 let state = {
     playerName:null,
     enemy:null,
     xp:0,
     level:1,
     persona:null,
+    playerIsDodging: false,
     currentFloor: 1,
     totalFloors: 10,
     enemiesDefeated: 0,
 };
-// #endregion
 
-// #region ------------------- SETUP & INITIALIZATION -------------------
+// How enemies are chosen
+function pickEnemy() {
+    return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
+}
+
+//Main menu
 function mainMenu() {
     const div = document.getElementById("start-screen");
     let newButton = document.createElement("button");
@@ -303,6 +304,7 @@ function mainMenu() {
     div.appendChild(loadButton);
 }
 
+// Selecting Persona
 function personaSelect() {
     localStorage.removeItem('personaSaveFile');
     const div = document.getElementById("start-screen");
@@ -315,6 +317,7 @@ function personaSelect() {
     })
 }
 
+// Starting the game
 function startGame(personaName) {
     const base = PERSONAS[personaName];
     state.persona = JSON.parse(JSON.stringify(base));
@@ -326,8 +329,7 @@ function startGame(personaName) {
     spawnEnemy();
     render();
     const exitContainer = document.getElementById("exit-container");
-    exitContainer.style.display = 'block';
-    exitContainer.innerHTML = '';
+    exitContainer.style.display = 'block'; // Make the container visible
     const exitButton = document.createElement("button");
     exitButton.textContent = "Exit to Menu";
     exitButton.onclick = () => {
@@ -335,16 +337,11 @@ function startGame(personaName) {
             document.location.reload();
         }
     };
-    const saveButton = document.createElement("button");
-    saveButton.textContent = "Save Game";
-    saveButton.onclick = () => saveGame();
-    exitContainer.innerHTML = '';
+    exitContainer.innerHTML = ''; // Clear it out first
     exitContainer.appendChild(exitButton);
-    exitContainer.appendChild(saveButton);
 }
-// #endregion
 
-// #region ------------------- UI & RENDERING -------------------
+// Render all game info
 function render() {
     if (!state.persona) return;
     const playerStatsDiv = document.getElementById("player-stats");
@@ -353,75 +350,93 @@ function render() {
     const spPercent = (p.SP / p.maxSP) * 100;
     playerStatsDiv.innerHTML = `
         <div class="feedback-text" id="player-feedback"></div>
+        
         <h3>${p.name} -- Lvl.${state.level}</h3>
         <img src='${p.img}' class='icon'>
         <p>HP: ${p.HP} / ${p.maxHP}</p>
-        <div class="stat-bar"><div class="hp-fill" style="width: ${hpPercent}%;"></div></div>
+        <div class="stat-bar">
+            <div class="hp-fill" style="width: ${hpPercent}%;"></div>
+        </div>
         <p>SP: ${p.SP} / ${p.maxSP}</p>
-        <div class="stat-bar"><div class="sp-fill" style="width: ${spPercent}%;"></div></div>
-        <ul>
-            <li>STR: ${p.STATS.STR}</li><li>MAG: ${p.STATS.MAG}</li>
-            <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
-            <li>LUK: ${p.STATS.LUK}</li>
-        </ul>`;
-
+        <div class="stat-bar">
+            <div class="sp-fill" style="width: ${spPercent}%;"></div>
+        </div>
+    <ul>
+        <li>STR: ${p.STATS.STR}</li>
+        <li>MAG: ${p.STATS.MAG}</li>
+        <li>END: ${p.STATS.END}</li>
+        <li>AGI: ${p.STATS.AGI}</li>
+        <li>LUK: ${p.STATS.LUK}</li>
+    </ul>
+    `;
     const enemyDisplayDiv = document.getElementById("enemy-display");
     if (state.enemy) {
         let e = state.enemy;
-        const enemyHpPercent = (e.HP / e.maxHP) * 100;
+        const enemyHpPercent = (e.HP / e.maxHP) * 100; // Calculate percentage
         enemyDisplayDiv.innerHTML = `
             <div class="feedback-text" id="enemy-feedback"></div>
             <h3>${e.name}</h3>
             <img src='${e.img}' class='icon'>
             <p>HP: ${e.HP} / ${e.maxHP}</p>
-            <div class="stat-bar"><div class="hp-fill" style="width: ${enemyHpPercent}%;"></div></div>`;
+            <div class="stat-bar">
+                <div class="hp-fill" style="width: ${enemyHpPercent}%;"></div>
+            </div>
+        `;
+        
     }
-
     const actionsDiv = document.getElementById("actions");
-    actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
+    actionsDiv.innerHTML = `<button onclick="saveGame()">Save</button><button onclick="attack()">Attack</button>`;
     
+
     p.ABILITY.forEach(skillKey => {
-        const skill = SKILLS[skillKey];
-        if (!skill) return;
-        let costDisplay = skill.cost.hp ? `${skill.cost.hp} HP` : `${skill.cost.sp} SP`;
+        const skill = SKILLS[skillKey]; 
+        if (!skill) return; 
+        let costDisplay = "";
+        if (skill.cost.hp) {
+            costDisplay = `${skill.cost.hp} HP`;
+        } else if (skill.cost.sp) {
+            costDisplay = `${skill.cost.sp} SP`;
+        }
         let skillButton = document.createElement("button");
         skillButton.innerHTML = `${skill.name} <br> (${costDisplay})`;
         skillButton.onclick = () => useAbility(skillKey);
         const hasEnoughSp = !skill.cost.sp || p.SP >= skill.cost.sp;
         const hasEnoughHp = !skill.cost.hp || p.HP > skill.cost.hp;
         if (!hasEnoughSp || !hasEnoughHp) {
-            skillButton.disabled = true;
-            skillButton.style.opacity = "0.5";
+            skillButton.disabled = true; // Disable the button
+            skillButton.style.opacity = "0.5"; // Make it look disabled
         }
         actionsDiv.appendChild(skillButton);
     });
     
     const floorCounterDiv = document.getElementById("floor-counter");
-    if (state.enemy) {
+    if (state.enemy) { // Only show it if the game is running
         floorCounterDiv.innerHTML = `Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}`;
     }
 }
-// #endregion
 
-// #region ------------------- COMBAT LOGIC -------------------
+// A central function to handle all damage calculations, including affinities.
 function calculateDamage(attacker, target, skill) {
+    // Step 1: Determine base damage based on skill type
     let baseDamage = 0;
     if (skill.type === 'physical') {
         baseDamage = skill.power + attacker.STATS.STR;
     } else if (skill.type === 'magic') {
         baseDamage = skill.power + attacker.STATS.MAG;
     } else {
-        return 0;
+        return 0; // Not a damage skill
     }
 
     let isCrit = false;
+    // Base 5% crit chance, plus 0.75% for every point of Luck
     const critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
     if (Math.random() < critChance) {
         isCrit = true;
     }
 
+    // Step 2: Check target's affinities for the skill's element
     const affinity = target.affinities[skill.element];
-    let affinityMultiplier = 1.0;
+    let affinityMultiplier = 1.0; // Normal damage
     if (affinity) {
         showAffinityFeedback(target, affinity);
         if (affinity === 'weak') affinityMultiplier = 1.5;
@@ -429,6 +444,7 @@ function calculateDamage(attacker, target, skill) {
         if (affinity === 'null') affinityMultiplier = 0;
     }
         
+        // Step 3: Calculate final damage
     const totalDamage = baseDamage - target.STATS.END;
     let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier);
 
@@ -436,12 +452,14 @@ function calculateDamage(attacker, target, skill) {
         finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
     }
-    return finalDamage;
-}
+        return finalDamage;
+    }
 
+// attack
 function attack() {
     const attackSkill = { power: 0, type: 'physical', element: 'phys' };
-    state.enemy.HP -= calculateDamage(state.persona, state.enemy, attackSkill);
+    const dmg = calculateDamage(state.persona, state.enemy, attackSkill);
+    state.enemy.HP -= dmg;
     if (state.enemy.HP <= 0) {
         enemyDefeated();
         return;
@@ -449,78 +467,74 @@ function attack() {
     enemyTurn();
     render();
 }
-
+// use Ability
 function useAbility(skillKey){
     const skill = SKILLS[skillKey];
     const player = state.persona;
-    if ((skill.cost.sp && player.SP < skill.cost.sp) || (skill.cost.hp && player.HP <= skill.cost.hp)) {
+    const enemy = state.enemy;
+
+    if (skill.cost.sp && player.SP < skill.cost.sp) {
         return;
     }
+    if (skill.cost.hp && player.HP < skill.cost.hp) {
+        return;
+    }
+
     if (skill.cost.sp) player.SP -= skill.cost.sp;
     if (skill.cost.hp) player.HP -= skill.cost.hp;
 
     if (skill.type === 'healing') {
-        const healAmount = skill.power + player.STATS.MAG;
-        player.HP = Math.min(player.maxHP, player.HP + healAmount);
+    const healAmount = skill.power + player.STATS.MAG; // Healing can scale with Magic
+    player.HP = Math.min(player.maxHP, player.HP + healAmount);
+    // No need to attack the enemy, so we can skip the enemy's turn to give a strategic advantage
     } else {
-        state.enemy.HP -= calculateDamage(player, state.enemy, skill);
-        if (state.enemy.HP <= 0) {
+        const dmg = calculateDamage(player, enemy, skill);
+        enemy.HP -= dmg;
+
+        if (enemy.HP <= 0) {
             enemyDefeated();
             return;
         }
+
         enemyTurn();
     }
     render();
 }
 
-function enemyTurn() {
-    const enemy = state.enemy;
-    const player = state.persona;
-
-    const dodgeChance = (player.STATS.AGI * 0.02) + (player.STATS.LUK * 0.01);
-    if (Math.random() < dodgeChance) {
-        showCombatText(player, "EVADED!", 'resist');
-        return; // Attack is dodged, skip the rest of the enemy's turn.
-    }
-
-    const availableSkills = enemy.ABILITY;
-    const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
-    const skill = SKILLS[chosenSkillKey];
+// Dodge
+function dodge() {
+    state.playerIsDodging = true;
+    showCombatText(state.persona, "Ready to Evade!", 'resist');
+    document.getElementById('actions').querySelectorAll('button').forEach(btn => btn.disabled = true);
     
-    if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
-        enemy.SP -= skill.cost.sp;
-        player.HP -= calculateDamage(enemy, player, skill);
-    } else {
-        const attackSkill = { power: 0, type: 'physical', element: 'phys' };
-        player.HP -= calculateDamage(enemy, player, attackSkill);
-    }
-
-    if (player.HP <= 0) {
-        player.HP = 0;
+    setTimeout(() => {
+        enemyTurn();
         render();
-        setTimeout(() => document.location.reload(), 2000); 
-    }
-}
-// #endregion
-
-// #region ------------------- GAME FLOW & PROGRESSION -------------------
-function pickEnemy() {
-    return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
+    }, 1000);
 }
 
+// Spawning Enemy
 function spawnEnemy() {
     let newEnemy;
     const nextEnemyNumber = state.enemiesDefeated + 1;
 
+    // Have we cleared all the floors? Time for the final boss.
     if (state.currentFloor > state.totalFloors) {
         newEnemy = JSON.parse(JSON.stringify(FINAL_BOSS));
-    } else if (nextEnemyNumber % 10 === 0) {
+    }
+    // Is the next enemy a main floor boss (10th, 20th, etc.)?
+    else if (nextEnemyNumber % 10 === 0) {
+        // This picks a random boss from the array
         const bossTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
         newEnemy = JSON.parse(JSON.stringify(bossTemplate));
-    } else if (nextEnemyNumber % 5 === 0) {
+    }
+    // Is the next enemy a mini-boss (5th, 15th, etc.)?
+    else if (nextEnemyNumber % 5 === 0) {
         const miniBossTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
         newEnemy = JSON.parse(JSON.stringify(miniBossTemplate));
-    } else {
+    }
+    // Otherwise, spawn a regular demon.
+    else {
         newEnemy = pickEnemy();
     }
     
@@ -528,25 +542,67 @@ function spawnEnemy() {
     state.enemy = newEnemy;
 }
 
+// Enemy turn to attack
+function enemyTurn() {
+    const enemy = state.enemy;
+    const player = state.persona;
+
+    // --- Check for Dodge ---
+    if (state.playerIsDodging) {
+        const dodgeChance = 0.10 + (player.STATS.AGI * 0.04) + (player.STATS.LUK * 0.01);
+        state.playerIsDodging = false;
+
+        if (Math.random() < dodgeChance) {
+            showCombatText(player, "EVADED!", 'resist');
+            return;
+        }
+    }
+
+    // --- Basic AI Decision Making ---
+    const availableSkills = enemy.ABILITY;
+    const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
+    const skill = SKILLS[chosenSkillKey];
+    
+    if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
+        // --- Use a Skill ---
+        enemy.SP -= skill.cost.sp;
+        const dmg = calculateDamage(enemy, player, skill); // Use new calculator
+        player.HP -= dmg;
+    } else {
+        // --- Use a Basic Attack ---
+        const attackSkill = { power: 0, type: 'physical', element: 'phys' };
+        const dmg = calculateDamage(enemy, player, attackSkill); // Use new calculator
+        player.HP -= dmg;
+    }
+
+    // --- Check for Player Defeat ---
+    if (player.HP <= 0) {
+        player.HP = 0;
+        render(); // Render one last time to show the final message
+        setTimeout(() => document.location.reload(), 1000); 
+    }
+}
+// Enemy dies
 function enemyDefeated(){
     if (state.enemy.isFinalBoss) {
-        const actionsDiv = document.getElementById("actions");
-        actionsDiv.innerHTML = "<h4>VICTORY!</h4><p>You have conquered the Abyss!</p><button onclick='document.location.reload()'>Play Again</button>";
-        return;
+    const actionsDiv = document.getElementById("actions");
+    actionsDiv.innerHTML = "<h4>VICTORY!</h4><p>You have conquered the Abyss and completed your journey!</p><button onclick='document.location.reload()'>Play Again</button>";
+    return; // Stop the function
     }
     state.enemiesDefeated++;
     if (state.enemy.isBoss) {
         state.currentFloor++;
-        floorTransition();
+        floorTransition(); // Go to a special screen before the next fight
         return;
     }
     state.xp += state.enemy.isMiniBoss ? 25 : 10;
-    if(state.xp >= state.level * 20){
+    if(state.xp>=state.level*20){
         state.level++;
         state.persona.maxHP += 5; 
         state.persona.maxSP += 2;
     }
 
+    // 25% chance for a special "Skill Time", 75% for a normal "Shuffle Time"
     if (Math.random() < 0.25) {
         skillShuffleTime();
     } else {
@@ -556,22 +612,24 @@ function enemyDefeated(){
 
 function floorTransition() {
     const actionsDiv = document.getElementById("actions");
-    actionsDiv.innerHTML = `<h4>Floor ${state.currentFloor - 1} Cleared!</h4><p>Preparing to advance.</p>`;
+    actionsDiv.innerHTML = `<h4>Floor ${state.currentFloor - 1} Cleared!</h4><p>You feel a shift in the abyss... Preparing to advance.</p>`;
     
+    // Wait 3 seconds, then spawn the next enemy and render the screen
     setTimeout(() => {
         spawnEnemy();
         render();
     }, 3000);
 }
-// #endregion
 
-// #region ------------------- REWARD SYSTEMS -------------------
+// Shuffle Time
 function shuffleTime() {
     const actionsDiv = document.getElementById("actions");
     actionsDiv.innerHTML = "<h4>Shuffle Time! Choose your reward...</h4>";
+    const options = [];
     const shuffled = [...CARDS].sort(() => 0.5 - Math.random());
-    const options = shuffled.slice(0, 3);
-    
+    for (let i = 0; i < Math.min(3, shuffled.length); i++) {
+        options.push(shuffled[i]);
+    }
     options.forEach(card => {
         let btn = document.createElement("button");
         btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
@@ -584,20 +642,27 @@ function shuffleTime() {
     });
 }
 
+// ... after your shuffleTime() function ...
+
+// NEW: A special reward screen dedicated to skills.
 function skillShuffleTime() {
     const actionsDiv = document.getElementById("actions");
     const player = state.persona;
     actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
+
     let skillOptions = [];
 
+    // --- Find Upgradable Skills ---
     player.ABILITY.forEach(skillKey => {
         const skill = SKILLS[skillKey];
+        // Check if this skill has an evolution and if we know what it evolves to
         if (skill.evolves_to && SKILLS[skill.evolves_to]) {
             const newSkill = SKILLS[skill.evolves_to];
             skillOptions.push({
                 name: `Upgrade ${skill.name}`,
                 description: `${skill.name} -> ${newSkill.name}`,
                 apply: (persona) => {
+                    // Find the index of the old skill and replace it
                     const index = persona.ABILITY.indexOf(skillKey);
                     if (index > -1) {
                         persona.ABILITY[index] = skill.evolves_to;
@@ -607,15 +672,17 @@ function skillShuffleTime() {
         }
     });
 
-    const learnableSkills = ['dia', 'garu', 'bufu'];
+    // --- Find Learnable Skills ---
+    const learnableSkills = ['dia', 'garu', 'bufu']; // Define which skills are learnable
     learnableSkills.forEach(skillKey => {
+        // Only add it as an option if the player DOESN'T already know it
         if (!player.ABILITY.includes(skillKey)) {
             const skill = SKILLS[skillKey];
             skillOptions.push({
                 name: `Learn ${skill.name}`,
                 description: `Acquire the skill '${skill.name}'.`,
                 apply: (persona) => {
-                    if (persona.ABILITY.length < 6) {
+                    if (persona.ABILITY.length < 6) { // Max 8 skills
                         persona.ABILITY.push(skillKey);
                     }
                 }
@@ -623,7 +690,9 @@ function skillShuffleTime() {
         }
     });
 
+    // --- Create the Buttons ---
     const shuffledOptions = skillOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
+
     shuffledOptions.forEach(card => {
         let btn = document.createElement("button");
         btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
@@ -635,46 +704,57 @@ function skillShuffleTime() {
         actionsDiv.appendChild(btn);
     });
 }
-// #endregion
 
-// #region ------------------- UTILITY & FEEDBACK -------------------
 function showCombatText(target, text, className) {
-    const feedbackDiv = (target === state.persona) ? document.getElementById('player-feedback') : document.getElementById('enemy-feedback');
-    if (feedbackDiv) {
-        feedbackDiv.textContent = text;
-        feedbackDiv.className = `feedback-text ${className}`;
-        feedbackDiv.classList.add('show');
-        setTimeout(() => {
-            feedbackDiv.classList.remove('show');
-        }, 1000);
-    }
+// Determine which div to show the feedback in
+const feedbackDiv = (target === state.persona) ? document.getElementById('player-feedback') : document.getElementById('enemy-feedback');
+
+if (feedbackDiv) {
+    feedbackDiv.textContent = text;
+    feedbackDiv.className = `feedback-text ${className}`; // e.g., "feedback-text critical"
+
+    // The 'show' class triggers the animation
+    feedbackDiv.classList.add('show');
+
+    // Remove the animation class after it finishes so it can be re-triggered
+    setTimeout(() => {
+        feedbackDiv.classList.remove('show');
+    }, 1000);
+}
 }
 
 function showAffinityFeedback(target, affinity) {
     showCombatText(target, affinity.toUpperCase() + "!", affinity);
 }
-// #endregion
 
-// #region ------------------- SAVE & LOAD -------------------
 function saveGame() {
-    const saveFile = JSON.stringify(state);
-    localStorage.setItem('personaSaveFile', saveFile);
-    alert("Game Saved!");
+// Convert the entire 'state' object into a JSON string
+const saveFile = JSON.stringify(state);
+// Store that string in the browser's localStorage under a unique key
+localStorage.setItem('personaSaveFile', saveFile);
+alert("Game Saved!");
 }
 
 function loadGame() {
+    // Retrieve the saved string from localStorage
     const savedState = localStorage.getItem('personaSaveFile');
+
     if (savedState) {
+        // If a save file exists, parse the string back into an object
         state = JSON.parse(savedState);
+        
+        // Hide the start screen and show the game screen
         document.getElementById("start-screen").style.display = 'none';
         document.getElementById("game-screen").style.display = 'grid';
+        
+        // IMPORTANT: Re-render the game with the loaded state
         render();
         alert("Game Loaded!");
     } else {
         alert("No save file found!");
     }
 }
-// #endregion
 
-// --- Game Start ---
+
+// Game Start
 mainMenu();
