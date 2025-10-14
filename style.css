@@ -65,9 +65,19 @@ h3, h4 {
 }
 
 .icon {
-    width: 96px; /* A multiple of 8 or 16 is good for pixel art */
-    height: auto;
-    margin-bottom: 10px;
+    max-width: 100px; /* A multiple of 8 or 16 is good for pixel art */
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.portrait-container {
+    width: 100%;
+    height: 120px; /* A fixed, predictable height for the portrait area. */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #000; /* A black background to frame the art. */
 }
 
 button {

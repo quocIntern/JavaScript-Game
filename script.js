@@ -596,7 +596,8 @@ let state = {
     persona:null,
     currentFloor: 1,
     totalFloors: 10,
-    enemiesDefeated: 0,
+    killsThisFloor: 0,
+    killsNeeded: 5
 };
 // #endregion
 
@@ -718,9 +719,20 @@ function render() {
     
     const floorCounterDiv = document.getElementById("floor-counter");
     if (state.enemy) {
-        floorCounterDiv.innerHTML = `Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}`;
+        let floorText = `Floor: ${state.currentFloor > state.totalFloors ? 'Final Encounter' : `${state.currentFloor} / ${state.totalFloors}`}`;
+        
+        // FIX: Display the kill counter, but ONLY on regular floors.
+        const isBossFloor = (state.currentFloor % 5 === 0 || state.currentFloor % 10 === 0);
+        if (!isBossFloor && state.currentFloor <= state.totalFloors) {
+            floorText += `<br>Enemies: ${state.killsThisFloor} / ${state.killsNeeded}`;
+        }
+
+        floorCounterDiv.innerHTML = floorText;
     }
+
 }
+
+
 // #endregion
 
 // #region ------------------- COMBAT LOGIC -------------------
@@ -912,34 +924,22 @@ function enemyTurn() {
 // #region ------------------- GAME FLOW & PROGRESSION -------------------
 function spawnEnemy() {
     let newEnemyTemplate;
-    const nextEnemyNumber = state.enemiesDefeated + 1;
 
-    // Is it time for the final boss?
+    // FIX: The logic is now streamlined to check the floor number directly.
     if (state.currentFloor > state.totalFloors) {
         newEnemyTemplate = FINAL_BOSS;
-    }
-    // Is it time for a major floor boss? (Floor 10 clear)
-    else if (state.currentFloor % 10 === 0 && nextEnemyNumber % 10 === 0) {
+    } else if (state.currentFloor % 10 === 0) { // Is it a major boss floor?
         newEnemyTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
-    }
-    // Is it time for a mini-boss? (Floor 5 clear)
-    else if (state.currentFloor % 5 === 0 && nextEnemyNumber % 5 === 0) {
+    } else if (state.currentFloor % 5 === 0) {  // Is it a mini-boss floor?
         newEnemyTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
-    }
-    // Otherwise, spawn a regular demon based on the current floor.
-    else {
-        // Get the list of enemy names for the current floor.
-        const floorIndex = state.currentFloor - 1;
+    } else { // Otherwise, it's a regular floor.
+        const floorIndex = Math.min(state.currentFloor - 1, FLOOR_ENCOUNTERS.length - 1);
         const availableEnemies = FLOOR_ENCOUNTERS[floorIndex];
-        
-        // Pick a random name from that list.
         const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
-        
-        // Find the full demon object from the DEMONS array using the chosen name.
         newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
     }
     
-    // Create a deep copy of the chosen enemy template to avoid modifying the original data.
+    // Create a deep copy to avoid modifying original data.
     const newEnemy = JSON.parse(JSON.stringify(newEnemyTemplate));
     newEnemy.maxHP = newEnemy.HP; 
     state.enemy = newEnemy;
@@ -951,30 +951,40 @@ function enemyDefeated(){
         actionsDiv.innerHTML = "<h4>VICTORY!</h4><p>You have conquered the Abyss!</p><button onclick='document.location.reload()'>Play Again</button>";
         return;
     }
+
     state.enemiesDefeated++;
-    if (state.enemy.isBoss) {
+
+    // FIX: A floor is cleared by defeating a Boss OR a Mini-Boss.
+    if (state.enemy.isBoss || state.enemy.isMiniBoss) {
         state.currentFloor++;
+        state.killsThisFloor = 0;
         floorTransition();
         return;
     }
-    state.xp += state.enemy.isMiniBoss ? 25 : 10;
-    
-    // BUG FIX: XP must be consumed after leveling up to prevent leveling every fight.
+    state.killsThisFloor++;
+    state.xp += 10;
+
     const xpToLevel = state.level * 20;
     if(state.xp >= xpToLevel){
-        state.xp -= xpToLevel; // Subtract the XP cost for the level-up
+        state.xp -= xpToLevel;
         state.level++;
         state.persona.maxHP += 5; 
         state.persona.maxSP += 2;
-        // Also, fully heal the player on level up as a bonus
         state.persona.HP = state.persona.maxHP;
         state.persona.SP = state.persona.maxSP;
     }
 
-    if (Math.random() < 0.25) {
-        skillShuffleTime();
+    if (state.killsThisFloor >= state.killsNeeded) {
+        state.currentFloor++;
+        state.killsThisFloor = 0; // Reset for the next floor.
+        floorTransition(); // Show the "Floor Cleared" message and advance.
     } else {
-        shuffleTime();
+        // If the quota is not met, proceed to the reward screen as normal.
+        if (Math.random() < 0.25) {
+            skillShuffleTime();
+        } else {
+            shuffleTime();
+        }
     }
 }
 
