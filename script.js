@@ -500,6 +500,18 @@ function useAbility(skillKey){
     render();
 }
 
+// Dodge
+function dodge() {
+    state.playerIsDodging = true;
+    showCombatText(state.persona, "Ready to Evade!", 'resist');
+    document.getElementById('actions').querySelectorAll('button').forEach(btn => btn.disabled = true);
+    
+    setTimeout(() => {
+        enemyTurn();
+        render();
+    }, 1000);
+}
+
 // Spawning Enemy
 function spawnEnemy() {
     let newEnemy;
@@ -534,11 +546,22 @@ function enemyTurn() {
     const enemy = state.enemy;
     const player = state.persona;
 
+    // --- Check for Dodge ---
+    if (state.playerIsDodging) {
+        const dodgeChance = 0.10 + (player.STATS.AGI * 0.04) + (player.STATS.LUK * 0.01);
+        state.playerIsDodging = false;
+
+        if (Math.random() < dodgeChance) {
+            showCombatText(player, "EVADED!", 'resist');
+            return;
+        }
+    }
+
     // --- Basic AI Decision Making ---
     const availableSkills = enemy.ABILITY;
     const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
     const skill = SKILLS[chosenSkillKey];
-
+    
     if (skill && enemy.SP >= skill.cost.sp && Math.random() < 0.5) {
         // --- Use a Skill ---
         enemy.SP -= skill.cost.sp;
@@ -553,8 +576,9 @@ function enemyTurn() {
 
     // --- Check for Player Defeat ---
     if (player.HP <= 0) {
+        player.HP = 0;
         render(); // Render one last time to show the final message
-        setTimeout(() => document.location.reload(), 2000); // Wait 2s before restart
+        setTimeout(() => document.location.reload(), 1000); 
     }
 }
 // Enemy dies
