@@ -76,6 +76,30 @@ const FINAL_BOSS = {
     affinities: { },
     isFinalBoss: true
 };
+
+const FLOOR_ENCOUNTERS = [
+    // Floor 1
+    ['Pixie', 'Goblin'],
+    // Floor 2
+    ['Slime', 'Mandrake'],
+    // Floor 3
+    ['Agathion', 'Bicorn'],
+    // Floor 4
+    ['Angel', 'Jack Frost'],
+    // Floor 5 is a Mini-Boss
+    [], 
+    // Floor 6
+    ['Pyro Jack', 'Nekomata'],
+    // Floor 7
+    ['Orthrus', 'Valkyrie'],
+    // Floor 8
+    ['Leanan Sídhe', 'Rakshasa'],
+    // Floor 9
+    ['Queen Mab', 'Rangda'],
+    // Floor 10 has the strongest regular demons before the boss
+    ['Throne', 'Barong', 'Abaddon', 'Anubis']
+];
+
 // Skill
 const SKILLS = {
     // #region --- Physical Skills ---
@@ -600,26 +624,37 @@ function enemyTurn() {
 // #endregion
 
 // #region ------------------- GAME FLOW & PROGRESSION -------------------
-function pickEnemy() {
-    return JSON.parse(JSON.stringify(DEMONS[Math.floor(Math.random()*DEMONS.length)]));
-}
-
 function spawnEnemy() {
-    let newEnemy;
+    let newEnemyTemplate;
     const nextEnemyNumber = state.enemiesDefeated + 1;
 
+    // Is it time for the final boss?
     if (state.currentFloor > state.totalFloors) {
-        newEnemy = JSON.parse(JSON.stringify(FINAL_BOSS));
-    } else if (nextEnemyNumber % 10 === 0) {
-        const bossTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
-        newEnemy = JSON.parse(JSON.stringify(bossTemplate));
-    } else if (nextEnemyNumber % 5 === 0) {
-        const miniBossTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
-        newEnemy = JSON.parse(JSON.stringify(miniBossTemplate));
-    } else {
-        newEnemy = pickEnemy();
+        newEnemyTemplate = FINAL_BOSS;
+    }
+    // Is it time for a major floor boss? (Floor 10 clear)
+    else if (state.currentFloor % 10 === 0 && nextEnemyNumber % 10 === 0) {
+        newEnemyTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
+    }
+    // Is it time for a mini-boss? (Floor 5 clear)
+    else if (state.currentFloor % 5 === 0 && nextEnemyNumber % 5 === 0) {
+        newEnemyTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
+    }
+    // Otherwise, spawn a regular demon based on the current floor.
+    else {
+        // Get the list of enemy names for the current floor.
+        const floorIndex = state.currentFloor - 1;
+        const availableEnemies = FLOOR_ENCOUNTERS[floorIndex];
+        
+        // Pick a random name from that list.
+        const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+        
+        // Find the full demon object from the DEMONS array using the chosen name.
+        newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
     }
     
+    // Create a deep copy of the chosen enemy template to avoid modifying the original data.
+    const newEnemy = JSON.parse(JSON.stringify(newEnemyTemplate));
     newEnemy.maxHP = newEnemy.HP; 
     state.enemy = newEnemy;
 }
