@@ -54,19 +54,19 @@ const DEMONS = [
     {
         name:"Goblin", HP: 45, maxHP: 45, SP: 15,
         STATS:{STR: 7, MAG: 2, END: 5, AGI: 4, LUK: 3},
-        ABILITY:["lunge"], img:"./img/Goblin.webp", // Placeholder image
+        ABILITY:["lunge"], img:"./img/Goblin.webp", 
         affinities: { wind: 'weak', fire: 'resist' }
     },
     {
         name:"Mandrake", HP: 40, maxHP: 40, SP: 22,
         STATS:{STR: 2, MAG: 8, END: 3, AGI: 5, LUK: 7},
-        ABILITY:["eiha"], img:"./img/Mandrake.png", // Placeholder image
+        ABILITY:["eiha"], img:"./img/Mandrake.png", 
         affinities: { fire: 'weak', elec: 'resist' }
     },
     {
         name:"Agathion", HP: 50, maxHP: 50, SP: 25,
         STATS:{STR: 5, MAG: 6, END: 5, AGI: 7, LUK: 5},
-        ABILITY:["zio", "lunge"], img:"./img/Agathion.webp", // Placeholder image
+        ABILITY:["zio", "lunge"], img:"./img/Agathion.webp", 
         affinities: { wind: 'weak', elec: 'resist', dark: 'resist' }
     },
     {
@@ -78,7 +78,7 @@ const DEMONS = [
     {
         name:"Angel", HP: 60, maxHP: 60, SP: 35,
         STATS:{STR: 5, MAG: 9, END: 6, AGI: 8, LUK: 6},
-        ABILITY:["kouha", "garu", "dia"], img:"./img/Angel.png", // Placeholder image
+        ABILITY:["kouha", "garu", "dia"], img:"./img/Angel.png", 
         affinities: { dark: 'weak', light: 'null', elec: 'weak' }
     },
     {
@@ -92,49 +92,49 @@ const DEMONS = [
     {
         name:"Pyro Jack", HP: 75, maxHP: 75, SP: 45,
         STATS:{STR: 5, MAG: 12, END: 6, AGI: 10, LUK: 9},
-        ABILITY:["agi", "agilao"], img:"./img/Pyro_Jack.png", // Placeholder image
+        ABILITY:["agi", "agilao"], img:"./img/Pyro_Jack.png", 
         affinities: { ice: 'weak', fire: 'null' }
     },
     {
         name:"Nekomata", HP: 80, maxHP: 80, SP: 35,
         STATS:{STR: 9, MAG: 7, END: 7, AGI: 14, LUK: 10},
-        ABILITY:["power_slash", "garula"], img:"./img/Nekomata.webp", // Placeholder image
+        ABILITY:["power_slash", "garula"], img:"./img/Nekomata.webp", 
         affinities: { elec: 'weak', psy: 'resist' }
     },
     {
         name:"Orthrus", HP: 90, maxHP: 90, SP: 40,
         STATS:{STR: 12, MAG: 8, END: 9, AGI: 11, LUK: 5},
-        ABILITY:["agilao", "assault_dive"], img:"./img/Orthrus.webp", // Placeholder image
+        ABILITY:["agilao", "assault_dive"], img:"./img/Orthrus.webp", 
         affinities: { ice: 'weak', fire: 'resist' }
     },
     {
         name:"Valkyrie", HP: 100, maxHP: 100, SP: 45,
         STATS:{STR: 14, MAG: 9, END: 10, AGI: 12, LUK: 8},
-        ABILITY:["power_slash", "bufula"], img:"./img/Valkyrie.png", // Placeholder image
+        ABILITY:["power_slash", "bufula"], img:"./img/Valkyrie.png", 
         affinities: { fire: 'weak', ice: 'resist', light: 'null' }
     },
     {
         name:"Leanan Sídhe", HP: 85, maxHP: 85, SP: 60,
         STATS:{STR: 7, MAG: 15, END: 8, AGI: 11, LUK: 12},
-        ABILITY:["psio", "diarama"], img:"./img/Leanan_Sidhe.webp", // Placeholder image
+        ABILITY:["psio", "diarama"], img:"./img/Leanan_Sidhe.webp", 
         affinities: { nuke: 'weak', psy: 'resist' }
     },
     {
         name:"Rakshasa", HP: 110, maxHP: 110, SP: 30,
         STATS:{STR: 16, MAG: 5, END: 12, AGI: 10, LUK: 6},
-        ABILITY:["megaton_raid"], img:"./img/Rakshasa.png", // Placeholder image
+        ABILITY:["megaton_raid"], img:"./img/Rakshasa.png", 
         affinities: { light: 'weak', phys: 'resist', dark: 'null' }
     },
     {
         name:"Queen Mab", HP: 130, maxHP: 130, SP: 90,
         STATS:{STR: 10, MAG: 18, END: 11, AGI: 15, LUK: 13},
-        ABILITY:["agidyne"], img:"./img/Queen_Mab.png", // Placeholder image
+        ABILITY:["agidyne"], img:"./img/Queen_Mab.png", 
         affinities: { nuke: 'weak', fire: 'null', elec: 'resist' }
     },
     {
         name:"Rangda", HP: 150, maxHP: 150, SP: 85,
         STATS:{STR: 12, MAG: 16, END: 13, AGI: 17, LUK: 11},
-        ABILITY:["agidyne", "eigaon"], img:"./img/Rangda.webp", // Placeholder image
+        ABILITY:["agidyne", "eigaon"], img:"./img/Rangda.webp", 
         affinities: { elec: 'weak', light: 'weak', phys: 'resist', fire: 'resist' }
     },
 
@@ -142,25 +142,25 @@ const DEMONS = [
     {
         name:"Throne", HP: 160, maxHP: 160, SP: 100,
         STATS:{STR: 13, MAG: 19, END: 14, AGI: 13, LUK: 12},
-        ABILITY:["agidyne", "kougaon"], img:"./img/Throne.webp", // Placeholder image
+        ABILITY:["agidyne", "kougaon"], img:"./img/Throne.webp", 
         affinities: { dark: 'weak', fire: 'null', light: 'null', nuke: 'resist' }
     },
     {
         name:"Barong", HP: 175, maxHP: 175, SP: 95,
         STATS:{STR: 18, MAG: 14, END: 15, AGI: 16, LUK: 10},
-        ABILITY:["ziodyne", "megaton_raid"], img:"./img/Barong.png", // Placeholder image
+        ABILITY:["ziodyne", "megaton_raid"], img:"./img/Barong.png", 
         affinities: { psy: 'weak', elec: 'null', phys: 'resist' }
     },
     {
         name:"Abaddon", HP: 200, maxHP: 200, SP: 110,
         STATS:{STR: 20, MAG: 15, END: 18, AGI: 12, LUK: 8},
-        ABILITY:["gigantic_fist", "megido"], img:"./img/Abaddon.webp", // Placeholder image
+        ABILITY:["gigantic_fist", "megido"], img:"./img/Abaddon.webp", 
         affinities: { nuke: 'weak', phys: 'resist', fire: 'resist', dark: 'resist' }
     },
     {
         name:"Anubis", HP: 140, maxHP: 140, SP: 130,
         STATS:{STR: 11, MAG: 20, END: 12, AGI: 15, LUK: 16},
-        ABILITY:["kougaon", "eigaon", "megido"], img:"./img/Anubis.webp", // Placeholder image
+        ABILITY:["kougaon", "eigaon", "megido"], img:"./img/Anubis.webp", 
         affinities: { light: 'null', dark: 'null' }
     }
 ];
@@ -171,15 +171,15 @@ const MINI_BOSSES = [
     {
         name:"Rampaging Oni", HP: 120, maxHP: 120, SP: 30,
         STATS:{STR: 15, MAG: 5, END: 12, AGI: 7, LUK: 5},
-        ABILITY:["assault_dive", "power_slash"], img:"./img/Oni.webp", // Placeholder
+        ABILITY:["assault_dive", "power_slash"], img:"./img/Oni.webp", 
         affinities: { phys: 'resist', fire: 'resist', elec: 'weak' },
         isMiniBoss: true,
-        description: "A physical wall that forces you to use magic." // Gimmick description
+        description: "A physical wall that forces you to use magic." 
     },
     {
         name:"Setanta", HP: 85, maxHP: 85, SP: 40,
         STATS:{STR: 13, MAG: 8, END: 7, AGI: 15, LUK: 12},
-        ABILITY:["power_slash", "lunge"], img:"./img/Setanta.webp", // Placeholder
+        ABILITY:["power_slash", "lunge"], img:"./img/Setanta.webp", 
         affinities: { psy: 'weak', wind: 'resist', fire: 'null' },
         isMiniBoss: true,
         description: "A high-crit attacker that is hard to hit."
@@ -190,7 +190,7 @@ const MINI_BOSSES = [
     {
         name:"Incubus", HP: 90, maxHP: 90, SP: 70,
         STATS:{STR: 6, MAG: 14, END: 7, AGI: 11, LUK: 10},
-        ABILITY:["agilao", "eigaon"], img:"./img/Incubus.png", // Placeholder
+        ABILITY:["agilao", "eigaon"], img:"./img/Incubus.png", 
         affinities: { phys: 'weak', fire: 'null', dark: 'resist', ice: 'weak' },
         isMiniBoss: true,
         description: "A glass cannon that hits hard with magic but is weak to physical attacks."
@@ -198,7 +198,7 @@ const MINI_BOSSES = [
     {
         name:"High Pixie", HP: 90, maxHP: 90, SP: 65,
         STATS:{STR: 6, MAG: 13, END: 7, AGI: 12, LUK: 10},
-        ABILITY:["zionga", "diarama"], img:"./img/High_Pixie.webp", // Placeholder
+        ABILITY:["zionga", "diarama"], img:"./img/High_Pixie.webp",
         affinities: { nuke: 'weak', wind: 'resist', elec: 'resist' },
         isMiniBoss: true,
         description: "A durable magic user that can heal itself."
@@ -209,7 +209,7 @@ const MINI_BOSSES = [
     {
         name:"Principality", HP: 110, maxHP: 110, SP: 80,
         STATS:{STR: 9, MAG: 12, END: 9, AGI: 9, LUK: 9},
-        ABILITY:["kougaon", "diarama"], img:"./img/Principality.webp", // Placeholder
+        ABILITY:["kougaon", "diarama"], img:"./img/Principality.webp", 
         affinities: { dark: 'weak', light: 'null', wind: 'resist' },
         isMiniBoss: true,
         description: "A battle of attrition that tests your damage output against its healing."
@@ -217,7 +217,7 @@ const MINI_BOSSES = [
     {
         name:"Kaiwan", HP: 130, maxHP: 130, SP: 60,
         STATS:{STR: 10, MAG: 11, END: 11, AGI: 10, LUK: 8},
-        ABILITY:["agilao", "psio", "garula"], img:"./img/Kaiwan.webp", // Placeholder
+        ABILITY:["agilao", "psio", "garula"], img:"./img/Kaiwan.webp", 
         affinities: { phys: 'weak', psy: 'resist', nuke: 'resist' },
         isMiniBoss: true,
         description: "An all-rounder with multiple resistances, forcing you to find an opening."
@@ -225,7 +225,7 @@ const MINI_BOSSES = [
     {
         name:"Naga", HP: 95, maxHP: 95, SP: 55,
         STATS:{STR: 9, MAG: 13, END: 8, AGI: 13, LUK: 7},
-        ABILITY:["zionga", "lunge"], img:"./img/Naga.webp", // Placeholder
+        ABILITY:["zionga", "lunge"], img:"./img/Naga.webp", 
         affinities: { wind: 'weak', elec: 'null' },
         isMiniBoss: true,
         description: "An elemental specialist that punishes those with an electric weakness."
@@ -239,7 +239,7 @@ const BOSSES = [
     {
         name:"Cerberus", HP: 240, maxHP: 240, SP: 80,
         STATS:{STR: 22, MAG: 8, END: 15, AGI: 14, LUK: 7},
-        ABILITY:["gigantic_fist", "brave_blade"], img:"./img/Cerberus.png", // Placeholder
+        ABILITY:["gigantic_fist", "brave_blade"], img:"./img/Cerberus.png", 
         affinities: { ice: 'weak', fire: 'null' },
         isBoss: true,
         description: "A relentless physical attacker that tests your endurance and physical defense."
@@ -248,7 +248,7 @@ const BOSSES = [
     {
         name:"Girimehkala", HP: 250, maxHP: 250, SP: 120,
         STATS:{STR: 14, MAG: 16, END: 20, AGI: 8, LUK: 9},
-        ABILITY:["megaton_raid", "eigadyne"], img:"./img/Girimekhala.png", // Placeholder
+        ABILITY:["megaton_raid", "eigadyne"], img:"./img/Girimekhala.png", 
         affinities: { phys: 'null', dark: 'resist', light: 'weak', nuke: 'weak' },
         isBoss: true,
         description: "A defensive fortress that nullifies all physical attacks, forcing a magic-based strategy."
@@ -257,7 +257,7 @@ const BOSSES = [
     {
         name:"Belphegor", HP: 220, maxHP: 220, SP: 150,
         STATS:{STR: 10, MAG: 20, END: 14, AGI: 12, LUK: 11},
-        ABILITY:["agidyne", "bufudyne"], img:"./img/Belphegor.png", // Placeholder
+        ABILITY:["agidyne", "bufudyne"], img:"./img/Belphegor.png",
         affinities: { fire: 'resist', ice: 'null', elec: 'weak' },
         isBoss: true,
         description: "A powerful mage that barrages you with high-tier elemental spells."
@@ -266,7 +266,7 @@ const BOSSES = [
     {
         name:"Odin", HP: 260, maxHP: 260, SP: 140,
         STATS:{STR: 18, MAG: 18, END: 17, AGI: 16, LUK: 14},
-        ABILITY:["ziodyne", "brave_blade"], img:"./img/Odin.png", // Placeholder
+        ABILITY:["ziodyne", "brave_blade"], img:"./img/Odin.png", 
         affinities: { wind: 'weak', elec: 'null', light: 'resist' },
         isBoss: true,
         description: "A balanced master of both physical and magical combat with no obvious flaws."
@@ -275,7 +275,7 @@ const BOSSES = [
     {
         name:"Trumpeter", HP: 280, maxHP: 280, SP: 200,
         STATS:{STR: 15, MAG: 18, END: 16, AGI: 15, LUK: 15},
-        ABILITY:["megidola", "diarahan"], img:"./img/Trumpeter.webp", // Placeholder
+        ABILITY:["megidola", "diarahan"], img:"./img/Trumpeter.webp", 
         affinities: { elec: 'weak', light: 'null', dark: 'null' },
         isBoss: true,
         description: "A strategic nightmare that can fully heal itself and uses Almighty damage that cannot be resisted."
