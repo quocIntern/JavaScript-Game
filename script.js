@@ -1107,17 +1107,14 @@ function loadGame() {
     }
 }
 
-function createSound(src, volume = 0.3) {
-    const sound = new Audio(src);
-    sound.volume = volume;
-    return sound;
-}
+
 const SOUNDS = {
     hit: new Audio('./sfx/hit.mp3'),
     crit: new Audio('./sfx/crit.mp3'),
     heal: new Audio('./sfx/heal.mp3'),
     select: new Audio('./sfx/select.mp3'),
 };
+Object.values(SOUNDS).forEach(sound => sound.volume = 0.2);
 // #endregion
 
 mainMenu();
