@@ -159,58 +159,58 @@ const DEMONS = [
 
 const MINI_BOSSES = [
     {
-        name:"Rampaging Oni", HP: 120, maxHP: 120, SP: 30,
-        STATS:{STR: 15, MAG: 5, END: 12, AGI: 7, LUK: 5},
-        ABILITY:["assault_dive", "power_slash"], img:"./img/Oni.webp", 
-        affinities: { phys: 'resist', fire: 'resist', elec: 'weak' },
+        name:"Rampaging Oni", HP: 95, maxHP: 95, SP: 30,
+        STATS:{STR: 12, MAG: 5, END: 10, AGI: 7, LUK: 5},
+        ABILITY:["power_slash", "bash"], img:"./img/Oni.webp", 
+        affinities: { phys: 'resist', elec: 'weak', wind: 'weak' },
         isMiniBoss: true,
         description: "A physical wall that forces you to use magic." 
     },
     {
-        name:"Setanta", HP: 85, maxHP: 85, SP: 40,
-        STATS:{STR: 13, MAG: 8, END: 7, AGI: 15, LUK: 12},
-        ABILITY:["power_slash", "lunge"], img:"./img/Setanta.webp", 
-        affinities: { psy: 'weak', wind: 'resist', fire: 'null' },
+        name:"Setanta", HP: 75, maxHP: 75, SP: 40,
+        STATS:{STR: 10, MAG: 8, END: 7, AGI: 13, LUK: 10},
+        ABILITY:["lunge", "bash"], img:"./img/Setanta.webp", 
+        affinities: { psy: 'weak', wind: 'resist', fire: 'resist' },
         isMiniBoss: true,
         description: "A high-crit attacker that is hard to hit."
     },
     {
-        name:"Incubus", HP: 90, maxHP: 90, SP: 70,
-        STATS:{STR: 6, MAG: 14, END: 7, AGI: 11, LUK: 10},
-        ABILITY:["agilao", "eigaon"], img:"./img/Incubus.png", 
-        affinities: { phys: 'weak', fire: 'null', dark: 'resist', ice: 'weak' },
+        name:"Incubus", HP: 80, maxHP: 80, SP: 70,
+        STATS:{STR: 6, MAG: 11, END: 7, AGI: 11, LUK: 10},
+        ABILITY:["agilao", "eiha"], img:"./img/Incubus.png", 
+        affinities: { phys: 'weak', fire: 'resist', dark: 'resist', ice: 'weak' },
         isMiniBoss: true,
         description: "A glass cannon that hits hard with magic but is weak to physical attacks."
     },
     {
-        name:"High Pixie", HP: 90, maxHP: 90, SP: 65,
-        STATS:{STR: 6, MAG: 13, END: 7, AGI: 12, LUK: 10},
-        ABILITY:["zionga", "diarama"], img:"./img/High_Pixie.webp",
-        affinities: { nuke: 'weak', wind: 'resist', elec: 'resist' },
+        name:"High Pixie", HP: 85, maxHP: 85, SP: 65,
+        STATS:{STR: 6, MAG: 12, END: 7, AGI: 12, LUK: 10},
+        ABILITY:["zionga", "dia"], img:"./img/High_Pixie.webp",
+        affinities: { nuke: 'weak', fire: 'weak', wind: 'resist', elec: 'resist' },
         isMiniBoss: true,
         description: "A durable magic user that can heal itself."
     },
     {
-        name:"Principality", HP: 110, maxHP: 110, SP: 80,
-        STATS:{STR: 9, MAG: 12, END: 9, AGI: 9, LUK: 9},
-        ABILITY:["kougaon", "diarama"], img:"./img/Principality.webp", 
-        affinities: { dark: 'weak', light: 'null', wind: 'resist' },
+        name:"Principality", HP: 100, maxHP: 100, SP: 80,
+        STATS:{STR: 9, MAG: 11, END: 9, AGI: 9, LUK: 9},
+        ABILITY:["kouga", "diarama"], img:"./img/Principality.webp", 
+        affinities: { dark: 'weak', light: 'resist', wind: 'resist' },
         isMiniBoss: true,
         description: "A battle of attrition that tests your damage output against its healing."
     },
     {
-        name:"Kaiwan", HP: 130, maxHP: 130, SP: 60,
-        STATS:{STR: 10, MAG: 11, END: 11, AGI: 10, LUK: 8},
-        ABILITY:["agilao", "psio", "garula"], img:"./img/Kaiwan.webp", 
-        affinities: { phys: 'weak', psy: 'resist', nuke: 'resist' },
+        name:"Kaiwan", HP: 110, maxHP: 110, SP: 60,
+        STATS:{STR: 10, MAG: 10, END: 11, AGI: 10, LUK: 8},
+        ABILITY:["agilao", "psio"], img:"./img/Kaiwan.webp", 
+        affinities: { phys: 'weak', psy: 'resist' },
         isMiniBoss: true,
         description: "An all-rounder with multiple resistances, forcing you to find an opening."
     },
     {
-        name:"Naga", HP: 95, maxHP: 95, SP: 55,
-        STATS:{STR: 9, MAG: 13, END: 8, AGI: 13, LUK: 7},
+        name:"Naga", HP: 90, maxHP: 90, SP: 55,
+        STATS:{STR: 9, MAG: 11, END: 8, AGI: 13, LUK: 7},
         ABILITY:["zionga", "lunge"], img:"./img/Naga.webp", 
-        affinities: { wind: 'weak', elec: 'null' },
+        affinities: { wind: 'weak', elec: 'resist' },
         isMiniBoss: true,
         description: "An elemental specialist that punishes those with an electric weakness."
     }
@@ -1107,6 +1107,11 @@ function loadGame() {
     }
 }
 
+function createSound(src, volume = 0.3) {
+    const sound = new Audio(src);
+    sound.volume = volume;
+    return sound;
+}
 const SOUNDS = {
     hit: new Audio('./sfx/hit.mp3'),
     crit: new Audio('./sfx/crit.mp3'),
