@@ -11,28 +11,28 @@ function playSound(soundName) {
 // Persona
 const PERSONAS = {
     Orpheus: {
-        name: "Orpheus", // Added name for consistency
+        name: "Orpheus",
         HP: 75, SP: 30,
-        STATS:{STR: 5, MAG: 4, END: 5, AGI: 4, LUK: 3}, // Total stats: 21
+        STATS:{STR: 5, MAG: 4, END: 5, AGI: 4, LUK: 3},
         ABILITY:["bash", "agi", "dia"],
         img:"./img/Orpheus.png",
         affinities: { elec: 'weak', fire: 'resist' }
     },
     Izanagi: {
-        name: "Izanagi", // Added name for consistency
+        name: "Izanagi",
         HP: 85, SP: 20,
-        STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3}, // Total stats: 21
+        STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3}, 
         ABILITY:["lunge", "bash"],
         img:"./img/Izanagi.png",
-        affinities: { wind: 'weak', elec: 'resist', phys: 'resist' } // Gave him phys resist instead of Arsene
+        affinities: { wind: 'weak', elec: 'resist', phys: 'resist' } 
     },
     Arsene: {
-        name: "Arsene", // Added name for consistency
+        name: "Arsene", 
         HP: 65, SP: 40,
-        STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3}, // Total stats: 21
+        STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3}, 
         ABILITY:["eiha", "bufu"],
         img:"./img/Arsene.png",
-        affinities: { light: 'weak', dark: 'resist' } // Changed affinities completely
+        affinities: { light: 'weak', dark: 'resist' } 
     }
 };
 
@@ -320,7 +320,7 @@ const SKILLS = {
     // #region --- Physical Skills ---
     // Tier 1: Light Damage
     lunge: { name: "Lunge", cost: { hp: 5 }, power: 13, type: "physical", element: "phys", evolves_to: "assault_dive" },
-    bash:   { name: "Bash", cost: { hp: 8 }, power: 10, type: "physical", element: "phys", evolves_to: "power_slash" },
+    bash:   { name: "Bash", cost: { hp: 8 }, power: 25, type: "physical", element: "phys", evolves_to: "power_slash" },
     
     // Tier 2: Medium Damage
     assault_dive: { name: "Assault Dive", cost: { hp: 14 }, power: 22, type: "physical", element: "phys", evolves_to: "megaton_raid" },
@@ -738,26 +738,20 @@ function render() {
 
 // #region ------------------- COMBAT LOGIC -------------------
 function calculateDamage(attacker, target, skill) {
-    let baseDamage = 0;
-    if (skill.type === 'physical') {
-        baseDamage = skill.power + attacker.STATS.STR;
-    } else if (skill.type === 'magic') {
-        baseDamage = skill.power + attacker.STATS.MAG;
-    }
+    // FIX: Reverted to the improved formula where stats have a higher impact.
+    let baseDamage = (skill.type === 'physical')
+        ? skill.power + (attacker.STATS.STR * 1.5)
+        : skill.power + (attacker.STATS.MAG * 1.5);
 
     let bonusTurn = false;
-
-    // BUG FIX: Define attacker's passives, defaulting to an empty array if none exist.
     const attackerPassives = attacker.PASSIVES || [];
 
     // --- Check for Critical Hit ---
-    // BUG FIX: Apply passives like 'Apt Pupil' *before* the random check.
     let critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
     if (attackerPassives.includes('apt_pupil')) {
         critChance *= 2.0; // Apt Pupil doubles the chance
     }
     const isCrit = Math.random() < critChance;
-
     if (isCrit) {
         bonusTurn = true;
     }
@@ -765,8 +759,6 @@ function calculateDamage(attacker, target, skill) {
     // --- Check for elemental affinity ---
     const affinity = target.affinities[skill.element];
     let affinityMultiplier = 1.0;
-    // BUG FIX: Initialize damageMultiplier for passive skill boosts.
-    let damageMultiplier = 1.0; 
 
     if (affinity) {
         showAffinityFeedback(target, affinity);
@@ -777,21 +769,53 @@ function calculateDamage(attacker, target, skill) {
             affinityMultiplier = 0.5;
         } else if (affinity === 'null') {
             affinityMultiplier = 0;
-            bonusTurn = false;
+            bonusTurn = false; // Nullified attacks never grant a bonus turn.
         }
     }
     
-    // BUG FIX: Correctly loop through attackerPassives and update the damage multiplier.
+    // --- Check for passive skill boosts ---
+    let passiveMultiplier = 1.0;
     attackerPassives.forEach(pKey => {
-        const passive = PASSIVE_SKILLS[pKey];
+        // FIX: The second redundant loop checking for passives has been removed.
+        const passive = GAME_DATA.PASSIVE_SKILLS[pKey];
         if (passive && passive.type === 'damage_boost' && passive.element === skill.element) {
-            damageMultiplier *= passive.multiplier;
+            passiveMultiplier *= passive.multiplier;
         }
     });
     
-    const totalDamage = baseDamage - target.STATS.END;
-    // BUG FIX: Apply the damageMultiplier from passives to the final damage calculation.
-    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * damageMultiplier);
+    // --- Calculate defense reduction ---
+    const damageReduction = target.STATS.END / (target.STATS.END + 50);
+    const totalDamage = baseDamage * (1 - damageReduction);
+
+    // --- Calculate final damage ---
+    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * passiveMultiplier);
+
+    if (isCrit && affinity !== 'null') {
+        playSound('crit');
+        finalDamage = Math.floor(finalDamage * 1.5);
+        showCombatText(target, "CRITICAL!", 'critical');
+        
+        // FIX: Removed the duplicate call to triggerScreenShake.
+        if (target === state.enemy) {
+            triggerScreenShake();
+        }
+    }
+
+    // Display damage number if damage was dealt
+    if (finalDamage > 0 && affinity !== 'null') {
+        playSound('hit');
+        setTimeout(() => {
+            showCombatText(target, finalDamage, 'damage');
+        }, 150);
+    }
+
+    return { damage: finalDamage, bonus: bonusTurn };
+}
+    
+    const damageReduction = target.STATS.END / (target.STATS.END + 50);
+    const totalDamage = baseDamage * (1 - damageReduction);
+
+    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * passiveMultiplier);
 
     if (isCrit && affinity !== 'null') {
         playSound('crit'); // Play critical hit sound
