@@ -2,43 +2,39 @@
 
 function playSound(soundName) {
     if (SOUNDS[soundName]) {
-        SOUNDS[soundName].currentTime = 0; // Rewind to start
+        SOUNDS[soundName].currentTime = 0;
         SOUNDS[soundName].play();
     }
 }
 
-
-// Persona
 const PERSONAS = {
     Orpheus: {
-        name: "Orpheus", // Added name for consistency
+        name: "Orpheus",
         HP: 75, SP: 30,
-        STATS:{STR: 5, MAG: 4, END: 5, AGI: 4, LUK: 3}, // Total stats: 21
+        STATS:{STR: 5, MAG: 4, END: 5, AGI: 4, LUK: 3},
         ABILITY:["bash", "agi", "dia"],
         img:"./img/Orpheus.png",
         affinities: { elec: 'weak', fire: 'resist' }
     },
     Izanagi: {
-        name: "Izanagi", // Added name for consistency
+        name: "Izanagi",
         HP: 85, SP: 20,
-        STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3}, // Total stats: 21
+        STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3},
         ABILITY:["lunge", "bash"],
         img:"./img/Izanagi.png",
-        affinities: { wind: 'weak', elec: 'resist', phys: 'resist' } // Gave him phys resist instead of Arsene
+        affinities: { wind: 'weak', elec: 'resist', phys: 'resist' }
     },
     Arsene: {
-        name: "Arsene", // Added name for consistency
+        name: "Arsene",
         HP: 65, SP: 40,
-        STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3}, // Total stats: 21
+        STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3},
         ABILITY:["eiha", "bufu"],
         img:"./img/Arsene.png",
-        affinities: { light: 'weak', dark: 'resist' } // Changed affinities completely
+        affinities: { light: 'weak', dark: 'resist' }
     }
 };
 
-// Demon
 const DEMONS = [
-    // --- Early Game Demons (Floors 1-4) ---
     {
         name:"Pixie", HP: 30, maxHP: 30, SP: 20,
         STATS:{STR: 3, MAG: 5, END: 2, AGI: 6, LUK: 4},
@@ -87,8 +83,6 @@ const DEMONS = [
         ABILITY:["bufu", "bufula"], img:"./img/Jack_Frost.webp",
         affinities: { fire: 'weak', ice: 'null' }
     },
-
-    // --- Mid-Game Demons (Floors 6-9) ---
     {
         name:"Pyro Jack", HP: 75, maxHP: 75, SP: 45,
         STATS:{STR: 5, MAG: 12, END: 6, AGI: 10, LUK: 9},
@@ -137,8 +131,6 @@ const DEMONS = [
         ABILITY:["agidyne", "eigaon"], img:"./img/Rangda.webp", 
         affinities: { elec: 'weak', light: 'weak', phys: 'resist', fire: 'resist' }
     },
-
-    // --- Late-Game Demons (Floor 10) ---
     {
         name:"Throne", HP: 160, maxHP: 160, SP: 100,
         STATS:{STR: 13, MAG: 19, END: 14, AGI: 13, LUK: 12},
@@ -165,9 +157,7 @@ const DEMONS = [
     }
 ];
 
-// Mini Bosses
 const MINI_BOSSES = [
-    // #region --- Brute Force Testers ---
     {
         name:"Rampaging Oni", HP: 120, maxHP: 120, SP: 30,
         STATS:{STR: 15, MAG: 5, END: 12, AGI: 7, LUK: 5},
@@ -184,9 +174,6 @@ const MINI_BOSSES = [
         isMiniBoss: true,
         description: "A high-crit attacker that is hard to hit."
     },
-    // #endregion
-
-    // #region --- Magic Specialist Testers ---
     {
         name:"Incubus", HP: 90, maxHP: 90, SP: 70,
         STATS:{STR: 6, MAG: 14, END: 7, AGI: 11, LUK: 10},
@@ -203,9 +190,6 @@ const MINI_BOSSES = [
         isMiniBoss: true,
         description: "A durable magic user that can heal itself."
     },
-    // #endregion
-
-    // #region --- Strategic Challenge Testers ---
     {
         name:"Principality", HP: 110, maxHP: 110, SP: 80,
         STATS:{STR: 9, MAG: 12, END: 9, AGI: 9, LUK: 9},
@@ -230,12 +214,9 @@ const MINI_BOSSES = [
         isMiniBoss: true,
         description: "An elemental specialist that punishes those with an electric weakness."
     }
-    // #endregion
 ];
 
-// Bosses
 const BOSSES = [
-    // The All-Out Attacker
     {
         name:"Cerberus", HP: 240, maxHP: 240, SP: 80,
         STATS:{STR: 22, MAG: 8, END: 15, AGI: 14, LUK: 7},
@@ -244,7 +225,6 @@ const BOSSES = [
         isBoss: true,
         description: "A relentless physical attacker that tests your endurance and physical defense."
     },
-    // The Unbreakable Wall
     {
         name:"Girimehkala", HP: 250, maxHP: 250, SP: 120,
         STATS:{STR: 14, MAG: 16, END: 20, AGI: 8, LUK: 9},
@@ -253,7 +233,6 @@ const BOSSES = [
         isBoss: true,
         description: "A defensive fortress that nullifies all physical attacks, forcing a magic-based strategy."
     },
-    // The Master Spellcaster
     {
         name:"Belphegor", HP: 220, maxHP: 220, SP: 150,
         STATS:{STR: 10, MAG: 20, END: 14, AGI: 12, LUK: 11},
@@ -262,7 +241,6 @@ const BOSSES = [
         isBoss: true,
         description: "A powerful mage that barrages you with high-tier elemental spells."
     },
-    // The All-Rounder
     {
         name:"Odin", HP: 260, maxHP: 260, SP: 140,
         STATS:{STR: 18, MAG: 18, END: 17, AGI: 16, LUK: 14},
@@ -271,7 +249,6 @@ const BOSSES = [
         isBoss: true,
         description: "A balanced master of both physical and magical combat with no obvious flaws."
     },
-    // The Gimmick Boss
     {
         name:"Trumpeter", HP: 280, maxHP: 280, SP: 200,
         STATS:{STR: 15, MAG: 18, END: 16, AGI: 15, LUK: 15},
@@ -282,7 +259,6 @@ const BOSSES = [
     }
 ];
 
-// Final Boss
 const FINAL_BOSS = {
     name:"Satan", HP: 300, maxHP: 300, SP: 150,
     STATS:{STR: 15, MAG:15, END: 15, AGI: 10, LUK: 10},
@@ -291,127 +267,85 @@ const FINAL_BOSS = {
     isFinalBoss: true
 };
 
-// Floor Encounters
 const FLOOR_ENCOUNTERS = [
-    // Floor 1: The weakest demons to start.
     ["Pixie", "Slime"],
-    // Floor 2: Introduce a slightly stronger physical attacker.
     ["Pixie", "Slime", "Goblin"],
-    // Floor 3: Add more variety with magic users.
     ["Goblin", "Mandrake", "Agathion"],
-    // Floor 4: Stronger early-game demons before the first mini-boss.
     ["Bicorn", "Angel", "Jack Frost"],
-    // Floor 5: A final test of early-game demons.
     ["Angel", "Bicorn", "Jack Frost"],
-    // Floor 6: A step up in difficulty with mid-game demons.
     ["Pyro Jack", "Nekomata"],
-    // Floor 7: Introduce stronger physical and magical threats.
     ["Orthrus", "Valkyrie"],
-    // Floor 8: Enemies with more complex resistances and abilities.
     ["Leanan Sídhe", "Rakshasa"],
-    // Floor 9: High-tier mid-game demons to challenge the player before the boss floor.
     ["Queen Mab", "Rangda"],
-    // Floor 10: The strongest regular demons before the final boss of the tower.
     ["Throne", "Barong", "Abaddon", "Anubis"]
 ];
 
-// Skill
 const SKILLS = {
-    // #region --- Physical Skills ---
-    // Tier 1: Light Damage
     lunge: { name: "Lunge", cost: { hp: 5 }, power: 13, type: "physical", element: "phys", evolves_to: "assault_dive" },
     bash:   { name: "Bash", cost: { hp: 8 }, power: 10, type: "physical", element: "phys", evolves_to: "power_slash" },
-    
-    // Tier 2: Medium Damage
     assault_dive: { name: "Assault Dive", cost: { hp: 14 }, power: 22, type: "physical", element: "phys", evolves_to: "megaton_raid" },
     power_slash:  { name: "Power Slash", cost: { hp: 18 }, power: 30, type: "physical", element: "phys", evolves_to: "gigantic_fist" },
-
-    // Tier 3: Heavy Damage
     megaton_raid:  { name: "Megaton Raid", cost: { hp: 20 }, power: 40, type: "physical", element: "phys", evolves_to: "gods_hand" },
     gigantic_fist: { name: "Gigantic Fist", cost: { hp: 25 }, power: 45, type: "physical", element: "phys", evolves_to: "brave_blade" },
-
-    // Tier 4: Severe Damage
     gods_hand:    { name: "God's Hand", cost: { hp: 30 }, power: 80, type: "physical", element: "phys" },
     brave_blade:  { name: "Brave Blade", cost: { hp: 32 }, power: 85, type: "physical", element: "phys" },
     primal_force: { name: "Primal Force", cost: { hp: 35 }, power: 100, type: "physical", element: "phys" },
-    // #endregion
-
-    // #region --- Elemental & Other Magic Skills ---
-    // Fire
+    
     agi:    { name: "Agi", cost: { sp: 4 }, power: 12, type: "magic", element: "fire", evolves_to: "agilao" },
     agilao: { name: "Agilao", cost: { sp: 8 }, power: 25, type: "magic", element: "fire", evolves_to: "agidyne" },
     agidyne:{ name: "Agidyne", cost: { sp: 16 }, power: 50, type: "magic", element: "fire", evolves_to: "inferno" },
     inferno:{ name: "Inferno", cost: { sp: 28 }, power: 90, type: "magic", element: "fire" },
 
-    // Ice
     bufu:   { name: "Bufu", cost: { sp: 4 }, power: 12, type: "magic", element: "ice", evolves_to: "bufula" },
     bufula: { name: "Bufula", cost: { sp: 8 }, power: 25, type: "magic", element: "ice", evolves_to: "bufudyne" },
     bufudyne:{ name: "Bufudyne", cost: { sp: 16 }, power: 50, type: "magic", element: "ice", evolves_to: "diamond_dust" },
     diamond_dust: { name: "Diamond Dust", cost: { sp: 28 }, power: 90, type: "magic", element: "ice" },
 
-    // Electric
     zio:    { name: "Zio", cost: { sp: 4 }, power: 12, type: "magic", element: "elec", evolves_to: "zionga" },
     zionga: { name: "Zionga", cost: { sp: 8 }, power: 25, type: "magic", element: "elec", evolves_to: "ziodyne" },
     ziodyne:{ name: "Ziodyne", cost: { sp: 16 }, power: 50, type: "magic", element: "elec", evolves_to: "thunder_reign" },
     thunder_reign: { name: "Thunder Reign", cost: { sp: 28 }, power: 90, type: "magic", element: "elec" },
 
-    // Wind
     garu:   { name: "Garu", cost: { sp: 4 }, power: 12, type: "magic", element: "wind", evolves_to: "garula" },
     garula: { name: "Garula", cost: { sp: 8 }, power: 25, type: "magic", element: "wind", evolves_to: "garudyne" },
     garudyne:{ name: "Garudyne", cost: { sp: 16 }, power: 50, type: "magic", element: "wind", evolves_to: "panta_rhei" },
     panta_rhei: { name: "Panta Rhei", cost: { sp: 28 }, power: 90, type: "magic", element: "wind" },
 
-    // Psy
     psi:    { name: "Psi", cost: { sp: 5 }, power: 14, type: "magic", element: "psy", evolves_to: "psio" },
     psio:   { name: "Psio", cost: { sp: 10 }, power: 28, type: "magic", element: "psy", evolves_to: "psiodyne" },
     psiodyne:{ name: "Psiodyne", cost: { sp: 18 }, power: 55, type: "magic", element: "psy" },
 
-    // Nuke
     frei:    { name: "Frei", cost: { sp: 5 }, power: 14, type: "magic", element: "nuke", evolves_to: "freila" },
     freila:  { name: "Freila", cost: { sp: 10 }, power: 28, type: "magic", element: "nuke", evolves_to: "freidyne" },
     freidyne:{ name: "Freidyne", cost: { sp: 18 }, power: 55, type: "magic", element: "nuke" },
 
-    // Light
     kouha:    { name: "Kouha", cost: { sp: 5 }, power: 14, type: "magic", element: "light", evolves_to: "kouga" },
     kouga:    { name: "Kouga", cost: { sp: 10 }, power: 28, type: "magic", element: "light", evolves_to: "kougaon" },
     kougaon:  { name: "Kougaon", cost: { sp: 18 }, power: 55, type: "magic", element: "light" },
 
-    // Dark
     eiha:    { name: "Eiha", cost: { sp: 5 }, power: 14, type: "magic", element: "dark", evolves_to: "eigaon" },
     eigaon:  { name: "Eigaon", cost: { sp: 10 }, power: 28, type: "magic", element: "dark", evolves_to: "eigadyne" },
     eigadyne:{ name: "Eigadyne", cost: { sp: 18 }, power: 55, type: "magic", element: "dark" },
 
-    // Almighty
     megido:    { name: "Megido", cost: { sp: 15 }, power: 35, type: "magic", element: "almighty", evolves_to: "megidola" },
     megidola:  { name: "Megidola", cost: { sp: 24 }, power: 55, type: "magic", element: "almighty", evolves_to: "megidolaon" },
     megidolaon:{ name: "Megidolaon", cost: { sp: 38 }, power: 80, type: "magic", element: "almighty" },
     morning_star: { name: "Morning Star", cost: { sp: 54 }, power: 120, type: "magic", element: "almighty" },
-    // #endregion
-
-    // #region --- Healing Skills ---
+    
     dia:      { name: "Dia", cost: { sp: 6 }, power: 30, type: "healing", element: "heal", evolves_to: "diarama" },
     diarama:  { name: "Diarama", cost: { sp: 12 }, power: 70, type: "healing", element: "heal", evolves_to: "diarahan" },
-    diarahan: { name: "Diarahan", cost: { sp: 24 }, power: 999, type: "healing", element: "heal" }, // power: 999 for full heal
-    // #endregion
+    diarahan: { name: "Diarahan", cost: { sp: 24 }, power: 999, type: "healing", element: "heal" },
 };
 
-// Passive Skills
 const PASSIVE_SKILLS = {
-    // Damage Boosts
     fire_boost: { name: "Fire Boost", description: "Increases Fire damage by 25%.", type: "damage_boost", element: "fire", multiplier: 1.25 },
     ice_boost:  { name: "Ice Boost", description: "Increases Ice damage by 25%.", type: "damage_boost", element: "ice", multiplier: 1.25 },
     elec_boost: { name: "Elec Boost", description: "Increases Elec damage by 25%.", type: "damage_boost", element: "elec", multiplier: 1.25 },
     wind_boost: { name: "Wind Boost", description: "Increases Wind damage by 25%.", type: "damage_boost", element: "wind", multiplier: 1.25 },
-
-    // Defensive & Counter Skills
     resist_phys: { name: "Resist Physical", description: "Reduces damage taken from Physical attacks.", type: "resistance", element: "phys", affinity: "resist" },
     counter:     { name: "Counter", description: "15% chance to repel Physical attacks with light damage.", type: "counter", chance: 0.15, power: 10 },
-    
-    // Resource Management
     invigorate_1: { name: "Invigorate 1", description: "Restore 3 SP at the start of your turn.", type: "regen", resource: "SP", amount: 3 },
     regenerate_1: { name: "Regenerate 1", description: "Restore 5% of max HP at the start of your turn.", type: "regen", resource: "HP", amount: 0.05 },
-
-    // Stat & Other Bonuses
     apt_pupil: { name: "Apt Pupil", description: "Doubles your critical hit rate.", type: "crit_boost", multiplier: 2.0 },
 };
 
@@ -503,8 +437,6 @@ const CARDS = [
             persona.STATS.END += 2;
         }
     },
-
-    // --- Resource & Healing Cards ---
     {
         name: "II. The High Priestess",
         description: "+5 to Max SP and restore 5 SP.",
@@ -567,8 +499,6 @@ const CARDS = [
             persona.SP += spBonus;
         }
     },
-
-    // --- Special Effect Cards ---
     {
         name: "X. Wheel of Fortune",
         description: "+3 to a random stat.",
@@ -578,7 +508,7 @@ const CARDS = [
             persona.STATS[randomStat] += 3;
         }
     },
-    {   // MODIFIED CARD
+    {
         name: "XIX. The Sun",
         description: "+1 to all stats and restore 50% of HP & SP.",
         apply: function(persona) {
@@ -746,28 +676,12 @@ function calculateDamage(attacker, target, skill) {
     }
 
     let bonusTurn = false;
-
-    // BUG FIX: Define attacker's passives, defaulting to an empty array if none exist.
+    let affinityMultiplier = 1.0;
+    let damageMultiplier = 1.0;
+    let critMultiplier = 1.0;
     const attackerPassives = attacker.PASSIVES || [];
 
-    // --- Check for Critical Hit ---
-    // BUG FIX: Apply passives like 'Apt Pupil' *before* the random check.
-    let critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
-    if (attackerPassives.includes('apt_pupil')) {
-        critChance *= 2.0; // Apt Pupil doubles the chance
-    }
-    const isCrit = Math.random() < critChance;
-
-    if (isCrit) {
-        bonusTurn = true;
-    }
-
-    // --- Check for elemental affinity ---
     const affinity = target.affinities[skill.element];
-    let affinityMultiplier = 1.0;
-    // BUG FIX: Initialize damageMultiplier for passive skill boosts.
-    let damageMultiplier = 1.0; 
-
     if (affinity) {
         showAffinityFeedback(target, affinity);
         if (affinity === 'weak') {
@@ -781,7 +695,6 @@ function calculateDamage(attacker, target, skill) {
         }
     }
     
-    // BUG FIX: Correctly loop through attackerPassives and update the damage multiplier.
     attackerPassives.forEach(pKey => {
         const passive = PASSIVE_SKILLS[pKey];
         if (passive && passive.type === 'damage_boost' && passive.element === skill.element) {
@@ -789,20 +702,28 @@ function calculateDamage(attacker, target, skill) {
         }
     });
     
-    const totalDamage = baseDamage - target.STATS.END;
-    // BUG FIX: Apply the damageMultiplier from passives to the final damage calculation.
-    let finalDamage = Math.floor(Math.max(1, totalDamage) * affinityMultiplier * damageMultiplier);
+    let critChance = 0.05 + (attacker.STATS.LUK * 0.0075);
+    if (attackerPassives.includes('apt_pupil')) {
+        critChance *= 2.0;
+    }
+    const isCrit = Math.random() < critChance;
+    if (isCrit && affinity !== 'null') {
+        critMultiplier = 1.5;
+        bonusTurn = true;
+    }
+    
+    const modifiedDamage = baseDamage * affinityMultiplier * damageMultiplier * critMultiplier;
+    const totalDamage = modifiedDamage - target.STATS.END;
+    let finalDamage = Math.floor(Math.max(0, totalDamage));
+    
+    if (affinity !== 'null' && finalDamage === 0 && modifiedDamage > 0) {
+        finalDamage = 1;
+    }
 
     if (isCrit && affinity !== 'null') {
-        playSound('crit'); // Play critical hit sound
+        playSound('crit');
         if (target === state.enemy) triggerScreenShake();
-        finalDamage = Math.floor(finalDamage * 1.5);
         showCombatText(target, "CRITICAL!", 'critical');
-        
-        // FIX: Add this line to trigger the shake on a critical hit.
-        if (target === state.enemy) { // Only shake on crits against the enemy
-             triggerScreenShake();
-        }
     }
 
     if (finalDamage > 0) {
@@ -814,8 +735,9 @@ function calculateDamage(attacker, target, skill) {
 
     return { damage: finalDamage, bonus: bonusTurn };
 }
+
 function attack() {
-    const attackSkill = { power: 10, type: 'physical', element: 'phys' };
+    const attackSkill = { power: 0, type: 'physical', element: 'phys' };
     const result = calculateDamage(state.persona, state.enemy, attackSkill);
     state.enemy.HP -= result.damage;
 
@@ -825,7 +747,7 @@ function attack() {
     }
 
     if (result.bonus) {
-        showCombatText(state.persona, "1 MORE!", "critical"); // Show "1 More!" feedback
+        showCombatText(state.persona, "1 MORE!", "critical");
     } else {
         enemyTurn();
     }
@@ -867,13 +789,12 @@ function useAbility(skillKey){
 function enemyTurn() {
     const enemy = state.enemy;
     const player = state.persona;
-    // BUG FIX: This flag is needed to track the attack type for the 'counter' passive.
     let wasPhysicalAttack = false; 
 
     const dodgeChance = (player.STATS.AGI * 0.02) + (player.STATS.LUK * 0.01);
     if (Math.random() < dodgeChance) {
         showCombatText(player, "EVADED!", 'resist');
-        handleStartOfTurnPassives(); // Player's turn starts if enemy attack is dodged
+        handleStartOfTurnPassives();
         render();
         return;
     }
@@ -882,9 +803,8 @@ function enemyTurn() {
     const chosenSkillKey = availableSkills[Math.floor(Math.random() * availableSkills.length)];
     const skill = SKILLS[chosenSkillKey];
     
-    // BUG FIX: Improved AI to correctly check if it can afford skills (HP or SP).
     const canUseSkill = skill && ((skill.cost.sp && enemy.SP >= skill.cost.sp) || (skill.cost.hp && enemy.HP > skill.cost.hp));
-    const wantsToUseSkill = Math.random() < 0.75; // 75% chance to use a skill if possible
+    const wantsToUseSkill = Math.random() < 0.75;
 
     if (canUseSkill && wantsToUseSkill) {
         if(skill.cost.sp) enemy.SP -= skill.cost.sp;
@@ -903,7 +823,6 @@ function enemyTurn() {
         wasPhysicalAttack = true; 
     }
     
-    // BUG FIX: The 'counter' check now works correctly using the flag.
     if (wasPhysicalAttack && player.PASSIVES && player.PASSIVES.includes('counter')) {
         const counterPassive = PASSIVE_SKILLS.counter;
         if (Math.random() < counterPassive.chance) {
@@ -913,7 +832,7 @@ function enemyTurn() {
                 const counterResult = calculateDamage(player, enemy, counterSkill);
                 enemy.HP -= counterResult.damage;
                 if (enemy.HP <= 0) enemyDefeated();
-                render(); // Update UI immediately after counter
+                render();
             }, 500);
         }
     }
@@ -924,7 +843,6 @@ function enemyTurn() {
         document.getElementById('actions').innerHTML = `<h4>DEFEAT...</h4>`; 
         setTimeout(() => document.location.reload(), 2000); 
     } else {
-        // BUG FIX: Moved passive skill trigger to here, the actual start of the player's turn.
         handleStartOfTurnPassives();
         render();
     }
@@ -934,7 +852,6 @@ function enemyTurn() {
 // #region ------------------- GAME FLOW & PROGRESSION -------------------
 function spawnEnemy() {
     let newEnemyTemplate;
-    // FIX: You were missing this line. The variable must be defined before it can be used.
     const nextKillNumber = state.totalKills + 1;
 
     if (nextKillNumber % 10 === 0) {
@@ -969,7 +886,7 @@ function enemyDefeated(){
     }
 
     const wasBoss = state.enemy.isBoss || state.enemy.isMiniBoss;
-    state.totalKills++; // This is the ONLY progression variable we need to change.
+    state.totalKills++;
     state.xp += wasBoss ? 25 : 10;
 
     const xpToLevel = state.level * 20;
@@ -982,7 +899,6 @@ function enemyDefeated(){
         state.persona.SP = state.persona.maxSP;
     }
 
-    // A reward is granted after every fight.
     if (wasBoss) {
         if (Math.random() < 0.5) { 
             skillShuffleTime();
@@ -1032,7 +948,6 @@ function skillShuffleTime() {
     actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
     let skillOptions = [];
 
-    // --- Generate UPGRADE options ---
     player.ABILITY.forEach(skillKey => {
         const skill = SKILLS[skillKey];
         if (skill.evolves_to && SKILLS[skill.evolves_to]) {
@@ -1049,23 +964,19 @@ function skillShuffleTime() {
         }
     });
 
-    // --- Generate LEARN options for active skills ---
     const learnableSkills = ['dia', 'garu', 'bufu', 'lunge', 'psi', 'kouha'];
     learnableSkills.forEach(skillKey => {
-        // FIX: This check prevents offering skills the player already has.
         if (!player.ABILITY.includes(skillKey)) {
             const skill = SKILLS[skillKey];
             skillOptions.push({
                 name: `Learn ${skill.name}`,
                 description: `Acquire the skill '${skill.name}'.`,
                 apply: (persona) => {
-                    // FIX: This handles the 6-skill limit.
                     if (persona.ABILITY.length < 6) {
                         persona.ABILITY.push(skillKey);
                         spawnEnemy();
                         render();
                     } else {
-                        // If full, trigger the replacement UI.
                         promptSkillReplacement(skillKey);
                     }
                 }
@@ -1073,7 +984,6 @@ function skillShuffleTime() {
         }
     });
 
-    // --- Generate LEARN options for passive skills ---
     const learnablePassives = ['invigorate_1', 'resist_phys', 'counter', 'fire_boost', 'apt_pupil'];
     learnablePassives.forEach(pKey => {
         if (!player.PASSIVES || !player.PASSIVES.includes(pKey)) {
@@ -1096,7 +1006,6 @@ function skillShuffleTime() {
 
     const shuffledOptions = skillOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
     
-    // If no skills are available to learn or upgrade, default to a standard card draw.
     if (shuffledOptions.length === 0) {
         shuffleTime();
         return;
@@ -1120,9 +1029,7 @@ function promptSkillReplacement(newSkillKey) {
         const btn = document.createElement("button");
         btn.innerHTML = `Forget ${currentSkill.name}`;
         btn.onclick = () => {
-            // Replace the old skill with the new one
             state.persona.ABILITY[index] = newSkillKey;
-            // Proceed to the next battle
             spawnEnemy();
             render();
         };
@@ -1132,7 +1039,6 @@ function promptSkillReplacement(newSkillKey) {
     const cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel (Keep current skills)";
     cancelButton.onclick = () => {
-        // Proceed to the next battle without making a change
         spawnEnemy();
         render();
     };
@@ -1202,12 +1108,11 @@ function loadGame() {
 }
 
 const SOUNDS = {
-    hit: new Audio('./sfx/hit.mp3'),       // A basic physical hit sound
-    crit: new Audio('./sfx/crit.mp3'),      // A more impactful critical hit sound
-    heal: new Audio('./sfx/heal.mp3'),      // A healing spell sound
-    select: new Audio('./sfx/select.mp3'),  // A UI selection sound
+    hit: new Audio('./sfx/hit.mp3'),
+    crit: new Audio('./sfx/crit.mp3'),
+    heal: new Audio('./sfx/heal.mp3'),
+    select: new Audio('./sfx/select.mp3'),
 };
 // #endregion
 
-// --- Game Start ---
 mainMenu();
