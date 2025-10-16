@@ -166,10 +166,10 @@ li {
     display: none;  
 }
 #floor-counter {
-    position: absolute; /* Takes the element out of the normal flow */
-    bottom: -90px;        /* Positions it 5px from the bottom of the container */
-    left: 15px;         /* Positions it 15px from the left */
-    font-size: 0.8em;   /* Make it slightly smaller to fit well */
+    position: fixed; /* Position relative to the screen */
+    bottom: 20px;    /* 20px from the bottom */
+    right: 20px;     /* 20px from the right */
+    font-size: 0.8em;
     color: var(--retro-border);
     text-align: left;
 }
@@ -188,4 +188,55 @@ li {
 
 .shake {
     animation: screen-shake 0.3s;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 5px; /* Reduce overall padding on small screens */
+    }
+
+    #game-screen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto auto; /* Added a third row for utilities */
+    grid-template-areas: 
+        "player actions"
+        "enemy  actions"
+        "exit   floor"; /* Defined new areas for the bottom row */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+    #player-stats, #enemy-display, #actions {
+        /* Slightly more balanced padding and border for readability */
+        padding: 3px;
+        border-width: 10px;
+    }
+    
+    #actions {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        padding: 40px;
+    }
+    button {
+        /* Better padding for easier tapping */
+        padding: 8px 10px;
+        font-size: 0.7em;
+    }
+
+    #floor-counter {
+    grid-area: floor; /* Assign it to the 'floor' grid area */
+    font-size: 0.8em;
+    color: var(--retro-border);
+    text-align: right; /* Align it to the right of its cell */
+    padding: 10px;
+}
+
+    /* Convert the exit container into a fixed bar at the bottom */
+    #exit-container {
+    grid-area: exit; /* Assign it to the 'exit' grid area */
+    display: block; 
+    text-align: left; /* Align it to the left of its cell */
+}
 }
