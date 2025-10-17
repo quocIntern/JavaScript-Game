@@ -737,6 +737,8 @@ function calculateDamage(attacker, target, skill) {
 }
 
 function attack() {
+    if (state.persona.HP <= 0) return;
+
     const attackSkill = { power: 0, type: 'physical', element: 'phys' };
     const result = calculateDamage(state.persona, state.enemy, attackSkill);
     state.enemy.HP -= result.damage;
@@ -755,6 +757,7 @@ function attack() {
 }
 
 function useAbility(skillKey){
+    if (state.persona.HP <= 0) return;
     const skill = SKILLS[skillKey];
     const player = state.persona;
     if ((skill.cost.sp && player.SP < skill.cost.sp) || (skill.cost.hp && player.HP <= skill.cost.hp)) {
