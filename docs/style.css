@@ -28,12 +28,15 @@ h3, h4 {
     color: var(--retro-text);
 }
 
+/* MODIFIED: Updated grid to include the log */
 #game-screen {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 150px; /* Added row for the log */
     grid-template-areas: 
         "player enemy"
-        "actions actions";
+        "actions actions"
+        "log log"; /* Added log area */
     gap: 10px;
     margin-top: 10px;
 }
@@ -190,53 +193,83 @@ li {
     animation: screen-shake 0.3s;
 }
 
+/* ADDED: Styles for the new Game Log */
+#game-log-container {
+    grid-area: log;
+    background-color: var(--retro-blue);
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6;
+    border-image-width: 1;
+    padding: 10px;
+    text-align: left;
+    overflow-y: hidden; /* Hide the scrollbar itself but allow scrolling */
+}
+
+#game-log {
+    height: 100%;
+    overflow-y: auto;
+    font-size: 0.7em;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+#game-log::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+#game-log p {
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+}
+/* ADDED: Text color classes for the log */
+.log-player { color: #87CEEB; } /* Light Blue */
+.log-enemy { color: #FFB6C1; } /* Light Pink */
+.log-player-dmg { color: #ff4d4d; } /* Red */
+.log-healing { color: #90EE90; } /* Light Green */
+.log-system { color: #D3D3D3; } /* Light Grey */
+.log-critical { color: #FFDF00; } /* Gold/Yellow */
+.log-resist { color: #a2d2ff; } /* Light Blue */
+
 @media (max-width: 768px) {
     body {
         padding: 5px; /* Reduce overall padding on small screens */
     }
 
+    /* MODIFIED: Updated mobile grid layout */
     #game-screen {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto auto; /* Added a third row for utilities */
-    grid-template-areas: 
-        "player actions"
-        "enemy  actions"
-        "exit   floor"; /* Defined new areas for the bottom row */
-    gap: 10px;
-    margin-top: 10px;
-}
+        grid-template-columns: 1fr; /* Single column */
+        grid-template-rows: auto auto auto auto; /* Four rows */
+        grid-template-areas: 
+            "player"
+            "enemy"
+            "actions"
+            "log"; /* Log at the bottom */
+    }
 
-    #player-stats, #enemy-display, #actions {
-        /* Slightly more balanced padding and border for readability */
+    #player-stats, #enemy-display, #actions, #game-log-container {
         padding: 3px;
         border-width: 10px;
     }
     
     #actions {
-        display: flex;
-        flex-direction: column;
-        width: auto;
-        padding: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 10px;
     }
     button {
-        /* Better padding for easier tapping */
         padding: 8px 10px;
         font-size: 0.7em;
     }
 
     #floor-counter {
-    grid-area: floor; /* Assign it to the 'floor' grid area */
-    font-size: 0.8em;
-    color: var(--retro-border);
-    text-align: right; /* Align it to the right of its cell */
-    padding: 10px;
-}
+        bottom: 10px;
+        right: 10px;
+    }
 
-    /* Convert the exit container into a fixed bar at the bottom */
     #exit-container {
-    grid-area: exit; /* Assign it to the 'exit' grid area */
-    display: block; 
-    text-align: left; /* Align it to the left of its cell */
-}
+       bottom: 10px;
+       left: 10px;
+       display: flex;
+       flex-direction: column;
+    }
 }

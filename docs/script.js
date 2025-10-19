@@ -21,6 +21,7 @@ const PERSONAS = {
         HP: 85, SP: 20,
         STATS:{STR: 7, MAG: 2, END: 6, AGI: 3, LUK: 3},
         ABILITY:["lunge", "bash"],
+        PASSIVES: ["regenerate_1"], // ADDED: For survivability
         img:"./img/Izanagi.png",
         affinities: { wind: 'weak', elec: 'resist', phys: 'resist' }
     },
@@ -29,6 +30,7 @@ const PERSONAS = {
         HP: 65, SP: 40,
         STATS:{STR: 3, MAG: 6, END: 3, AGI: 6, LUK: 3},
         ABILITY:["eiha", "bufu"],
+        PASSIVES: ["regenerate_1"], // ADDED: For survivability
         img:"./img/Arsene.png",
         affinities: { light: 'weak', dark: 'resist' }
     }
@@ -157,10 +159,11 @@ const DEMONS = [
     }
 ];
 
+// MODIFIED: Reduced primary stats for all mini-bosses for better balancing.
 const MINI_BOSSES = [
     {
         name:"Rampaging Oni", HP: 95, maxHP: 95, SP: 30,
-        STATS:{STR: 12, MAG: 5, END: 10, AGI: 7, LUK: 5},
+        STATS:{STR: 9, MAG: 5, END: 10, AGI: 7, LUK: 5}, // STR: 12 -> 9
         ABILITY:["power_slash", "bash"], img:"./img/Oni.webp", 
         affinities: { phys: 'resist', elec: 'weak', wind: 'weak' },
         isMiniBoss: true,
@@ -168,7 +171,7 @@ const MINI_BOSSES = [
     },
     {
         name:"Setanta", HP: 75, maxHP: 75, SP: 40,
-        STATS:{STR: 10, MAG: 8, END: 7, AGI: 13, LUK: 10},
+        STATS:{STR: 8, MAG: 8, END: 7, AGI: 13, LUK: 10}, // STR: 10 -> 8
         ABILITY:["lunge", "bash"], img:"./img/Setanta.webp", 
         affinities: { psy: 'weak', wind: 'resist', fire: 'resist' },
         isMiniBoss: true,
@@ -176,7 +179,7 @@ const MINI_BOSSES = [
     },
     {
         name:"Incubus", HP: 80, maxHP: 80, SP: 70,
-        STATS:{STR: 6, MAG: 11, END: 7, AGI: 11, LUK: 10},
+        STATS:{STR: 6, MAG: 9, END: 7, AGI: 11, LUK: 10}, // MAG: 11 -> 9
         ABILITY:["agilao", "eiha"], img:"./img/Incubus.png", 
         affinities: { phys: 'weak', fire: 'resist', dark: 'resist', ice: 'weak' },
         isMiniBoss: true,
@@ -184,7 +187,7 @@ const MINI_BOSSES = [
     },
     {
         name:"High Pixie", HP: 85, maxHP: 85, SP: 65,
-        STATS:{STR: 6, MAG: 12, END: 7, AGI: 12, LUK: 10},
+        STATS:{STR: 6, MAG: 10, END: 7, AGI: 12, LUK: 10}, // MAG: 12 -> 10
         ABILITY:["zionga", "dia"], img:"./img/High_Pixie.webp",
         affinities: { nuke: 'weak', fire: 'weak', wind: 'resist', elec: 'resist' },
         isMiniBoss: true,
@@ -192,7 +195,7 @@ const MINI_BOSSES = [
     },
     {
         name:"Principality", HP: 100, maxHP: 100, SP: 80,
-        STATS:{STR: 9, MAG: 11, END: 9, AGI: 9, LUK: 9},
+        STATS:{STR: 9, MAG: 9, END: 9, AGI: 9, LUK: 9}, // MAG: 11 -> 9
         ABILITY:["kouga", "diarama"], img:"./img/Principality.webp", 
         affinities: { dark: 'weak', light: 'resist', wind: 'resist' },
         isMiniBoss: true,
@@ -200,7 +203,7 @@ const MINI_BOSSES = [
     },
     {
         name:"Kaiwan", HP: 110, maxHP: 110, SP: 60,
-        STATS:{STR: 10, MAG: 10, END: 11, AGI: 10, LUK: 8},
+        STATS:{STR: 10, MAG: 8, END: 11, AGI: 10, LUK: 8}, // MAG: 10 -> 8
         ABILITY:["agilao", "psio"], img:"./img/Kaiwan.webp", 
         affinities: { phys: 'weak', psy: 'resist' },
         isMiniBoss: true,
@@ -208,7 +211,7 @@ const MINI_BOSSES = [
     },
     {
         name:"Naga", HP: 90, maxHP: 90, SP: 55,
-        STATS:{STR: 9, MAG: 11, END: 8, AGI: 13, LUK: 7},
+        STATS:{STR: 9, MAG: 9, END: 8, AGI: 13, LUK: 7}, // MAG: 11 -> 9
         ABILITY:["zionga", "lunge"], img:"./img/Naga.webp", 
         affinities: { wind: 'weak', elec: 'resist' },
         isMiniBoss: true,
@@ -359,17 +362,18 @@ const CARDS = [
             persona.STATS.END += 1;
             persona.STATS.AGI += 1;
             persona.STATS.LUK += 1;
+            logMessage("The Fool grants insight. All stats increased by 1.", "log-system");
         }
     },
     {
         name: "I. The Magician",
         description: "Increases Magic by 2.",
-        apply: function(persona) { persona.STATS.MAG += 2; }
+        apply: function(persona) { persona.STATS.MAG += 2; logMessage("The Magician enhances arcane power. MAG increased by 2.", "log-system"); }
     },
     {
         name: "IV. The Emperor",
         description: "Increases Endurance by 2.",
-        apply: function(persona) { persona.STATS.END += 2; }
+        apply: function(persona) { persona.STATS.END += 2; logMessage("The Emperor bolsters resilience. END increased by 2.", "log-system"); }
     },
     {
         name: "VI. The Lovers",
@@ -377,12 +381,13 @@ const CARDS = [
         apply: function(persona) {
             persona.STATS.AGI += 1;
             persona.STATS.LUK += 1;
+            logMessage("The Lovers bless you with grace. AGI and LUK increased by 1.", "log-system");
         }
     },
     {
         name: "VII. The Chariot",
         description: "Increases Strength by 2.",
-        apply: function(persona) { persona.STATS.STR += 2; }
+        apply: function(persona) { persona.STATS.STR += 2; logMessage("The Chariot drives you forward. STR increased by 2.", "log-system"); }
     },
     {
         name: "VIII. Strength",
@@ -390,12 +395,13 @@ const CARDS = [
         apply: function(persona) {
             persona.STATS.STR += 1;
             persona.STATS.END += 1;
+            logMessage("Strength empowers your body. STR and END increased by 1.", "log-system");
         }
     },
     {
         name: "IX. The Hermit",
         description: "Increases Luck by 3.",
-        apply: function(persona) { persona.STATS.LUK += 3; }
+        apply: function(persona) { persona.STATS.LUK += 3; logMessage("The Hermit guides your fate. LUK increased by 3.", "log-system"); }
     },
     {
         name: "XI. Justice",
@@ -403,22 +409,23 @@ const CARDS = [
         apply: function(persona) {
             persona.STATS.STR += 1;
             persona.STATS.MAG += 1;
+            logMessage("Justice brings balance to your power. STR and MAG increased by 1.", "log-system");
         }
     },
     {
         name: "XII. The Hanged Man",
         description: "Increases Agility by 3.",
-        apply: function(persona) { persona.STATS.AGI += 3; }
+        apply: function(persona) { persona.STATS.AGI += 3; logMessage("The Hanged Man grants a new perspective. AGI increased by 3.", "log-system"); }
     },
     {
         name: "XV. The Devil",
         description: "Increases Strength by 4.",
-        apply: function(persona) { persona.STATS.STR += 4; }
+        apply: function(persona) { persona.STATS.STR += 4; logMessage("The Devil tempts with raw power. STR increased by 4.", "log-system"); }
     },
     {
         name: "XVI. The Tower",
         description: "Increases Endurance by 4.",
-        apply: function(persona) { persona.STATS.END += 4; }
+        apply: function(persona) { persona.STATS.END += 4; logMessage("The Tower brings unforeseen fortitude. END increased by 4.", "log-system"); }
     },
     {
         name: "XVIII. The Moon",
@@ -426,6 +433,7 @@ const CARDS = [
         apply: function(persona) {
             persona.STATS.MAG += 2;
             persona.STATS.LUK += 2;
+            logMessage("The Moon's illusion empowers you. MAG and LUK increased by 2.", "log-system");
         }
     },
     {
@@ -435,6 +443,7 @@ const CARDS = [
             persona.STATS.STR += 2;
             persona.STATS.MAG += 2;
             persona.STATS.END += 2;
+            logMessage("The World expands your potential. STR, MAG, and END increased by 2.", "log-system");
         }
     },
     {
@@ -443,6 +452,7 @@ const CARDS = [
         apply: function(persona) {
             persona.maxSP += 5;
             persona.SP += 5;
+            logMessage("The High Priestess deepens your focus. Max SP +5.", "log-system");
         }
     },
     {
@@ -451,6 +461,7 @@ const CARDS = [
         apply: function(persona) {
             persona.maxHP += 10;
             persona.HP += 10;
+            logMessage("The Empress nurtures your life force. Max HP +10.", "log-system");
         }
     },
     {
@@ -459,6 +470,7 @@ const CARDS = [
         apply: function(persona) {
             const spRestore = Math.floor(persona.maxSP * 0.50);
             persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
+            logMessage(`The Hierophant's wisdom restores ${spRestore} SP.`, "log-system");
         }
     },
     {
@@ -467,6 +479,7 @@ const CARDS = [
         apply: function(persona) {
             persona.HP = persona.maxHP;
             persona.SP = persona.maxSP;
+            logMessage("Death brings rebirth. HP and SP fully restored.", "log-system");
         }
     },
     {
@@ -475,6 +488,7 @@ const CARDS = [
         apply: function(persona) {
             const healAmount = Math.floor(persona.maxHP * 0.50);
             persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
+            logMessage(`Temperance's grace heals you for ${healAmount} HP.`, "log-system");
         }
     },
     {
@@ -485,6 +499,7 @@ const CARDS = [
             persona.maxSP += 5;
             persona.HP += 5;
             persona.SP += 5;
+            logMessage("The Star's hope shines upon you. Max HP and SP +5.", "log-system");
         }
     },
     {
@@ -497,6 +512,7 @@ const CARDS = [
             persona.maxSP += spBonus;
             persona.HP += hpBonus;
             persona.SP += spBonus;
+            logMessage("Judgement awakens new power. Max HP and SP increased by 10%.", "log-system");
         }
     },
     {
@@ -506,6 +522,7 @@ const CARDS = [
             const stats = ["STR", "MAG", "END", "AGI", "LUK"];
             const randomStat = stats[Math.floor(Math.random() * stats.length)];
             persona.STATS[randomStat] += 3;
+            logMessage(`The Wheel of Fortune turns! ${randomStat} increased by 3.`, "log-system");
         }
     },
     {
@@ -521,6 +538,7 @@ const CARDS = [
             const spRestore = Math.floor(persona.maxSP * 0.50);
             persona.HP = Math.min(persona.maxHP, persona.HP + healAmount);
             persona.SP = Math.min(persona.maxSP, persona.SP + spRestore);
+            logMessage("The Sun grants a radiant blessing. All stats +1, HP & SP restored.", "log-system");
         }
     },
 ];
@@ -669,6 +687,8 @@ function render() {
 // #region ------------------- COMBAT LOGIC -------------------
 function calculateDamage(attacker, target, skill) {
     let baseDamage = 0;
+    let attackerName = attacker.isBoss || attacker.isMiniBoss || DEMONS.find(d => d.name === attacker.name) ? attacker.name : state.persona.name;
+
     if (skill.type === 'physical') {
         baseDamage = skill.power + attacker.STATS.STR;
     } else if (skill.type === 'magic') {
@@ -687,11 +707,14 @@ function calculateDamage(attacker, target, skill) {
         if (affinity === 'weak') {
             affinityMultiplier = 1.5;
             bonusTurn = true;
+            logMessage(`The attack was Super Effective!`, 'log-critical');
         } else if (affinity === 'resist') {
             affinityMultiplier = 0.5;
+            logMessage(`The attack was Resisted...`, 'log-resist');
         } else if (affinity === 'null') {
             affinityMultiplier = 0;
             bonusTurn = false;
+            logMessage(`The attack was Nullified!`, 'log-resist');
         }
     }
     
@@ -724,6 +747,7 @@ function calculateDamage(attacker, target, skill) {
         playSound('crit');
         if (target === state.enemy) triggerScreenShake();
         showCombatText(target, "CRITICAL!", 'critical');
+        logMessage(`A CRITICAL HIT!`, 'log-critical');
     }
 
     if (finalDamage > 0) {
@@ -739,9 +763,11 @@ function calculateDamage(attacker, target, skill) {
 function attack() {
     if (state.persona.HP <= 0) return;
 
+    logMessage(`${state.persona.name} performs a basic attack.`, 'log-player');
     const attackSkill = { power: 0, type: 'physical', element: 'phys' };
     const result = calculateDamage(state.persona, state.enemy, attackSkill);
     state.enemy.HP -= result.damage;
+    logMessage(`${state.enemy.name} takes ${result.damage} damage.`, 'log-enemy');
 
     if (state.enemy.HP <= 0) {
         enemyDefeated();
@@ -750,8 +776,9 @@ function attack() {
 
     if (result.bonus) {
         showCombatText(state.persona, "1 MORE!", "critical");
+        logMessage(`An opening! ${state.persona.name} gets another turn!`, 'log-critical');
     } else {
-        enemyTurn();
+        setTimeout(enemyTurn, 1000);
     }
     render();
 }
@@ -763,6 +790,8 @@ function useAbility(skillKey){
     if ((skill.cost.sp && player.SP < skill.cost.sp) || (skill.cost.hp && player.HP <= skill.cost.hp)) {
         return;
     }
+    
+    logMessage(`${player.name} uses ${skill.name}!`, 'log-player');
     if (skill.cost.sp) player.SP -= skill.cost.sp;
     if (skill.cost.hp) player.HP -= skill.cost.hp;
 
@@ -770,10 +799,13 @@ function useAbility(skillKey){
         const healAmount = skill.power + player.STATS.MAG;
         player.HP = Math.min(player.maxHP, player.HP + healAmount);
         showCombatText(player, `+${healAmount}`, 'healing');
+        logMessage(`${player.name} recovers ${healAmount} HP.`, 'log-healing');
         playSound('heal');
+        setTimeout(enemyTurn, 1000);
     } else {
         const result = calculateDamage(player, state.enemy, skill);
         state.enemy.HP -= result.damage;
+        logMessage(`${state.enemy.name} takes ${result.damage} damage.`, 'log-enemy');
         
         if (state.enemy.HP <= 0) {
             enemyDefeated();
@@ -782,8 +814,9 @@ function useAbility(skillKey){
 
         if (result.bonus) {
             showCombatText(state.persona, "1 MORE!", "critical");
+            logMessage(`An opening! ${state.persona.name} gets another turn!`, 'log-critical');
         } else {
-            enemyTurn();
+            setTimeout(enemyTurn, 1000);
         }
     }
     render();
@@ -797,6 +830,7 @@ function enemyTurn() {
     const dodgeChance = (player.STATS.AGI * 0.02) + (player.STATS.LUK * 0.01);
     if (Math.random() < dodgeChance) {
         showCombatText(player, "EVADED!", 'resist');
+        logMessage(`${player.name} evaded the attack!`, 'log-player');
         handleStartOfTurnPassives();
         render();
         return;
@@ -810,19 +844,23 @@ function enemyTurn() {
     const wantsToUseSkill = Math.random() < 0.75;
 
     if (canUseSkill && wantsToUseSkill) {
+        logMessage(`${enemy.name} uses ${skill.name}!`, 'log-enemy');
         if(skill.cost.sp) enemy.SP -= skill.cost.sp;
         if(skill.cost.hp) enemy.HP -= skill.cost.hp;
         
         const result = calculateDamage(enemy, player, skill);
         player.HP -= result.damage;
+        logMessage(`${player.name} takes ${result.damage} damage.`, 'log-player-dmg');
 
         if (skill.type === 'physical') {
             wasPhysicalAttack = true;
         }
     } else {
+        logMessage(`${enemy.name} attacks!`, 'log-enemy');
         const attackSkill = { power: 0, type: 'physical', element: 'phys' };
         const result = calculateDamage(enemy, player, attackSkill);
         player.HP -= result.damage;
+        logMessage(`${player.name} takes ${result.damage} damage.`, 'log-player-dmg');
         wasPhysicalAttack = true; 
     }
     
@@ -831,9 +869,11 @@ function enemyTurn() {
         if (Math.random() < counterPassive.chance) {
             setTimeout(() => {
                 showCombatText(player, 'COUNTER!', 'critical');
+                logMessage(`${player.name} counters the attack!`, 'log-critical');
                 const counterSkill = { power: counterPassive.power, type: 'physical', element: 'phys' };
                 const counterResult = calculateDamage(player, enemy, counterSkill);
                 enemy.HP -= counterResult.damage;
+                logMessage(`${enemy.name} takes ${counterResult.damage} from the counter.`, 'log-enemy');
                 if (enemy.HP <= 0) enemyDefeated();
                 render();
             }, 500);
@@ -842,9 +882,10 @@ function enemyTurn() {
 
     if (player.HP <= 0) {
         player.HP = 0;
+        logMessage(`${player.name} has fallen...`, 'log-player-dmg');
         render();
         document.getElementById('actions').innerHTML = `<h4>DEFEAT...</h4>`; 
-        setTimeout(() => document.location.reload(), 2000); 
+        setTimeout(() => document.location.reload(), 3000); 
     } else {
         handleStartOfTurnPassives();
         render();
@@ -857,40 +898,40 @@ function spawnEnemy() {
     let newEnemyTemplate;
     const nextKillNumber = state.totalKills + 1;
 
-    if (nextKillNumber % 10 === 0) {
-        newEnemyTemplate = BOSSES[Math.floor(Math.random() * BOSSES.length)];
-    } else if (nextKillNumber % 5 === 0) {
+    if (nextKillNumber % 10 === 0 && nextKillNumber > 0) {
+        const bossIndex = Math.min(Math.floor(state.totalKills / 10), BOSSES.length - 1);
+        newEnemyTemplate = BOSSES[bossIndex];
+    } else if (nextKillNumber % 5 === 0 && nextKillNumber > 0) {
         newEnemyTemplate = MINI_BOSSES[Math.floor(Math.random() * MINI_BOSSES.length)];
     } else {
         const enemyTier = Math.floor(state.totalKills / 10);
         const floorIndex = Math.min(enemyTier, FLOOR_ENCOUNTERS.length - 1);
         const availableEnemies = FLOOR_ENCOUNTERS[floorIndex];
         
-        if (!availableEnemies || availableEnemies.length === 0) {
-            const lastTier = FLOOR_ENCOUNTERS[FLOOR_ENCOUNTERS.length - 1];
-            const chosenEnemyName = lastTier[Math.floor(Math.random() * lastTier.length)];
-            newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
-        } else {
-            const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
-            newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
-        }
+        const chosenEnemyName = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+        newEnemyTemplate = DEMONS.find(demon => demon.name === chosenEnemyName);
     }
     
     const newEnemy = JSON.parse(JSON.stringify(newEnemyTemplate));
     newEnemy.maxHP = newEnemy.HP; 
     state.enemy = newEnemy;
+    logMessage(`A wild ${state.enemy.name} appears!`, 'log-system');
 }
 
 function enemyDefeated(){
+    logMessage(`${state.enemy.name} was defeated!`, 'log-system');
     if (state.enemy.isFinalBoss) {
         const actionsDiv = document.getElementById("actions");
         actionsDiv.innerHTML = "<h4>VICTORY!</h4><p>You have conquered the Abyss!</p><button onclick='document.location.reload()'>Play Again</button>";
+        logMessage("Congratulations! You have cleared the game.", "log-system");
         return;
     }
 
     const wasBoss = state.enemy.isBoss || state.enemy.isMiniBoss;
     state.totalKills++;
-    state.xp += wasBoss ? 25 : 10;
+    const xpGained = wasBoss ? 25 : 10;
+    state.xp += xpGained;
+    logMessage(`Gained ${xpGained} EXP.`, 'log-system');
 
     const xpToLevel = state.level * 20;
     if(state.xp >= xpToLevel){
@@ -900,6 +941,8 @@ function enemyDefeated(){
         state.persona.maxSP += 2;
         state.persona.HP = state.persona.maxHP;
         state.persona.SP = state.persona.maxSP;
+        logMessage(`LEVEL UP! ${state.persona.name} is now Level ${state.level}.`, 'log-critical');
+        playSound('heal');
     }
 
     if (wasBoss) {
@@ -928,6 +971,7 @@ function floorTransition() {
 function shuffleTime() {
     const actionsDiv = document.getElementById("actions");
     actionsDiv.innerHTML = "<h4>Shuffle Time! Choose your reward...</h4>";
+    logMessage("Shuffle Time! Choose a card.", "log-system");
     const shuffled = [...CARDS].sort(() => 0.5 - Math.random());
     const options = shuffled.slice(0, 3);
     
@@ -949,6 +993,7 @@ function skillShuffleTime() {
     const actionsDiv = document.getElementById("actions");
     const player = state.persona;
     actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
+    logMessage("Skill Time! Choose a new power.", "log-system");
     let skillOptions = [];
 
     player.ABILITY.forEach(skillKey => {
@@ -959,7 +1004,11 @@ function skillShuffleTime() {
                 description: `${skill.name} -> ${SKILLS[skill.evolves_to].name}`,
                 apply: (persona) => {
                     const index = persona.ABILITY.indexOf(skillKey);
-                    if (index > -1) persona.ABILITY[index] = skill.evolves_to;
+                    if (index > -1) {
+                        const newSkillKey = skill.evolves_to;
+                        persona.ABILITY[index] = newSkillKey;
+                        logMessage(`${skill.name} has evolved into ${SKILLS[newSkillKey].name}!`, 'log-system');
+                    }
                     spawnEnemy();
                     render();
                 }
@@ -977,6 +1026,7 @@ function skillShuffleTime() {
                 apply: (persona) => {
                     if (persona.ABILITY.length < 6) {
                         persona.ABILITY.push(skillKey);
+                        logMessage(`${persona.name} learned ${skill.name}!`, 'log-system');
                         spawnEnemy();
                         render();
                     } else {
@@ -1000,6 +1050,7 @@ function skillShuffleTime() {
                     if (passive.type === 'resistance') {
                         persona.affinities[passive.element] = passive.affinity;
                     }
+                    logMessage(`${persona.name} learned the passive skill: ${passive.name}!`, 'log-system');
                     spawnEnemy();
                     render();
                 }
@@ -1032,6 +1083,7 @@ function promptSkillReplacement(newSkillKey) {
         const btn = document.createElement("button");
         btn.innerHTML = `Forget ${currentSkill.name}`;
         btn.onclick = () => {
+            logMessage(`${state.persona.name} forgot ${currentSkill.name} and learned ${newSkill.name}!`, 'log-system');
             state.persona.ABILITY[index] = newSkillKey;
             spawnEnemy();
             render();
@@ -1042,6 +1094,7 @@ function promptSkillReplacement(newSkillKey) {
     const cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel (Keep current skills)";
     cancelButton.onclick = () => {
+        logMessage(`Declined to learn ${newSkill.name}.`, 'log-system');
         spawnEnemy();
         render();
     };
@@ -1075,9 +1128,12 @@ function handleStartOfTurnPassives() {
             if (passive.resource === 'HP') {
                 const healAmount = Math.floor(state.persona.maxHP * passive.amount);
                 state.persona.HP = Math.min(state.persona.maxHP, state.persona.HP + healAmount);
+                if (healAmount > 0) logMessage(`${passive.name} restores ${healAmount} HP.`, 'log-healing');
             }
             if (passive.resource === 'SP') {
-                state.persona.SP = Math.min(state.persona.maxSP, state.persona.SP + passive.amount);
+                const spAmount = passive.amount;
+                state.persona.SP = Math.min(state.persona.maxSP, state.persona.SP + spAmount);
+                if (spAmount > 0) logMessage(`${passive.name} restores ${spAmount} SP.`, 'log-healing');
             }
         }
     });
@@ -1088,6 +1144,20 @@ function triggerScreenShake() {
     gameContainer.classList.add('shake');
     setTimeout(() => gameContainer.classList.remove('shake'), 300);
 }
+
+// ADDED: Function to add messages to the new game log
+function logMessage(message, className) {
+    const logBox = document.getElementById('game-log');
+    if (logBox) {
+        const p = document.createElement('p');
+        p.textContent = message;
+        if (className) {
+            p.className = className;
+        }
+        logBox.appendChild(p);
+        logBox.scrollTop = logBox.scrollHeight; // Auto-scroll to the bottom
+    }
+}
 // #endregion
 
 // #region ------------------- SAVE & LOAD -------------------
@@ -1095,6 +1165,7 @@ function saveGame() {
     const saveFile = JSON.stringify(state);
     localStorage.setItem('personaSaveFile', saveFile);
     alert("Game Saved!");
+    logMessage("Game state saved.", "log-system");
 }
 
 function loadGame() {
@@ -1103,6 +1174,8 @@ function loadGame() {
         state = JSON.parse(savedState);
         document.getElementById("start-screen").style.display = 'none';
         document.getElementById("game-screen").style.display = 'grid';
+        document.getElementById('game-log').innerHTML = ''; // Clear log on load
+        logMessage("Save file loaded successfully.", "log-system");
         render();
         alert("Game Loaded!");
     } else {
