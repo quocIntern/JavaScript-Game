@@ -11,9 +11,9 @@ function playSound(soundName) {
 
 function floorTransition() {
     const actionsDiv = document.getElementById("actions");
-    const currentFloor = Math.floor((state.totalKills -1) / 10) + 1;
-    actionsDiv.innerHTML = `<h4>Floor ${currentFloor} Cleared!</h4><p>Preparing to advance.</p>`;
-    logMessage(`Floor ${currentFloor} has been cleared.`, 'log-system');
+    actionsDiv.classList.add('reward-mode');
+    actionsDiv.innerHTML = `<h4>Floor ${state.totalKills / 10} Cleared!</h4><p>Preparing to advance.</p>`;
+    logMessage(`Floor ${state.totalKills / 10} has been cleared.`, 'log-system');
     
     setTimeout(() => {
         shuffleTime(); 
@@ -86,15 +86,22 @@ export function enemyDefeated() {
 
 function shuffleTime() {
     const actionsDiv = document.getElementById("actions");
-    actionsDiv.innerHTML = "<h4>Shuffle Time! Choose your reward...</h4>";
+    actionsDiv.classList.add('reward-mode');
+    actionsDiv.innerHTML = `
+        <h4>Shuffle Time! Choose your reward...</h4>
+        <div class="reward-cards-container"></div>
+    `;
+    const cardsContainer = actionsDiv.querySelector('.reward-cards-container');
+
     logMessage("Shuffle Time! Choose a card.", "log-system");
     const shuffled = [...Data.CARDS].sort(() => 0.5 - Math.random());
     const options = shuffled.slice(0, 3);
     
     options.forEach(card => {
-        let btn = document.createElement("button");
-        btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
-        btn.onclick = () => {
+        const cardDiv = document.createElement("div");
+        cardDiv.className = 'card-button';
+        cardDiv.innerHTML = `<strong>${card.name}</strong><span>${card.description}</span>`;
+        cardDiv.onclick = () => {
             playSound('select');
             const logMsg = card.apply(state.persona);
             logMessage(logMsg, "log-system");
@@ -102,14 +109,20 @@ function shuffleTime() {
             handleStartOfTurnPassives();             
             render();                  
         };
-        actionsDiv.appendChild(btn);
+        cardsContainer.appendChild(cardDiv);
     });
 }
 
 function skillShuffleTime() {
     const actionsDiv = document.getElementById("actions");
+    actionsDiv.classList.add('reward-mode');
+    actionsDiv.innerHTML = `
+        <h4>Skill Time! Your potential has grown...</h4>
+        <div class="reward-cards-container"></div>
+    `;
+    const cardsContainer = actionsDiv.querySelector('.reward-cards-container');
+
     const player = state.persona;
-    actionsDiv.innerHTML = "<h4>Skill Time! Your potential has grown...</h4>";
     logMessage("Skill Time! Choose a new power.", "log-system");
     let skillOptions = [];
 
@@ -175,10 +188,13 @@ function skillShuffleTime() {
     }
 
     shuffledOptions.forEach(card => {
-        let btn = document.createElement("button");
-        btn.innerHTML = `<strong>${card.name}</strong><br>${card.description}`;
-        btn.onclick = () => {
+        const cardDiv = document.createElement("div");
+        cardDiv.className = 'card-button';
+        cardDiv.innerHTML = `<strong>${card.name}</strong><span>${card.description}</span>`;
+        
+        cardDiv.onclick = () => {
             card.apply(state.persona);
+            
             const needsReplacement = player.ABILITY.length >= 6 && card.name.startsWith("Learn");
             if (!needsReplacement) {
                 spawnEnemy();
@@ -187,36 +203,42 @@ function skillShuffleTime() {
             }
         };
 
-        actionsDiv.appendChild(btn);
+        cardsContainer.appendChild(cardDiv);
     });
 }
 
 function promptSkillReplacement(newSkillKey) {
     const actionsDiv = document.getElementById("actions");
-    const newSkill = Data.SKILLS[newSkillKey];
-    actionsDiv.innerHTML = `<h4>Your skill slots are full.</h4><p>Choose a skill to forget to learn <strong>${newSkill.name}</strong>.</p>`;
+    actionsDiv.innerHTML = `
+        <h4>Your skill slots are full.</h4>
+        <p>Choose a skill to forget to learn <strong>${Data.SKILLS[newSkillKey].name}</strong>.</p>
+        <div class="reward-cards-container"></div>
+    `;
+    const cardsContainer = actionsDiv.querySelector('.reward-cards-container');
 
     state.persona.ABILITY.forEach((currentSkillKey, index) => {
         const currentSkill = Data.SKILLS[currentSkillKey];
-        const btn = document.createElement("button");
-        btn.innerHTML = `Forget ${currentSkill.name}`;
-        btn.onclick = () => {
-            logMessage(`${state.persona.name} forgot ${currentSkill.name} and learned ${newSkill.name}!`, 'log-system');
+        const cardDiv = document.createElement("div");
+        cardDiv.className = 'card-button';
+        cardDiv.innerHTML = `<strong>Forget</strong><span>${currentSkill.name}</span>`;
+        cardDiv.onclick = () => {
+            logMessage(`${state.persona.name} forgot ${currentSkill.name} and learned ${Data.SKILLS[newSkillKey].name}!`, 'log-system');
             state.persona.ABILITY[index] = newSkillKey;
             spawnEnemy();
             render();
         };
-        actionsDiv.appendChild(btn);
+        cardsContainer.appendChild(cardDiv);
     });
 
-    const cancelButton = document.createElement("button");
-    cancelButton.textContent = "Cancel (Keep current skills)";
-    cancelButton.onclick = () => {
-        logMessage(`Declined to learn ${newSkill.name}.`, 'log-system');
+    const cancelCard = document.createElement("div");
+    cancelCard.className = 'card-button';
+    cancelCard.innerHTML = `<strong>Cancel</strong><span>Keep current skills</span>`;
+    cancelCard.onclick = () => {
+        logMessage(`Declined to learn ${Data.SKILLS[newSkillKey].name}.`, 'log-system');
         spawnEnemy();
         render();
     };
-    actionsDiv.appendChild(cancelButton);
+    cardsContainer.appendChild(cancelCard);
 }
 
 export function handleStartOfTurnPassives() {

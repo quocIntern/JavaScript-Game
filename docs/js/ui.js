@@ -48,6 +48,7 @@ export function render() {
     }
 
     const actionsDiv = document.getElementById("actions");
+    actionsDiv.classList.remove('reward-mode');
     actionsDiv.innerHTML = `
         <button id="attack-button" onclick="attack()">Attack</button>
         <div id="skill-grid"></div>
