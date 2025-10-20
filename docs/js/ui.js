@@ -8,6 +8,7 @@ export function render() {
     let p = state.persona;
     const hpPercent = (p.HP / p.maxHP) * 100;
     const spPercent = (p.SP / p.maxSP) * 100;
+
     playerStatsDiv.innerHTML = `
         <div class="feedback-text" id="player-feedback"></div>
         <h3>${p.name} -- Lvl.${state.level}</h3>
@@ -20,15 +21,18 @@ export function render() {
             <li>STR: ${p.STATS.STR}</li><li>MAG: ${p.STATS.MAG}</li>
             <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
             <li>LUK: ${p.STATS.LUK}</li>
-        </ul>`;
-        if (p.PASSIVES && p.PASSIVES.length > 0) {
-        playerStatsDiv.innerHTML += `
-            <div class="passives-list">
-                <strong>Passives:</strong>
-                <ul>
-                    ${p.PASSIVES.map(pKey => `<li>${PASSIVE_SKILLS[pKey].name}</li>`).join('')}
-                </ul>
-            </div>`;
+        </ul>
+    `;
+
+    if (p.PASSIVES && p.PASSIVES.length > 0) {
+        const passivesContainer = document.createElement('div');
+        passivesContainer.className = 'passives-list';
+        passivesContainer.innerHTML = `
+            <strong>Passives:</strong>
+            <ul>
+                ${p.PASSIVES.map(pKey => `<li>${PASSIVE_SKILLS[pKey].name}</li>`).join('')}
+            </ul>`;
+        playerStatsDiv.appendChild(passivesContainer);
     }
 
     const enemyDisplayDiv = document.getElementById("enemy-display");
@@ -44,23 +48,39 @@ export function render() {
     }
 
     const actionsDiv = document.getElementById("actions");
-    actionsDiv.innerHTML = `<button onclick="attack()">Attack</button>`;
-    
-    p.ABILITY.forEach(skillKey => {
-        const skill = SKILLS[skillKey];
-        if (!skill) return;
-        let costDisplay = skill.cost.hp ? `${skill.cost.hp} HP` : `${skill.cost.sp} SP`;
-        let skillButton = document.createElement("button");
-        skillButton.innerHTML = `${skill.name} <br> (${costDisplay})`;
-        skillButton.onclick = () => useAbility(skillKey);
-        const hasEnoughSp = !skill.cost.sp || p.SP >= skill.cost.sp;
-        const hasEnoughHp = !skill.cost.hp || p.HP > skill.cost.hp;
-        if (!hasEnoughSp || !hasEnoughHp) {
-            skillButton.disabled = true;
-            skillButton.style.opacity = "0.5";
+    actionsDiv.innerHTML = `
+        <button id="attack-button" onclick="attack()">Attack</button>
+        <div id="skill-grid"></div>
+    `;
+
+    const skillGridDiv = document.getElementById("skill-grid");
+    const maxSlots = 6;
+
+    for (let i = 0; i < maxSlots; i++) {
+        const skillKey = p.ABILITY[i];
+        if (skillKey && SKILLS[skillKey]) {
+            const skill = SKILLS[skillKey];
+            const skillButton = document.createElement("button");
+            skillButton.className = 'skill-button';
+            
+            const cost = skill.cost.hp ? `${skill.cost.hp} HP` : `${skill.cost.sp} SP`;
+            skillButton.innerHTML = `<span class="skill-name">${skill.name}</span><span class="skill-cost">${cost}</span>`;
+            skillButton.onclick = () => useAbility(skillKey);
+
+            const hasEnoughSp = !skill.cost.sp || p.SP >= skill.cost.sp;
+            const hasEnoughHp = !skill.cost.hp || p.HP > skill.cost.hp;
+            if (!hasEnoughSp || !hasEnoughHp) {
+                skillButton.disabled = true;
+                skillButton.classList.add('disabled');
+            }
+            skillGridDiv.appendChild(skillButton);
+        } else {
+            const emptySlotDiv = document.createElement("div");
+            emptySlotDiv.className = 'skill-button empty';
+            emptySlotDiv.innerHTML = `-------`;
+            skillGridDiv.appendChild(emptySlotDiv);
         }
-        actionsDiv.appendChild(skillButton);
-    });
+    }
     
     const floorCounterDiv = document.getElementById("floor-counter");
     if (state.enemy) {
@@ -71,8 +91,8 @@ export function render() {
             Kill Count: ${state.totalKills}
         `;
     }
-
 }
+
 export function showCombatText(target, text, className) {
     const feedbackDiv = (target === state.persona) ? document.getElementById('player-feedback') : document.getElementById('enemy-feedback');
     if (feedbackDiv) {
@@ -84,14 +104,17 @@ export function showCombatText(target, text, className) {
         }, 1000);
     }
 }
+
 export function showAffinityFeedback(target, affinity) {
     showCombatText(target, affinity.toUpperCase() + "!", affinity);
 }
+
 export function triggerScreenShake() {
     const gameContainer = document.getElementById('game-container');
     gameContainer.classList.add('shake');
     setTimeout(() => gameContainer.classList.remove('shake'), 300);
 }
+
 export function logMessage(message, className) {
     const logBox = document.getElementById('game-log');
     if (logBox) {
@@ -101,6 +124,6 @@ export function logMessage(message, className) {
             p.className = className;
         }
         logBox.appendChild(p);
-        logBox.scrollTop = logBox.scrollHeight; // Auto-scroll to the bottom
+        logBox.scrollTop = logBox.scrollHeight;
     }
 }

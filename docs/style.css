@@ -76,6 +76,7 @@ h3, h4 {
 
 #player-stats { grid-area: player; }
 #enemy-display { grid-area: enemy; }
+
 .game-title {
     font-size: 1.5em;
     color: #FFDF00;
@@ -83,42 +84,24 @@ h3, h4 {
     margin-bottom: 30px;
 }
 
-.ui-box {
-    background-color: var(--retro-blue);
-    padding: 15px;
-    border: 3px solid var(--retro-border);
-    box-shadow: 
-        inset 0 0 0 3px #000,
-        inset 0 0 0 6px var(--retro-blue);
-}
 #actions {
     grid-area: actions;
-    padding: 10px;
     border: 12px solid;
     border-image-source: url(https://i.imgur.com/jI9a614.png);
     border-image-slice: 6;
     border-image-width: 1;
     background-color: var(--retro-blue);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 15px;
+    padding: 15px;
+    align-items: stretch;
 }
 
 .icon {
     max-width: 100px;
     max-height: 100px;
     object-fit: contain;
-}
-
-.portrait-container {
-    width: 100%;
-    height: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-    background-color: #000;
 }
 
 button {
@@ -128,11 +111,11 @@ button {
     padding: 10px 15px;
     cursor: pointer;
     font-family: 'Press Start 2P', cursive;
-    margin: 5px;
+    margin: 0;
     font-size: 0.8em;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background-color: var(--retro-text);
     color: var(--retro-blue);
 }
@@ -171,10 +154,6 @@ li {
     opacity: 0;
     transition: opacity 0.5s;
 }
-
-.feedback-text.weak { color: #ff4d4d; }
-.feedback-text.resist { color: #a2d2ff; }
-.feedback-text.null { color: #b0b0b0; }
 
 .feedback-text.show {
     animation: fadeUp 1s ease-out;
@@ -241,6 +220,52 @@ li {
     margin: 0 0 5px 0;
     line-height: 1.2;
 }
+
+#attack-button {
+    height: 100%;
+    font-size: 1.2em;
+    box-sizing: border-box;
+}
+
+#skill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.skill-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--retro-border);
+    width: 100%;
+    text-align: left;
+    font-size: 0.8em;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.skill-button.empty {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #6c757d;
+    justify-content: center;
+    align-items: center;
+}
+
+.skill-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.skill-cost {
+    font-weight: bold;
+    color: #ffd900;
+}
+
 .log-player { color: #87CEEB; }
 .log-enemy { color: #FFB6C1; }
 .log-player-dmg { color: #ff4d4d; }
@@ -271,9 +296,14 @@ li {
     
     #actions {
         display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 10px;
+    }
+
+    #skill-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 5px;
-        padding: 10px;
+        grid-template-rows: repeat(3, 1fr);
     }
 
     button {
