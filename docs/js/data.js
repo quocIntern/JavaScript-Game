@@ -28,10 +28,10 @@ export const DEMONS = [
         affinities: { phys: 'weak', elec: 'resist', wind: 'weak' }
     },
     {
-        name:"Slime", HP: 60, maxHP: 60, SP: 10,
-        STATS:{STR: 6, MAG: 2, END: 8, AGI: 2, LUK: 2},
-        ABILITY:["lunge"], img:"./img/Slime.png",
-        affinities: { phys: 'resist', fire: 'weak', elec: 'weak' }
+        name:"Mandrake", HP: 40, maxHP: 40, SP: 22,
+        STATS:{STR: 2, MAG: 8, END: 3, AGI: 5, LUK: 7},
+        ABILITY:["eiha"], img:"./img/Mandrake.png", 
+        affinities: { fire: 'weak', elec: 'resist' }
     },
     {
         name:"Goblin", HP: 45, maxHP: 45, SP: 15,
@@ -40,16 +40,16 @@ export const DEMONS = [
         affinities: { wind: 'weak', fire: 'resist' }
     },
     {
-        name:"Mandrake", HP: 40, maxHP: 40, SP: 22,
-        STATS:{STR: 2, MAG: 8, END: 3, AGI: 5, LUK: 7},
-        ABILITY:["eiha"], img:"./img/Mandrake.png", 
-        affinities: { fire: 'weak', elec: 'resist' }
-    },
-    {
         name:"Agathion", HP: 50, maxHP: 50, SP: 25,
         STATS:{STR: 5, MAG: 6, END: 5, AGI: 7, LUK: 5},
         ABILITY:["zio", "lunge"], img:"./img/Agathion.webp", 
         affinities: { wind: 'weak', elec: 'resist', dark: 'resist' }
+    },
+    {
+        name:"Slime", HP: 60, maxHP: 60, SP: 10,
+        STATS:{STR: 6, MAG: 2, END: 8, AGI: 2, LUK: 2},
+        ABILITY:["lunge"], img:"./img/Slime.png",
+        affinities: { phys: 'resist', fire: 'weak', elec: 'weak' }
     },
     {
         name:"Bicorn", HP: 55, maxHP: 55, SP: 18,
@@ -82,6 +82,12 @@ export const DEMONS = [
         affinities: { elec: 'weak', psy: 'resist' }
     },
     {
+        name:"Leanan Sídhe", HP: 85, maxHP: 85, SP: 60,
+        STATS:{STR: 7, MAG: 15, END: 8, AGI: 11, LUK: 12},
+        ABILITY:["psio", "diarama"], img:"./img/Leanan_Sidhe.webp", 
+        affinities: { nuke: 'weak', psy: 'resist' }
+    },
+    {
         name:"Orthrus", HP: 90, maxHP: 90, SP: 40,
         STATS:{STR: 12, MAG: 8, END: 9, AGI: 11, LUK: 5},
         ABILITY:["agilao", "assault_dive"], img:"./img/Orthrus.webp", 
@@ -94,12 +100,6 @@ export const DEMONS = [
         affinities: { fire: 'weak', ice: 'resist', light: 'null' }
     },
     {
-        name:"Leanan Sídhe", HP: 85, maxHP: 85, SP: 60,
-        STATS:{STR: 7, MAG: 15, END: 8, AGI: 11, LUK: 12},
-        ABILITY:["psio", "diarama"], img:"./img/Leanan_Sidhe.webp", 
-        affinities: { nuke: 'weak', psy: 'resist' }
-    },
-    {
         name:"Rakshasa", HP: 110, maxHP: 110, SP: 30,
         STATS:{STR: 16, MAG: 5, END: 12, AGI: 10, LUK: 6},
         ABILITY:["megaton_raid"], img:"./img/Rakshasa.png", 
@@ -110,6 +110,12 @@ export const DEMONS = [
         STATS:{STR: 10, MAG: 18, END: 11, AGI: 15, LUK: 13},
         ABILITY:["agidyne"], img:"./img/Queen_Mab.png", 
         affinities: { nuke: 'weak', fire: 'null', elec: 'resist' }
+    },
+    {
+        name:"Anubis", HP: 140, maxHP: 140, SP: 130,
+        STATS:{STR: 11, MAG: 20, END: 12, AGI: 15, LUK: 16},
+        ABILITY:["kougaon", "eigaon", "megido"], img:"./img/Anubis.webp", 
+        affinities: { light: 'null', dark: 'null' }
     },
     {
         name:"Rangda", HP: 150, maxHP: 150, SP: 85,
@@ -134,18 +140,12 @@ export const DEMONS = [
         STATS:{STR: 20, MAG: 15, END: 18, AGI: 12, LUK: 8},
         ABILITY:["gigantic_fist", "megido"], img:"./img/Abaddon.webp", 
         affinities: { nuke: 'weak', phys: 'resist', fire: 'resist', dark: 'resist' }
-    },
-    {
-        name:"Anubis", HP: 140, maxHP: 140, SP: 130,
-        STATS:{STR: 11, MAG: 20, END: 12, AGI: 15, LUK: 16},
-        ABILITY:["kougaon", "eigaon", "megido"], img:"./img/Anubis.webp", 
-        affinities: { light: 'null', dark: 'null' }
     }
 ];
 export const MINI_BOSSES = [
     {
         name:"Rampaging Oni", HP: 95, maxHP: 95, SP: 30,
-        STATS:{STR: 9, MAG: 5, END: 10, AGI: 7, LUK: 5}, // STR: 12 -> 9
+        STATS:{STR: 9, MAG: 5, END: 10, AGI: 7, LUK: 5},
         ABILITY:["power_slash", "bash"], img:"./img/Oni.webp", 
         affinities: { phys: 'resist', elec: 'weak', wind: 'weak' },
         isMiniBoss: true,
@@ -153,7 +153,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"Setanta", HP: 75, maxHP: 75, SP: 40,
-        STATS:{STR: 8, MAG: 8, END: 7, AGI: 13, LUK: 10}, // STR: 10 -> 8
+        STATS:{STR: 8, MAG: 8, END: 7, AGI: 13, LUK: 10},
         ABILITY:["lunge", "bash"], img:"./img/Setanta.webp", 
         affinities: { psy: 'weak', wind: 'resist', fire: 'resist' },
         isMiniBoss: true,
@@ -161,7 +161,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"Incubus", HP: 80, maxHP: 80, SP: 70,
-        STATS:{STR: 6, MAG: 9, END: 7, AGI: 11, LUK: 10}, // MAG: 11 -> 9
+        STATS:{STR: 6, MAG: 9, END: 7, AGI: 11, LUK: 10},
         ABILITY:["agilao", "eiha"], img:"./img/Incubus.png", 
         affinities: { phys: 'weak', fire: 'resist', dark: 'resist', ice: 'weak' },
         isMiniBoss: true,
@@ -169,7 +169,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"High Pixie", HP: 85, maxHP: 85, SP: 65,
-        STATS:{STR: 6, MAG: 10, END: 7, AGI: 12, LUK: 10}, // MAG: 12 -> 10
+        STATS:{STR: 6, MAG: 10, END: 7, AGI: 12, LUK: 10},
         ABILITY:["zionga", "dia"], img:"./img/High_Pixie.webp",
         affinities: { nuke: 'weak', fire: 'weak', wind: 'resist', elec: 'resist' },
         isMiniBoss: true,
@@ -177,7 +177,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"Principality", HP: 100, maxHP: 100, SP: 80,
-        STATS:{STR: 9, MAG: 9, END: 9, AGI: 9, LUK: 9}, // MAG: 11 -> 9
+        STATS:{STR: 9, MAG: 9, END: 9, AGI: 9, LUK: 9},
         ABILITY:["kouga", "diarama"], img:"./img/Principality.webp", 
         affinities: { dark: 'weak', light: 'resist', wind: 'resist' },
         isMiniBoss: true,
@@ -185,7 +185,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"Kaiwan", HP: 110, maxHP: 110, SP: 60,
-        STATS:{STR: 10, MAG: 8, END: 11, AGI: 10, LUK: 8}, // MAG: 10 -> 8
+        STATS:{STR: 10, MAG: 8, END: 11, AGI: 10, LUK: 8},
         ABILITY:["agilao", "psio"], img:"./img/Kaiwan.webp", 
         affinities: { phys: 'weak', psy: 'resist' },
         isMiniBoss: true,
@@ -193,7 +193,7 @@ export const MINI_BOSSES = [
     },
     {
         name:"Naga", HP: 90, maxHP: 90, SP: 55,
-        STATS:{STR: 9, MAG: 9, END: 8, AGI: 13, LUK: 7}, // MAG: 11 -> 9
+        STATS:{STR: 9, MAG: 9, END: 8, AGI: 13, LUK: 7},
         ABILITY:["zionga", "lunge"], img:"./img/Naga.webp", 
         affinities: { wind: 'weak', elec: 'resist' },
         isMiniBoss: true,
@@ -202,24 +202,24 @@ export const MINI_BOSSES = [
 ];
 export const BOSSES = [
     {
-        name:"Cerberus", HP: 240, maxHP: 240, SP: 80,
-        STATS:{STR: 22, MAG: 8, END: 15, AGI: 14, LUK: 7},
-        ABILITY:["gigantic_fist", "brave_blade"], img:"./img/Cerberus.png", 
+        name:"Cerberus", HP: 220, maxHP: 220, SP: 80,
+        STATS:{STR: 16, MAG: 8, END: 15, AGI: 14, LUK: 7},
+        ABILITY:["gigantic_fist", "power_slash"], img:"./img/Cerberus.png", 
         affinities: { ice: 'weak', fire: 'null' },
         isBoss: true,
         description: "A relentless physical attacker that tests your endurance and physical defense."
     },
     {
         name:"Girimehkala", HP: 250, maxHP: 250, SP: 120,
-        STATS:{STR: 14, MAG: 16, END: 20, AGI: 8, LUK: 9},
-        ABILITY:["megaton_raid", "eigadyne"], img:"./img/Girimekhala.png", 
+        STATS:{STR: 14, MAG: 14, END: 20, AGI: 8, LUK: 9},
+        ABILITY:["megaton_raid", "eigaon"], img:"./img/Girimekhala.png", 
         affinities: { phys: 'null', dark: 'resist', light: 'weak', nuke: 'weak' },
         isBoss: true,
         description: "A defensive fortress that nullifies all physical attacks, forcing a magic-based strategy."
     },
     {
         name:"Belphegor", HP: 220, maxHP: 220, SP: 150,
-        STATS:{STR: 10, MAG: 20, END: 14, AGI: 12, LUK: 11},
+        STATS:{STR: 10, MAG: 17, END: 14, AGI: 12, LUK: 11},
         ABILITY:["agidyne", "bufudyne"], img:"./img/Belphegor.png",
         affinities: { fire: 'resist', ice: 'null', elec: 'weak' },
         isBoss: true,
