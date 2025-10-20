@@ -49,11 +49,12 @@ h3, h4 {
     height: 100%;
     max-height: 100%;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto 180px;
+    grid-template-rows: 5fr auto 1fr auto;
     grid-template-areas: 
         "player enemy"
         "actions actions"
-        "log log";
+        "log log"
+        "system system";
     gap: 10px;
 }
 
@@ -222,20 +223,21 @@ li {
     0% { opacity: 1; transform: translate(50px, 50px); }
     100% { opacity: 0; transform: translate(50px, 0px); }
 }
+
 #exit-container {
-    position: fixed; 
-    bottom: 20px;
-    left: 20px;
-    display: none;  
+    display: block;
 }
+
+#exit-container button {
+    margin-right: 5px;
+}
+
 #floor-counter {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
     font-size: 0.8em;
     color: var(--retro-border);
-    text-align: left;
+    text-align: right;
 }
+
 .feedback-text.weak { color: #ff4d4d; }
 .feedback-text.resist { color: #a2d2ff; }
 .feedback-text.null { color: #b0b0b0; }
@@ -325,6 +327,19 @@ li {
     color: var(--gold);
 }
 
+#system-bar {
+    grid-area: system;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--retro-blue);
+    padding: 10px 15px;
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6;
+    border-image-width: 1;
+}
+
 .log-player { color: #87CEEB; }
 .log-enemy { color: #FFB6C1; }
 .log-player-dmg { color: #ff4d4d; }
@@ -340,15 +355,16 @@ li {
 
     #game-screen {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr auto 150px;
+        grid-template-rows: 3fr 2fr auto 1fr auto;
         grid-template-areas: 
             "player"
             "enemy"
             "actions"
-            "log";
+            "log"
+            "system";
     }
 
-    #player-stats, #enemy-display, #actions, #game-log-container {
+    #player-stats, #enemy-display, #actions, #game-log-container, #system-bar {
         padding: 10px;
         border-width: 10px;
     }
@@ -385,15 +401,8 @@ li {
         font-size: 0.65em;
     }
 
-    #floor-counter {
-        bottom: 10px;
-        right: 10px;
-    }
-
-    #exit-container {
-       bottom: 10px;
-       left: 10px;
-       display: flex;
-       flex-direction: column;
+    #system-bar {
+        flex-direction: column;
+        gap: 8px;
     }
 }
