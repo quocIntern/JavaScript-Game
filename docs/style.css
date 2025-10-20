@@ -49,7 +49,7 @@ h3, h4 {
     height: 100%;
     max-height: 100%;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 5fr auto 1fr auto;
+    grid-template-rows: 3fr auto 1fr auto;
     grid-template-areas: 
         "player enemy"
         "actions actions"
@@ -355,7 +355,7 @@ li {
 
     #game-screen {
         grid-template-columns: 1fr;
-        grid-template-rows: 3fr 2fr auto 1fr auto;
+        grid-template-rows: 2fr 2fr auto 1fr auto;
         grid-template-areas: 
             "player"
             "enemy"
@@ -369,6 +369,21 @@ li {
         border-width: 10px;
     }
     
+    .stat-panel-container {
+        display: flex;
+        gap: 15px;
+    }
+
+    .stat-panel-left {
+        flex-basis: 120px;
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    .stat-panel-right {
+        flex: 1;
+    }
+
     #actions {
         display: grid;
         grid-template-columns: 1fr;

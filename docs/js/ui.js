@@ -11,17 +11,23 @@ export function render() {
 
     playerStatsDiv.innerHTML = `
         <div class="feedback-text" id="player-feedback"></div>
-        <h3>${p.name} -- Lvl.${state.level}</h3>
-        <img src='${p.img}' class='icon'>
-        <p>HP: ${p.HP} / ${p.maxHP}</p>
-        <div class="stat-bar"><div class="hp-fill" style="width: ${hpPercent}%;"></div></div>
-        <p>SP: ${p.SP} / ${p.maxSP}</p>
-        <div class="stat-bar"><div class="sp-fill" style="width: ${spPercent}%;"></div></div>
-        <ul>
-            <li>STR: ${p.STATS.STR}</li><li>MAG: ${p.STATS.MAG}</li>
-            <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
-            <li>LUK: ${p.STATS.LUK}</li>
-        </ul>
+        <div class="stat-panel-container">
+            <div class="stat-panel-left">
+                <h3>${p.name} -- Lvl.${state.level}</h3>
+                <img src='${p.img}' class='icon'>
+            </div>
+            <div class="stat-panel-right">
+                <p>HP: ${p.HP} / ${p.maxHP}</p>
+                <div class="stat-bar"><div class="hp-fill" style="width: ${hpPercent}%;"></div></div>
+                <p>SP: ${p.SP} / ${p.maxSP}</p>
+                <div class="stat-bar"><div class="sp-fill" style="width: ${spPercent}%;"></div></div>
+                <ul>
+                    <li>STR: ${p.STATS.STR}</li><li>MAG: ${p.STATS.MAG}</li>
+                    <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
+                    <li>LUK: ${p.STATS.LUK}</li>
+                </ul>
+            </div>
+        </div>
     `;
 
     if (p.PASSIVES && p.PASSIVES.length > 0) {
@@ -32,7 +38,7 @@ export function render() {
             <ul>
                 ${p.PASSIVES.map(pKey => `<li>${PASSIVE_SKILLS[pKey].name}</li>`).join('')}
             </ul>`;
-        playerStatsDiv.appendChild(passivesContainer);
+        playerStatsDiv.querySelector('.stat-panel-right').appendChild(passivesContainer);
     }
 
     const enemyDisplayDiv = document.getElementById("enemy-display");
@@ -41,10 +47,17 @@ export function render() {
         const enemyHpPercent = (e.HP / e.maxHP) * 100;
         enemyDisplayDiv.innerHTML = `
             <div class="feedback-text" id="enemy-feedback"></div>
-            <h3>${e.name}</h3>
-            <img src='${e.img}' class='icon'>
-            <p>HP: ${e.HP} / ${e.maxHP}</p>
-            <div class="stat-bar"><div class="hp-fill" style="width: ${enemyHpPercent}%;"></div></div>`;
+            <div class="stat-panel-container">
+                <div class="stat-panel-left">
+                    <h3>${e.name}</h3>
+                    <img src='${e.img}' class='icon'>
+                </div>
+                <div class="stat-panel-right">
+                    <p>HP: ${e.HP} / ${e.maxHP}</p>
+                    <div class="stat-bar"><div class="hp-fill" style="width: ${enemyHpPercent}%;"></div></div>
+                </div>
+            </div>
+        `;
     }
 
     const actionsDiv = document.getElementById("actions");
