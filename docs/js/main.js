@@ -19,12 +19,17 @@ function mainMenu() {
 function personaSelect() {
     localStorage.removeItem('personaSaveFile');
     const div = document.getElementById("start-screen");
-    div.innerHTML = "<h4>Choose your Persona</h4>";
+    div.innerHTML = `
+        <h4>Choose your Persona</h4>
+        <div id="persona-select-container"></div>
+    `;
+    const container = document.getElementById('persona-select-container');
+
     Object.keys(PERSONAS).forEach (c => {
         let btn = document.createElement("button");
         btn.innerHTML=`<img src='${PERSONAS[c].img}' class='icon'> ${c}`;
         btn.onclick = () => startGame(c);
-        div.appendChild(btn);
+        container.appendChild(btn);
     })
 }
 function startGame(personaName) {
