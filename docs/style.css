@@ -177,10 +177,10 @@ h3, h4 {
 }
 
 .icon {
-    width: 100px; /* Standardized width */
-    height: 100px; /* Standardized height */
+    width: 100px;
+    height: 100px;
     object-fit: contain;
-    image-rendering: pixelated; /* Ensure pixel art remains sharp */
+    image-rendering: pixelated;
 }
 
 button {
@@ -222,6 +222,10 @@ li {
 }
 .sp-fill {
     background-color: #3262a8;
+    height: 100%;
+}
+.xp-fill {
+    background-color: var(--gold);
     height: 100%;
 }
 .feedback-text {

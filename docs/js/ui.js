@@ -8,6 +8,8 @@ export function render() {
     let p = state.persona;
     const hpPercent = (p.HP / p.maxHP) * 100;
     const spPercent = (p.SP / p.maxSP) * 100;
+    const xpToLevel = state.level * 20;
+    const xpPercent = (state.xp / xpToLevel) * 100;
 
     playerStatsDiv.innerHTML = `
         <div class="feedback-text" id="player-feedback"></div>
@@ -21,6 +23,8 @@ export function render() {
                 <div class="stat-bar"><div class="hp-fill" style="width: ${hpPercent}%;"></div></div>
                 <p>SP: ${p.SP} / ${p.maxSP}</p>
                 <div class="stat-bar"><div class="sp-fill" style="width: ${spPercent}%;"></div></div>
+                <p>EXP: ${state.xp} / ${xpToLevel}</p>
+                <div class="stat-bar"><div class="xp-fill" style="width: ${xpPercent}%;"></div></div>
                 <ul>
                     <li>STR: ${p.STATS.STR}</li><li>MAG: ${p.STATS.MAG}</li>
                     <li>END: ${p.STATS.END}</li><li>AGI: ${p.STATS.AGI}</li>
