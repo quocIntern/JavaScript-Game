@@ -327,6 +327,29 @@ li {
     color: var(--gold);
 }
 
+.affinities-list {
+    margin-top: 15px;
+}
+
+.affinities-list h4 {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--retro-border);
+    padding-bottom: 3px;
+}
+
+.affinities-list ul {
+    margin-top: 5px;
+}
+
+.affinities-list li {
+    font-size: 0.7em;
+}
+
+.affinities-list li.weak { color: #ff4d4d; }
+.affinities-list li.resist { color: #a2d2ff; }
+.affinities-list li.null { color: #b0b0b0; }
+
 #system-bar {
     grid-area: system;
     display: flex;

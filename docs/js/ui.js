@@ -45,6 +45,7 @@ export function render() {
     if (state.enemy) {
         let e = state.enemy;
         const enemyHpPercent = (e.HP / e.maxHP) * 100;
+
         enemyDisplayDiv.innerHTML = `
             <div class="feedback-text" id="enemy-feedback"></div>
             <div class="stat-panel-container">
@@ -55,6 +56,11 @@ export function render() {
                 <div class="stat-panel-right">
                     <p>HP: ${e.HP} / ${e.maxHP}</p>
                     <div class="stat-bar"><div class="hp-fill" style="width: ${enemyHpPercent}%;"></div></div>
+                    <ul>
+                        <li>STR: ${e.STATS.STR}</li><li>MAG: ${e.STATS.MAG}</li>
+                        <li>END: ${e.STATS.END}</li><li>AGI: ${e.STATS.AGI}</li>
+                        <li>LUK: ${e.STATS.LUK}</li>
+                    </ul>
                 </div>
             </div>
         `;
