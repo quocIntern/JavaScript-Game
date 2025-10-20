@@ -4,14 +4,18 @@
     --retro-border: #c3c3c3;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 body {
-    font-family: 'Press Start 2P', cursive; /* Use the new pixel font */
+    font-family: 'Press Start 2P', cursive;
     background-color: black;
     color: var(--retro-text);
     text-align: center;
-    margin: 0;
-    padding: 10px;
-    /* These ensure our pixel art and font stay sharp */
     image-rendering: pixelated;
     font-smooth: never;
     -webkit-font-smoothing: none;
@@ -19,6 +23,17 @@ body {
 
 #game-container {
     position: relative;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 h3, h4 {
@@ -28,37 +43,42 @@ h3, h4 {
     color: var(--retro-text);
 }
 
-/* MODIFIED: Updated grid to include the log */
 #game-screen {
     display: grid;
+    height: 100%;
+    max-height: 100%;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 150px; /* Added row for the log */
+    grid-template-rows: 1fr auto 180px;
     grid-template-areas: 
         "player enemy"
         "actions actions"
-        "log log"; /* Added log area */
+        "log log";
     gap: 10px;
-    margin-top: 10px;
 }
 
-/* This is the core of the retro text box style */
 #player-stats, #enemy-display {
     background-color: var(--retro-blue);
-    padding: 24px; /* Give space for the border */
+    padding: 15px;
     text-align: left;
-    
-    /* The magic for decorative borders */
     border: 12px solid;
     border-image-source: url(https://i.imgur.com/jI9a614.png);
-    border-image-slice: 6; /* This tells the browser how to "slice" the image */
+    border-image-slice: 6;
     border-image-width: 1;
     border-image-repeat: stretch;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
+#player-stats::-webkit-scrollbar, #enemy-display::-webkit-scrollbar {
+    display: none;
+}
+
 #player-stats { grid-area: player; }
 #enemy-display { grid-area: enemy; }
 .game-title {
     font-size: 1.5em;
-    color: #FFDF00; /* A gold-yellow for emphasis */
+    color: #FFDF00;
     text-shadow: 2px 2px #000000;
     margin-bottom: 30px;
 }
@@ -68,8 +88,8 @@ h3, h4 {
     padding: 15px;
     border: 3px solid var(--retro-border);
     box-shadow: 
-        inset 0 0 0 3px #000, /* Inner black border */
-        inset 0 0 0 6px var(--retro-blue); /* Inner blue padding */
+        inset 0 0 0 3px #000,
+        inset 0 0 0 6px var(--retro-blue);
 }
 #actions {
     grid-area: actions;
@@ -79,22 +99,26 @@ h3, h4 {
     border-image-slice: 6;
     border-image-width: 1;
     background-color: var(--retro-blue);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .icon {
-    max-width: 100px; /* A multiple of 8 or 16 is good for pixel art */
+    max-width: 100px;
     max-height: 100px;
     object-fit: contain;
 }
 
 .portrait-container {
     width: 100%;
-    height: 120px; /* A fixed, predictable height for the portrait area. */
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 15px;
-    background-color: #000; /* A black background to frame the art. */
+    background-color: #000;
 }
 
 button {
@@ -105,7 +129,7 @@ button {
     cursor: pointer;
     font-family: 'Press Start 2P', cursive;
     margin: 5px;
-    font-size: 0.8em; /* Match the retro feel */
+    font-size: 0.8em;
 }
 
 button:hover {
@@ -123,7 +147,6 @@ li {
     padding: 2px 0;
 }
 
-/* Health & SP Bar Styles */
 .stat-bar {
     background-color: #333;
     border: 1px solid var(--retro-border);
@@ -132,28 +155,27 @@ li {
     margin: 5px 0 15px 0;
 }
 .hp-fill {
-    background-color: #32a852; /* Classic green for HP */
+    background-color: #32a852;
     height: 100%;
 }
 .sp-fill {
-    background-color: #3262a8; /* Classic blue for SP/MP */
+    background-color: #3262a8;
     height: 100%;
 }
 .feedback-text {
     position: absolute;
     font-size: 1.2em;
     font-weight: bold;
-    transform: translate(50px, 50px); /* Center it roughly over the sprite */
-    pointer-events: none; /* Make it unclickable */
+    transform: translate(50px, 50px);
+    pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s;
 }
 
-.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
-.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
-.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
+.feedback-text.weak { color: #ff4d4d; }
+.feedback-text.resist { color: #a2d2ff; }
+.feedback-text.null { color: #b0b0b0; }
 
-/* Animation class */
 .feedback-text.show {
     animation: fadeUp 1s ease-out;
 }
@@ -169,20 +191,19 @@ li {
     display: none;  
 }
 #floor-counter {
-    position: fixed; /* Position relative to the screen */
-    bottom: 20px;    /* 20px from the bottom */
-    right: 20px;     /* 20px from the right */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     font-size: 0.8em;
     color: var(--retro-border);
     text-align: left;
 }
-.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
-.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
-.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
-.feedback-text.critical { color: #ffd900; } /* Add this line for CRITICAL */
-.feedback-text.damage { color: #ffffff; }      /* White for damage */
-.feedback-text.healing { color: #32a852; }     /* Green for healing */
-/* Add this to style.css */
+.feedback-text.weak { color: #ff4d4d; }
+.feedback-text.resist { color: #a2d2ff; }
+.feedback-text.null { color: #b0b0b0; }
+.feedback-text.critical { color: #ffd900; }
+.feedback-text.damage { color: #ffffff; }
+.feedback-text.healing { color: #32a852; }
 @keyframes screen-shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -193,7 +214,6 @@ li {
     animation: screen-shake 0.3s;
 }
 
-/* ADDED: Styles for the new Game Log */
 #game-log-container {
     grid-area: log;
     background-color: var(--retro-blue);
@@ -203,59 +223,59 @@ li {
     border-image-width: 1;
     padding: 10px;
     text-align: left;
-    overflow-y: hidden; /* Hide the scrollbar itself but allow scrolling */
+    overflow: hidden;
 }
 
 #game-log {
     height: 100%;
     overflow-y: auto;
     font-size: 0.7em;
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 #game-log::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
+    display: none;
 }
 
 #game-log p {
     margin: 0 0 5px 0;
     line-height: 1.2;
 }
-/* ADDED: Text color classes for the log */
-.log-player { color: #87CEEB; } /* Light Blue */
-.log-enemy { color: #FFB6C1; } /* Light Pink */
-.log-player-dmg { color: #ff4d4d; } /* Red */
-.log-healing { color: #90EE90; } /* Light Green */
-.log-system { color: #D3D3D3; } /* Light Grey */
-.log-critical { color: #FFDF00; } /* Gold/Yellow */
-.log-resist { color: #a2d2ff; } /* Light Blue */
+.log-player { color: #87CEEB; }
+.log-enemy { color: #FFB6C1; }
+.log-player-dmg { color: #ff4d4d; }
+.log-healing { color: #90EE90; }
+.log-system { color: #D3D3D3; }
+.log-critical { color: #FFDF00; }
+.log-resist { color: #a2d2ff; }
 
 @media (max-width: 768px) {
-    body {
-        padding: 5px; /* Reduce overall padding on small screens */
+    #game-container {
+        padding: 5px;
     }
 
-    /* MODIFIED: Updated mobile grid layout */
     #game-screen {
-        grid-template-columns: 1fr; /* Single column */
-        grid-template-rows: auto auto auto auto; /* Four rows */
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr auto 150px;
         grid-template-areas: 
             "player"
             "enemy"
             "actions"
-            "log"; /* Log at the bottom */
+            "log";
     }
 
     #player-stats, #enemy-display, #actions, #game-log-container {
-        padding: 3px;
+        padding: 10px;
         border-width: 10px;
     }
     
     #actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 5px;
         padding: 10px;
     }
+
     button {
         padding: 8px 10px;
         font-size: 0.7em;
