@@ -2,16 +2,21 @@
     --retro-blue: #001a6d;
     --retro-text: #ffffff;
     --retro-border: #c3c3c3;
+    --gold: #FFDF00;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 body {
-    font-family: 'Press Start 2P', cursive; /* Use the new pixel font */
+    font-family: 'Press Start 2P', cursive;
     background-color: black;
     color: var(--retro-text);
     text-align: center;
-    margin: 0;
-    padding: 10px;
-    /* These ensure our pixel art and font stay sharp */
     image-rendering: pixelated;
     font-smooth: never;
     -webkit-font-smoothing: none;
@@ -19,6 +24,35 @@ body {
 
 #game-container {
     position: relative;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#persona-select-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+#start-screen button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    min-width: 150px;
 }
 
 h3, h4 {
@@ -30,68 +64,123 @@ h3, h4 {
 
 #game-screen {
     display: grid;
+    height: 100%;
+    max-height: 100%;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 4fr auto 1fr auto;
     grid-template-areas: 
         "player enemy"
-        "actions actions";
+        "actions actions"
+        "log log"
+        "system system";
     gap: 10px;
-    margin-top: 10px;
 }
 
-/* This is the core of the retro text box style */
 #player-stats, #enemy-display {
     background-color: var(--retro-blue);
-    padding: 24px; /* Give space for the border */
+    padding: 15px;
     text-align: left;
-    
-    /* The magic for decorative borders */
     border: 12px solid;
     border-image-source: url(https://i.imgur.com/jI9a614.png);
-    border-image-slice: 6; /* This tells the browser how to "slice" the image */
+    border-image-slice: 6;
     border-image-width: 1;
     border-image-repeat: stretch;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
+#player-stats::-webkit-scrollbar, #enemy-display::-webkit-scrollbar {
+    display: none;
+}
+
 #player-stats { grid-area: player; }
 #enemy-display { grid-area: enemy; }
+
 .game-title {
     font-size: 1.5em;
-    color: #FFDF00; /* A gold-yellow for emphasis */
+    color: var(--gold);
     text-shadow: 2px 2px #000000;
     margin-bottom: 30px;
 }
 
-.ui-box {
-    background-color: var(--retro-blue);
-    padding: 15px;
-    border: 3px solid var(--retro-border);
-    box-shadow: 
-        inset 0 0 0 3px #000, /* Inner black border */
-        inset 0 0 0 6px var(--retro-blue); /* Inner blue padding */
-}
 #actions {
     grid-area: actions;
-    padding: 10px;
     border: 12px solid;
     border-image-source: url(https://i.imgur.com/jI9a614.png);
     border-image-slice: 6;
     border-image-width: 1;
     background-color: var(--retro-blue);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 15px;
+    padding: 15px;
+    align-items: stretch;
+}
+
+#actions.reward-mode {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+.reward-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.reward-mode h4 {
+    color: var(--gold);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.card-button {
+    flex-basis: 200px;
+    min-height: 130px;
+    border: 2px solid var(--gold);
+    background-color: var(--retro-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    text-align: center;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    cursor: pointer;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.card-button:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 15px rgba(255, 223, 0, 0.25);
+}
+
+.card-button strong {
+    color: var(--gold);
+    font-size: 0.85em;
+    margin-bottom: 8px;
+}
+
+.card-button span {
+    font-size: 0.7em;
+    line-height: 1.3;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .icon {
-    max-width: 100px; /* A multiple of 8 or 16 is good for pixel art */
-    max-height: 100px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
-}
-
-.portrait-container {
-    width: 100%;
-    height: 120px; /* A fixed, predictable height for the portrait area. */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-    background-color: #000; /* A black background to frame the art. */
+    image-rendering: pixelated;
 }
 
 button {
@@ -101,11 +190,11 @@ button {
     padding: 10px 15px;
     cursor: pointer;
     font-family: 'Press Start 2P', cursive;
-    margin: 5px;
-    font-size: 0.8em; /* Match the retro feel */
+    margin: 0;
+    font-size: 0.8em;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background-color: var(--retro-text);
     color: var(--retro-blue);
 }
@@ -120,7 +209,6 @@ li {
     padding: 2px 0;
 }
 
-/* Health & SP Bar Styles */
 .stat-bar {
     background-color: #333;
     border: 1px solid var(--retro-border);
@@ -129,28 +217,27 @@ li {
     margin: 5px 0 15px 0;
 }
 .hp-fill {
-    background-color: #32a852; /* Classic green for HP */
+    background-color: #32a852;
     height: 100%;
 }
 .sp-fill {
-    background-color: #3262a8; /* Classic blue for SP/MP */
+    background-color: #3262a8;
+    height: 100%;
+}
+.xp-fill {
+    background-color: var(--gold);
     height: 100%;
 }
 .feedback-text {
     position: absolute;
     font-size: 1.2em;
     font-weight: bold;
-    transform: translate(50px, 50px); /* Center it roughly over the sprite */
-    pointer-events: none; /* Make it unclickable */
+    transform: translate(50px, 50px);
+    pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s;
 }
 
-.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
-.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
-.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
-
-/* Animation class */
 .feedback-text.show {
     animation: fadeUp 1s ease-out;
 }
@@ -159,27 +246,27 @@ li {
     0% { opacity: 1; transform: translate(50px, 50px); }
     100% { opacity: 0; transform: translate(50px, 0px); }
 }
+
 #exit-container {
-    position: fixed; 
-    bottom: 20px;
-    left: 20px;
-    display: none;  
+    display: block;
 }
+
+#exit-container button {
+    margin-right: 5px;
+}
+
 #floor-counter {
-    position: fixed; /* Position relative to the screen */
-    bottom: 20px;    /* 20px from the bottom */
-    right: 20px;     /* 20px from the right */
     font-size: 0.8em;
     color: var(--retro-border);
-    text-align: left;
+    text-align: right;
 }
-.feedback-text.weak { color: #ff4d4d; } /* Red for WEAK */
-.feedback-text.resist { color: #a2d2ff; } /* Blue for RESIST */
-.feedback-text.null { color: #b0b0b0; } /* Grey for NULL */
-.feedback-text.critical { color: #ffd900; } /* Add this line for CRITICAL */
-.feedback-text.damage { color: #ffffff; }      /* White for damage */
-.feedback-text.healing { color: #32a852; }     /* Green for healing */
-/* Add this to style.css */
+
+.feedback-text.weak { color: #ff4d4d; }
+.feedback-text.resist { color: #a2d2ff; }
+.feedback-text.null { color: #b0b0b0; }
+.feedback-text.critical { color: #ffd900; }
+.feedback-text.damage { color: #ffffff; }
+.feedback-text.healing { color: #32a852; }
 @keyframes screen-shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -190,53 +277,174 @@ li {
     animation: screen-shake 0.3s;
 }
 
+#game-log-container {
+    grid-area: log;
+    background-color: var(--retro-blue);
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6;
+    border-image-width: 1;
+    padding: 10px;
+    text-align: left;
+    overflow: hidden;
+}
+
+#game-log {
+    height: 100%;
+    overflow-y: auto;
+    font-size: 0.7em;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+#game-log::-webkit-scrollbar {
+    display: none;
+}
+
+#game-log p {
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+}
+
+#attack-button {
+    height: 100%;
+    font-size: 1.2em;
+    box-sizing: border-box;
+}
+
+#skill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.skill-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--retro-border);
+    width: 100%;
+    text-align: left;
+    font-size: 0.8em;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.skill-button.empty {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #6c757d;
+    justify-content: center;
+    align-items: center;
+}
+
+.skill-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.skill-cost {
+    font-weight: bold;
+    color: var(--gold);
+}
+
+#system-bar {
+    grid-area: system;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--retro-blue);
+    padding: 10px 15px;
+    border: 12px solid;
+    border-image-source: url(https://i.imgur.com/jI9a614.png);
+    border-image-slice: 6;
+    border-image-width: 1;
+}
+
+.log-player { color: #87CEEB; }
+.log-enemy { color: #FFB6C1; }
+.log-player-dmg { color: #ff4d4d; }
+.log-healing { color: #90EE90; }
+.log-system { color: #D3D3D3; }
+.log-critical { color: var(--gold); }
+.log-resist { color: #a2d2ff; }
+
 @media (max-width: 768px) {
-    body {
-        padding: 5px; /* Reduce overall padding on small screens */
+    #game-container {
+        padding: 5px;
     }
 
     #game-screen {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto auto; /* Added a third row for utilities */
-    grid-template-areas: 
-        "player actions"
-        "enemy  actions"
-        "exit   floor"; /* Defined new areas for the bottom row */
-    gap: 10px;
-    margin-top: 10px;
-}
+        grid-template-columns: 1fr;
+        grid-template-rows: 2.5fr 2.5fr auto 1fr auto;
+        grid-template-areas: 
+            "player"
+            "enemy"
+            "actions"
+            "log"
+            "system";
+    }
+    
+    #persona-select-container {
+        flex-direction: column;
+    }
 
-    #player-stats, #enemy-display, #actions {
-        /* Slightly more balanced padding and border for readability */
-        padding: 3px;
+    #player-stats, #enemy-display, #actions, #game-log-container, #system-bar {
+        padding: 10px;
         border-width: 10px;
     }
     
-    #actions {
+    .stat-panel-container {
         display: flex;
-        flex-direction: column;
-        width: auto;
-        padding: 40px;
+        gap: 15px;
     }
+
+    .stat-panel-left {
+        flex-basis: 120px;
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    .stat-panel-right {
+        flex: 1;
+    }
+
+    #actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 10px;
+    }
+
+    #skill-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3, 1fr);
+    }
+
     button {
-        /* Better padding for easier tapping */
         padding: 8px 10px;
         font-size: 0.7em;
     }
 
-    #floor-counter {
-    grid-area: floor; /* Assign it to the 'floor' grid area */
-    font-size: 0.8em;
-    color: var(--retro-border);
-    text-align: right; /* Align it to the right of its cell */
-    padding: 10px;
-}
+    .reward-cards-container {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
 
-    /* Convert the exit container into a fixed bar at the bottom */
-    #exit-container {
-    grid-area: exit; /* Assign it to the 'exit' grid area */
-    display: block; 
-    text-align: left; /* Align it to the left of its cell */
-}
+    .card-button {
+        flex-basis: 45%;
+        min-height: 100px;
+        padding: 8px;
+    }
+    
+    .card-button span {
+        font-size: 0.65em;
+    }
+
+    #system-bar {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
