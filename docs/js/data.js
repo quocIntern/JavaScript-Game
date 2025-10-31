@@ -261,6 +261,13 @@ export const FLOOR_ENCOUNTERS = [
     ["Queen Mab", "Rangda"],
     ["Throne", "Barong", "Abaddon", "Anubis"]
 ];
+export const FLOOR_BACKGROUNDS = [
+    './bg-img/level1.jpg', 
+    './bg-img/level2.jpg', 
+    './bg-img/level3.webp', 
+    './bg-img/level4.jpg', 
+    './bg-img/level5.webp', 
+];
 export const SKILLS = {
     lunge: { name: "Lunge", cost: { hp: 5 }, power: 13, type: "physical", element: "phys", evolves_to: "assault_dive" },
     bash:   { name: "Bash", cost: { hp: 8 }, power: 10, type: "physical", element: "phys", evolves_to: "power_slash" },
